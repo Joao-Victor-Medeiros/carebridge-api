@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: carebridge-api
+  datasource:
+    url: jdbc:postgresql://localhost:5432/carebridge-db
+    username: carebridge
+    password: carebridge
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
