@@ -30,20 +30,14 @@ public class Usuario {
     @Column(name = "senha_hash", nullable = false)
     private String senhaHash;
 
-    @Column(name = "tipo_perfil", nullable = false)
-    private String tipoPerfil;
+    @Enumerated(EnumType.STRING)
+    private TipoPerfil tipoPerfil;
 
     @Column(name = "criado_em", nullable = false, updatable = false)
     private Instant criadoEm;
 
     @Column(name = "atualizado_em", nullable = false)
     private Instant atualizadoEm;
-
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-    private Paciente paciente;
-
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-    private ProfissionalSaude perfilOfertante;
 
     @PrePersist
     protected void aoCriar() {
