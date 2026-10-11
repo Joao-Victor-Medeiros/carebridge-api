@@ -1,8 +1,6 @@
 package com.bcndeigth.carebridgeapi.users;
 
 
-import com.bcndeigth.carebridgeapi.paciente.Paciente;
-import com.bcndeigth.carebridgeapi.profissional_saude.ProfissionalSaude;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
