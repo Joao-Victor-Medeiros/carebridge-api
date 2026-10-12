@@ -1,7 +1,6 @@
 package com.bcndeigth.carebridgeapi.paciente;
 
 import com.bcndeigth.carebridgeapi.opportunities.Inscricao;
-import com.bcndeigth.carebridgeapi.users.Usuario;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,10 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "pacientes")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Paciente extends Usuario{
+public class Paciente {
+    @Id
+    private Long id;
+
     @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
 
