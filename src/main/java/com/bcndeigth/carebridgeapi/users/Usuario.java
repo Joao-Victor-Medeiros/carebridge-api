@@ -1,6 +1,7 @@
 package com.bcndeigth.carebridgeapi.users;
 
 
+import com.bcndeigth.carebridgeapi.users.dto.SignUpUserDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ import java.util.UUID;
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private Long id;
 
     @Column(nullable = false)
     private String nome;
@@ -36,6 +37,13 @@ public class Usuario {
 
     @Column(name = "atualizado_em", nullable = false)
     private Instant atualizadoEm;
+
+    public Usuario(SignUpUserDto dto) {
+        this.nome = dto.nome();
+        this.email = dto.email();
+        this.senhaHash = dto.senha();
+        this.tipoPerfil = dto.tipoPerfil();
+    }
 
     @PrePersist
     protected void aoCriar() {
