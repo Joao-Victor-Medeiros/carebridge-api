@@ -1,7 +1,6 @@
 package com.bcndeigth.carebridgeapi.users;
 
 
-import com.bcndeigth.carebridgeapi.users.dto.SignUpUserDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
