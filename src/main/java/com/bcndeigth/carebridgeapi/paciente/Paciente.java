@@ -1,6 +1,7 @@
 package com.bcndeigth.carebridgeapi.paciente;
 
 import com.bcndeigth.carebridgeapi.opportunities.Inscricao;
+import com.bcndeigth.carebridgeapi.users.Usuario;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Paciente {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "data_nascimento")
@@ -27,6 +29,21 @@ public class Paciente {
     @Column(columnDefinition = "text")
     private String endereco;
 
+    @OneToOne
+    @JoinColumn(
+            name = "usuario_id",
+            nullable =false,
+            unique =true
+    )
+    private Usuario usuario;
+
     @OneToMany(mappedBy = "paciente", fetch = FetchType.LAZY)
     private List<Inscricao> inscricoes = new ArrayList<>();
+
+    public Paciente(LocalDate dataNascimento, String telefone, String endereco, Usuario usuario) {
+        this.dataNascimento = dataNascimento;
+        this.telefone = telefone;
+        this.endereco = endereco;
+        this.usuario = usuario;
+    }
 }

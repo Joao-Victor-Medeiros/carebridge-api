@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 public class UserController {
     @Autowired
-    private UserService userService;
+    private UsuarioService usuarioService;
 
 
     @PostMapping("/register")
     public void signUp(@RequestBody SignUpUserDto dto) {
         //aqui deve registrar segundo sua role
-        userService.cadastrarUsuario(dto);
+        usuarioService.cadastrarUsuario(dto);
     }
 }
