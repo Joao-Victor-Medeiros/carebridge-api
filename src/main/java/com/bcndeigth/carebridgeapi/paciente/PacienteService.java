@@ -24,9 +24,9 @@ public class PacienteService {
     @Transactional
     public void cadastrarPaciente(CadastroPacienteDto cadastroPacienteDto) {
         Usuario usuario = new Usuario(
-                cadastroPacienteDto.nome(),
-                cadastroPacienteDto.email(),
-                passwordEncoder.encode(cadastroPacienteDto.senha()),
+                cadastroPacienteDto.usuario().getNome(),
+                cadastroPacienteDto.usuario().getEmail(),
+                passwordEncoder.encode(cadastroPacienteDto.usuario().getSenhaHash()),
                 TipoPerfil.PACIENTE
         );
 
