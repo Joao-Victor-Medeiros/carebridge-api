@@ -18,7 +18,7 @@ import java.util.UUID;
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private Long id;
+    private UUID id;
 
     @Column(nullable = false)
     private String nome;
@@ -38,11 +38,11 @@ public class Usuario {
     @Column(name = "atualizado_em", nullable = false)
     private Instant atualizadoEm;
 
-    public Usuario(SignUpUserDto dto) {
-        this.nome = dto.nome();
-        this.email = dto.email();
-        this.senhaHash = dto.senha();
-        this.tipoPerfil = dto.tipoPerfil();
+    public Usuario(String nome, String email, String hashedPassword, TipoPerfil tipoPerfil) {
+        this.nome = nome;
+        this.email = email;
+        this.senhaHash = hashedPassword;
+        this.tipoPerfil = tipoPerfil;
     }
 
     @PrePersist
