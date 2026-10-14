@@ -10,9 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/paciente")
 public class PacienteController {
 
+    private final PacienteService pacienteService;
+
+    public PacienteController(PacienteService pacienteService) {
+        this.pacienteService = pacienteService;
+    }
+
     @PostMapping("/cadastro")
-    public String cadastrarPaciente(@RequestBody CadastroPacienteDto cadastroPacienteDto) {
-        // Lógica para cadastrar o paciente
-        return "Paciente cadastrado com sucesso!";
+    public void cadastrarPaciente(@RequestBody CadastroPacienteDto cadastroPacienteDto) {
+        pacienteService.cadastrarPaciente(cadastroPacienteDto);
     }
 }
