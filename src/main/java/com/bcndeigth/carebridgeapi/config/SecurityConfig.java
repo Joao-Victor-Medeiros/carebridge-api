@@ -22,6 +22,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/user/register").permitAll()
                 .requestMatchers("/paciente/cadastro").permitAll()
+                .requestMatchers("/profissional-saude/cadastro").permitAll()
                 .anyRequest().authenticated()
             )
             .httpBasic(Customizer.withDefaults())
