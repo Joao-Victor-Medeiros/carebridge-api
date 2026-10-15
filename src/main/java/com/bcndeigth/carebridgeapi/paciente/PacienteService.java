@@ -35,7 +35,7 @@ public class PacienteService {
                 usuarioDto.nome(),
                 usuarioDto.email(),
                 hashedPassword,
-                TipoPerfil.PACIENTE
+                usuarioDto.tipoPerfil()
         ));
 
         pacienteRepository.save(new Paciente(
