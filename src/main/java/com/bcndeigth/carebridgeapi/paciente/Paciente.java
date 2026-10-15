@@ -10,6 +10,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "pacientes")
@@ -18,9 +19,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Paciente {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pacientes_seq")
-    @SequenceGenerator(name = "pacientes_seq", sequenceName = "pacientes_seq", allocationSize = 1)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
