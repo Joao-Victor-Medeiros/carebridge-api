@@ -1,18 +1,17 @@
 package com.bcndeigth.carebridgeapi.users;
 
 import com.bcndeigth.carebridgeapi.users.dto.SignUpUserDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UsuarioService {
-    private final UsuarioRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private UsuarioRepository userRepository;
 
-    public UsuarioService(UsuarioRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public void cadastrarUsuario(SignUpUserDto dto) {
         var hashedPassword = passwordEncoder.encode(dto.senha());
