@@ -41,4 +41,10 @@ public class ProfissionalSaude {
 
     @OneToMany(mappedBy = "ofertante", fetch = FetchType.LAZY)
     private List<FormularioTriagem> formulariosTriagem = new ArrayList<>();
+
+    public ProfissionalSaude(String documentoRegistro, String biografiaOuDescricao, Usuario usuario) {
+        this.documentoRegistro = documentoRegistro;
+        this.biografiaOuDescricao = biografiaOuDescricao;
+        this.usuario = usuario;
+    }
 }
