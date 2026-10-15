@@ -1,9 +1,9 @@
 package com.bcndeigth.carebridgeapi.paciente;
 
 import com.bcndeigth.carebridgeapi.paciente.dto.CadastroPacienteDto;
-import com.bcndeigth.carebridgeapi.users.TipoPerfil;
 import com.bcndeigth.carebridgeapi.users.Usuario;
 import com.bcndeigth.carebridgeapi.users.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,21 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PacienteService {
 
-    private final PacienteRepository pacienteRepository;
-
-    private final UsuarioRepository usuarioRepository;
-
-    private final PasswordEncoder passwordEncoder;
-
-    public PacienteService(
-            PacienteRepository pacienteRepository,
-            UsuarioRepository usuarioRepository,
-            PasswordEncoder passwordEncoder
-    ) {
-        this.pacienteRepository = pacienteRepository;
-        this.usuarioRepository = usuarioRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+    @Autowired
+    private PacienteRepository pacienteRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Transactional
     public void cadastrarPaciente(CadastroPacienteDto cadastroPacienteDto) {
