@@ -27,8 +27,9 @@ public class ProfissionalSaude {
     @JoinColumn(name = "usuario_id", nullable = false, unique = true)
     private Usuario usuario;
 
-    @Column(name = "documento_registro")
-    private String documentoRegistro;
+    @ElementCollection
+    @CollectionTable(name = "documentos_registro", joinColumns = @JoinColumn(name = "profissional_id"))
+    private List<Documento> documentosRegistro = new ArrayList<>();
 
     @Column(name = "biografia_ou_descricao", columnDefinition = "text")
     private String biografiaOuDescricao;
@@ -42,8 +43,8 @@ public class ProfissionalSaude {
     @OneToMany(mappedBy = "ofertante", fetch = FetchType.LAZY)
     private List<FormularioTriagem> formulariosTriagem = new ArrayList<>();
 
-    public ProfissionalSaude(String documentoRegistro, String biografiaOuDescricao, Usuario usuario) {
-        this.documentoRegistro = documentoRegistro;
+    public ProfissionalSaude(List<Documento> documentosRegistro, String biografiaOuDescricao, Usuario usuario) {
+        this.documentosRegistro = documentosRegistro;
         this.biografiaOuDescricao = biografiaOuDescricao;
         this.usuario = usuario;
     }

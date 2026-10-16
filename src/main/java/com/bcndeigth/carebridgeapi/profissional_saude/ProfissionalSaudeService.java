@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProfissionalSaudeService {
@@ -28,7 +32,7 @@ public class ProfissionalSaudeService {
     }
 
     @Transactional
-    public void cadastrarProfissionalSaude(CadastroProfissionalSaudeDto cadastroProfissionalSaudeDto) {
+    public void cadastrarProfissionalSaude(CadastroProfissionalSaudeDto cadastroProfissionalSaudeDto, List<MultipartFile> documentos) {
         var usuarioDto = cadastroProfissionalSaudeDto.usuarioDto();
         var hashedPassword = passwordEncoder.encode(usuarioDto.senha());
         var usuarioSalvo = usuarioRepository.save(new Usuario(
@@ -38,8 +42,12 @@ public class ProfissionalSaudeService {
                 TipoPerfil.PROFISSIONAL_SAUDE
         ));
 
+        List<Documento> documentosEntidade = documentos.stream()
+                .map(doc -> new Documento(doc.getOriginalFilename(), "base64_or_path_placeholder")) // Replace with actual file handling logic
+                .collect(Collectors.toList());
+
         profissionalSaudeRepository.save(new ProfissionalSaude(
-                cadastroProfissionalSaudeDto.documentoRegistro(),
+                documentosEntidade,
                 cadastroProfissionalSaudeDto.biografiaOuDescricao(),
                 usuarioSalvo
         ));
