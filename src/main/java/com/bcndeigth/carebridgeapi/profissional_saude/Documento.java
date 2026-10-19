@@ -1,23 +1,41 @@
 package com.bcndeigth.carebridgeapi.profissional_saude;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Column;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Embeddable
 public class Documento {
-    private String tipo; // Ex.: "Diploma" ou "Carteirinha"
-    private String arquivo; // Caminho ou referência ao arquivo (ex.: URL ou base64)
+    @Column(name = "nome_arquivo", nullable = false)
+    private String nomeArquivo;
 
-    public Documento(String tipo, String arquivo) {
+    private String tipo;
+
+    @Column(name = "arquivo", columnDefinition = "bytea")
+    private byte[] arquivo;
+
+    public Documento() {
+
+    }
+
+    public Documento(String nomeArquivo, String tipo, byte[] arquivo) {
+        this.nomeArquivo = nomeArquivo;
         this.tipo = tipo;
         this.arquivo = arquivo;
+    }
+
+    public String getNomeArquivo() {
+        return nomeArquivo;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public byte[] getArquivo() {
+        return arquivo;
     }
 }
