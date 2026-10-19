@@ -9,8 +9,6 @@ public record CadastroProfissionalSaudeDto(
         @NonNull
         SignUpUserDto usuarioDto,
 
-        List<DocumentoDto> documentosRegistro,
+        List<String> documentosRegistro,
         String biografiaOuDescricao
 ) {}
-
-record DocumentoDto(String tipo, String arquivo) {}

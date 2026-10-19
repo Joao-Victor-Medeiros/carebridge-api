@@ -1,5 +1,6 @@
 package com.bcndeigth.carebridgeapi.config;
 
+import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -20,6 +21,7 @@ public class SecurityConfig {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
+                .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                 .requestMatchers("/user/register").permitAll()
                 .requestMatchers("/paciente/cadastro").permitAll()
                 .requestMatchers("/profissional-saude/cadastro").permitAll()
