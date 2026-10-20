@@ -2,6 +2,11 @@ spring:
   application:
     name: carebridge-api
 
+  servlet:
+    multipart:
+      max-file-size: ${UPLOAD_MAX_FILE_SIZE:10MB}
+      max-request-size: ${UPLOAD_MAX_REQUEST_SIZE:22MB}
+
   datasource:
     url: jdbc:postgresql://localhost:5432/carebridge-db
     username: admin
