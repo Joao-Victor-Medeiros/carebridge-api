@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +28,23 @@ public class ProfissionalSaude {
     @JoinColumn(name = "usuario_id", nullable = false, unique = true)
     private Usuario usuario;
 
-    @Column(name = "documento_registro")
+    @ElementCollection
+    @CollectionTable(
+            name = "documentos_registro",
+            joinColumns = @JoinColumn(name = "profissional_id")
+    )
+    private List<Documento> documentosRegistro = new ArrayList<>();
+
+    @Column(name = "documento_registro", length = 4096)
     private String documentoRegistro;
+
+    @PrePersist
+    @PreUpdate
+    private void atualizarReferenciaDocumentos() {
+        documentoRegistro = JsonMapper.builder().build().writeValueAsString(
+                documentosRegistro.stream().map(Documento::getNomeArquivo).toList());
+    }
+
 
     @Column(name = "biografia_ou_descricao", columnDefinition = "text")
     private String biografiaOuDescricao;
@@ -42,8 +58,8 @@ public class ProfissionalSaude {
     @OneToMany(mappedBy = "ofertante", fetch = FetchType.LAZY)
     private List<FormularioTriagem> formulariosTriagem = new ArrayList<>();
 
-    public ProfissionalSaude(String documentoRegistro, String biografiaOuDescricao, Usuario usuario) {
-        this.documentoRegistro = documentoRegistro;
+    public ProfissionalSaude(List<Documento> documentosRegistro, String biografiaOuDescricao, Usuario usuario) {
+        this.documentosRegistro = documentosRegistro;
         this.biografiaOuDescricao = biografiaOuDescricao;
         this.usuario = usuario;
     }
