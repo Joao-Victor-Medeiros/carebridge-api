@@ -20,5 +20,7 @@ spring:
       ddl-auto: update
     open-in-view: false
 
-jwt:
-  secret: ${JWT_SECRET}
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET}
