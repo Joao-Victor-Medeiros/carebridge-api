@@ -1,30 +1,25 @@
 package com.bcndeigth.carebridgeapi.profissional_saude;
 
 import com.bcndeigth.carebridgeapi.profissional_saude.dto.CadastroProfissionalSaudeDto;
+import com.bcndeigth.carebridgeapi.shared.docs.usuario.ProfissionalSaudeControllerDocs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/profissional-saude")
-public class ProfissionalSaudeController {
+public class ProfissionalSaudeController implements ProfissionalSaudeControllerDocs {
 
     @Autowired
     private ProfissionalSaudeService profissionalSaudeService;
 
-    @PostMapping(
-            value = "/cadastro",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    )
+    @Override
     public ResponseEntity<Void> cadastrarProfissionalSaude(
-            @Validated @RequestPart("dados") CadastroProfissionalSaudeDto cadastroProfissionalSaudeDto,
-            @RequestPart(value = "documentos", required = false) List<MultipartFile> documentos
+            CadastroProfissionalSaudeDto cadastroProfissionalSaudeDto,
+            List<MultipartFile> documentos
     ) {
         profissionalSaudeService.cadastrarProfissionalSaude(cadastroProfissionalSaudeDto, documentos);
         return ResponseEntity.status(HttpStatus.CREATED).build();

@@ -1,21 +1,17 @@
 package com.bcndeigth.carebridgeapi.users;
 
 import com.bcndeigth.carebridgeapi.users.dto.SignUpUserDto;
+import com.bcndeigth.carebridgeapi.shared.docs.usuario.UsuarioControllerDocs;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/user")
-public class UsuarioController {
+public class UsuarioController implements UsuarioControllerDocs {
     @Autowired
     private UsuarioService usuarioService;
 
-
-    @PostMapping("/register")
-    public void signUp(@RequestBody SignUpUserDto dto) {
+    @Override
+    public void signUp(SignUpUserDto dto) {
         //aqui deve registrar segundo sua role
         usuarioService.cadastrarUsuario(dto);
     }

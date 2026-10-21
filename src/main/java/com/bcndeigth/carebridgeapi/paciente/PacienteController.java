@@ -1,14 +1,11 @@
 package com.bcndeigth.carebridgeapi.paciente;
 
 import com.bcndeigth.carebridgeapi.paciente.dto.CadastroPacienteDto;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.bcndeigth.carebridgeapi.shared.docs.usuario.PacienteControllerDocs;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/paciente")
-public class PacienteController {
+public class PacienteController implements PacienteControllerDocs {
 
     private final PacienteService pacienteService;
 
@@ -16,8 +13,8 @@ public class PacienteController {
         this.pacienteService = pacienteService;
     }
 
-    @PostMapping("/cadastro")
-    public void cadastrarPaciente(@RequestBody CadastroPacienteDto cadastroPacienteDto) {
+    @Override
+    public void cadastrarPaciente(CadastroPacienteDto cadastroPacienteDto) {
         pacienteService.cadastrarPaciente(cadastroPacienteDto);
     }
 }
