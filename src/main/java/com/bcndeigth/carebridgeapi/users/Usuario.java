@@ -5,8 +5,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.jspecify.annotations.Nullable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -14,7 +20,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Usuario {
+public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -44,6 +50,14 @@ public class Usuario {
         this.tipoPerfil = tipoPerfil;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public TipoPerfil getTipoPerfil() {
+        return tipoPerfil;
+    }
+
     @PrePersist
     protected void aoCriar() {
         Instant agora = Instant.now();
@@ -54,5 +68,24 @@ public class Usuario {
     @PreUpdate
     protected void aoAtualizar() {
         atualizadoEm = Instant.now();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (tipoPerfil == null) {
+            return List.of();
+        }
+
+        return List.of(new SimpleGrantedAuthority("ROLE_" + tipoPerfil.name()));
+    }
+
+    @Override
+    public @Nullable String getPassword() {
+        return senhaHash;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 }

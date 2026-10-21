@@ -27,7 +27,7 @@ public interface ProfissionalSaudeControllerDocs {
     @PostMapping(value = "/cadastro", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
             summary = "Cadastrar usuário profissional de saúde",
-            description = "Cria uma conta de usuário com perfil de profissional de saúde. Envie os dados cadastrais na parte obrigatória dados como application/json e, opcionalmente, até dois arquivos na parte documentos. "
+            description = "Cria uma conta de usuário com perfil de profissional de saúde. Envie os dados cadastrais na parte obrigatória dados como application/json e, opcionalmente, até dois arquivos na parte documentos, sendo 1 obrigstório. "
                     + "Cada arquivo pode ter até 10 MB e a requisição completa até 22 MB por padrão.",
             requestBody = @RequestBody(
                     required = true,
