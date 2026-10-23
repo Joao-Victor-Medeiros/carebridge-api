@@ -1,12 +1,26 @@
 spring:
   application:
     name: carebridge-api
+
+  config:
+    import: "optional:file:./.env[.properties]"
+
+  servlet:
+    multipart:
+      max-file-size: ${UPLOAD_MAX_FILE_SIZE:10MB}
+      max-request-size: ${UPLOAD_MAX_REQUEST_SIZE:22MB}
+
   datasource:
     url: jdbc:postgresql://localhost:5432/carebridge-db
-    username: carebridge
-    password: carebridge
+    username: admin
+    password: admin
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update
     open-in-view: false
+
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET}
