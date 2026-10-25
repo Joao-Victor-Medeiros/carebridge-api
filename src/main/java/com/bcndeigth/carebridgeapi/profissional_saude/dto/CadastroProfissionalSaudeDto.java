@@ -12,6 +12,9 @@ public record CadastroProfissionalSaudeDto(
         @Schema(description = "Dados da conta do profissional.")
         SignUpUserDto usuarioDto,
 
+        @Schema(description = "Nome completo do profissional de saúde.", example = "Dra. Ana Souza")
+        String nome,
+
         @Schema(description = "Referências textuais de documentos de registro profissional.", example = "[\"CRM-SP 123456\"]")
         List<String> documentosRegistro,
 

@@ -49,13 +49,13 @@ public class ProfissionalSaudeService {
         var usuarioDto = cadastroProfissionalSaudeDto.usuarioDto();
         var hashedPassword = passwordEncoder.encode(usuarioDto.senha());
         var usuarioSalvo = usuarioRepository.save(new Usuario(
-                usuarioDto.nome(),
                 usuarioDto.email(),
                 hashedPassword,
                 TipoPerfil.PROFISSIONAL_SAUDE
         ));
 
         profissionalSaudeRepository.save(new ProfissionalSaude(
+                cadastroProfissionalSaudeDto.nome(),
                 documentosEntidade,
                 cadastroProfissionalSaudeDto.biografiaOuDescricao(),
                 usuarioSalvo
