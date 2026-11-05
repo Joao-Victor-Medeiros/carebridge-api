@@ -1,6 +1,6 @@
 package com.bcndeigth.carebridgeapi.paciente;
 
-import com.bcndeigth.carebridgeapi.opportunities.Inscricao;
+import com.bcndeigth.carebridgeapi.oportunidade.Inscricao;
 import com.bcndeigth.carebridgeapi.users.Usuario;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
