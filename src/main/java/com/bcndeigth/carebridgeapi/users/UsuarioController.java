@@ -5,6 +5,7 @@ import com.bcndeigth.carebridgeapi.users.dto.AuthenticationDTO;
 import com.bcndeigth.carebridgeapi.users.dto.LoginResponseDTO;
 import com.bcndeigth.carebridgeapi.users.dto.SignUpUserDto;
 import com.bcndeigth.carebridgeapi.shared.docs.usuario.UsuarioControllerDocs;
+import com.bcndeigth.carebridgeapi.profissional_saude.ProfissionalSaudeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +27,9 @@ public class UsuarioController implements UsuarioControllerDocs {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private ProfissionalSaudeRepository profissionalSaudeRepository;
+
     @Override
     @PostMapping("/sign-up")
     public void signUp(SignUpUserDto dto) {
@@ -42,6 +46,15 @@ public class UsuarioController implements UsuarioControllerDocs {
         var authentication = authenticationManager.authenticate(authenticationToken);
         Usuario usuario = (Usuario) authentication.getPrincipal();
 
-        return ResponseEntity.ok(new LoginResponseDTO(tokenService.generateToken(usuario)));
+        boolean validado = profissionalSaudeRepository.findByUsuarioId(usuario.getId())
+                .map(com.bcndeigth.carebridgeapi.profissional_saude.ProfissionalSaude::isValidadoInstitucionalmente)
+                .orElse(false);
+
+        return ResponseEntity.ok(new LoginResponseDTO(
+                tokenService.generateToken(usuario, validado),
+                true,
+                usuario.getTipoPerfil().name(),
+                validado
+        ));
     }
 }
