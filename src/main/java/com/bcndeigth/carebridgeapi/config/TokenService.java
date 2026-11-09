@@ -21,7 +21,7 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
-    public String generateToken(Usuario usuario) {
+    public String generateToken(Usuario usuario, boolean validadoInstitucionalmente) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
@@ -29,6 +29,7 @@ public class TokenService {
                     .withIssuer(ISSUER)
                     .withSubject(usuario.getEmail())
                     .withClaim("role", usuario.getTipoPerfil().name())
+                    .withClaim("validadoInstitucionalmente", validadoInstitucionalmente)
                     .withExpiresAt(Date.from(Instant.now().plus(2, ChronoUnit.HOURS)))
                     .sign(algorithm);
         } catch (JWTCreationException exception) {

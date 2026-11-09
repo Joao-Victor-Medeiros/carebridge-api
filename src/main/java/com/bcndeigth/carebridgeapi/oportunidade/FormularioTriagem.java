@@ -1,13 +1,12 @@
-package com.bcndeigth.carebridgeapi.opportunities;
+package com.bcndeigth.carebridgeapi.oportunidade;
 
+import com.bcndeigth.carebridgeapi.profissional_saude.ProfissionalSaude;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.UUID;
-
-import com.bcndeigth.carebridgeapi.profissional_saude.ProfissionalSaude;
 
 @Entity
 @Table(name = "formulario_triagem")
@@ -20,11 +19,7 @@ public class FormularioTriagem {
     private UUID id;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(
-            name = "oportunidade_id",
-            nullable = false,
-            unique = true
-    )
+    @JoinColumn(name = "oportunidade_id", nullable = false, unique = true)
     private Oportunidade oportunidade;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

@@ -1,4 +1,4 @@
-package com.bcndeigth.carebridgeapi.config;
+package com.bcndeigth.carebridgeapi.config.security;
 
 import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfigurations {
 
     private final SecurityFilter securityFilter;
@@ -32,10 +34,11 @@ public class SecurityConfigurations {
             .authorizeHttpRequests(auth -> auth
                 .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                .requestMatchers("/auth/login", "/auth/register").permitAll()
+                .requestMatchers("/user/login", "/user/register").permitAll()
                 .requestMatchers("/user/register", "/paciente/cadastro", "/profissional-saude/cadastro").permitAll()
                 .requestMatchers("/paciente/**").hasRole("PACIENTE")
                 .requestMatchers("/profissional-saude/**").hasRole("PROFISSIONAL_SAUDE")
+                .requestMatchers("/oportunidades/**").authenticated()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )

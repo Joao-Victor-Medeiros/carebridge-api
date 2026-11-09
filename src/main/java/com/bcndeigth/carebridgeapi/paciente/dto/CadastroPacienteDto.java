@@ -10,6 +10,9 @@ public record CadastroPacienteDto(
         @Schema(description = "Dados da conta do paciente.")
         SignUpUserDto usuarioDto,
 
+        @Schema(description = "Nome completo do paciente.", example = "João da Silva")
+        String nome,
+
         @Schema(description = "Data de nascimento do paciente no formato ISO-8601.", example = "1990-05-21")
         LocalDate dataNascimento,
 

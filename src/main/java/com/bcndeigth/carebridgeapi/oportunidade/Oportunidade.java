@@ -1,4 +1,4 @@
-package com.bcndeigth.carebridgeapi.opportunities;
+package com.bcndeigth.carebridgeapi.oportunidade;
 
 import com.bcndeigth.carebridgeapi.profissional_saude.ProfissionalSaude;
 import jakarta.persistence.*;

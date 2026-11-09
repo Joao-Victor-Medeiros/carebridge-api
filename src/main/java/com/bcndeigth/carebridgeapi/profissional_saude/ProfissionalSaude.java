@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.bcndeigth.carebridgeapi.opportunities.Oportunidade;
-import com.bcndeigth.carebridgeapi.opportunities.FormularioTriagem;
+import com.bcndeigth.carebridgeapi.oportunidade.Oportunidade;
+import com.bcndeigth.carebridgeapi.oportunidade.FormularioTriagem;
 
 @Entity
 @Table(name = "profissional_saude")
