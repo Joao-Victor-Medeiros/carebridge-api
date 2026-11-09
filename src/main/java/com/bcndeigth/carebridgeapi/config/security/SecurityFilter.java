@@ -1,5 +1,6 @@
-package com.bcndeigth.carebridgeapi.config;
+package com.bcndeigth.carebridgeapi.config.security;
 
+import com.bcndeigth.carebridgeapi.config.TokenService;
 import com.bcndeigth.carebridgeapi.users.Usuario;
 import com.bcndeigth.carebridgeapi.users.UsuarioRepository;
 import jakarta.servlet.FilterChain;

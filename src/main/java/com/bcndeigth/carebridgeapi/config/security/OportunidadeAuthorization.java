@@ -1,4 +1,4 @@
-package com.bcndeigth.carebridgeapi.config;
+package com.bcndeigth.carebridgeapi.config.security;
 
 import com.bcndeigth.carebridgeapi.profissional_saude.ProfissionalSaudeRepository;
 import com.bcndeigth.carebridgeapi.users.TipoPerfil;

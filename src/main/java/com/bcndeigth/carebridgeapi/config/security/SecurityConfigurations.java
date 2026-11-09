@@ -1,4 +1,4 @@
-package com.bcndeigth.carebridgeapi.config;
+package com.bcndeigth.carebridgeapi.config.security;
 
 import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
