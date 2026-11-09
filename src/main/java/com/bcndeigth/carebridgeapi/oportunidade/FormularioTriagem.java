@@ -1,11 +1,7 @@
 package com.bcndeigth.carebridgeapi.oportunidade;
 
 import com.bcndeigth.carebridgeapi.profissional_saude.ProfissionalSaude;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +9,7 @@ import lombok.Setter;
 import java.util.UUID;
 
 @Entity
+@Table(name = "formulario_triagem")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,8 +18,14 @@ public class FormularioTriagem {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "oportunidade_id", nullable = false, unique = true)
+    private Oportunidade oportunidade;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ofertante_id", nullable = false)
     private ProfissionalSaude ofertante;
 
-    // Adicione outros atributos relevantes aqui
+    @Column(name = "configuracao_campos", columnDefinition = "text")
+    private String configuracaoCampos;
 }
