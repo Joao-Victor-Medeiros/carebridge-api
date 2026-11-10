@@ -11,9 +11,9 @@ spring:
       max-request-size: ${UPLOAD_MAX_REQUEST_SIZE:22MB}
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/carebridge-db
-    username: admin
-    password: admin
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/carebridge-db}
+    username: ${DATABASE_USERNAME:admin}
+    password: ${DATABASE_PASSWORD:admin}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

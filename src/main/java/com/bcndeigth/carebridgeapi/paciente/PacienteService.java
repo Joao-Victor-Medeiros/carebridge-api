@@ -23,6 +23,7 @@ public class PacienteService {
         var hashedPassword = passwordEncoder.encode(cadastroPacienteDto.usuarioDto().senha());
         var usuarioDto = cadastroPacienteDto.usuarioDto();
         var usuarioSalvo = usuarioRepository.save(new Usuario(
+                cadastroPacienteDto.nome(),
                 usuarioDto.email(),
                 hashedPassword,
                 usuarioDto.tipoPerfil()
