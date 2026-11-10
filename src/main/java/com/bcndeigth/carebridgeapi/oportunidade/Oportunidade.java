@@ -49,10 +49,10 @@ public class Oportunidade {
     @Column(name = "ultima_atualizacao", nullable = false)
     private Instant ultimaAtualizacao;
 
-    @OneToOne(mappedBy = "oportunidade", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "oportunidade", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private FormularioTriagem formularioTriagem;
 
-    @OneToMany(mappedBy = "oportunidade", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "oportunidade", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Inscricao> inscricoes = new ArrayList<>();
 
     @PrePersist
