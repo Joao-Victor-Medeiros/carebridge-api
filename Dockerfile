@@ -27,7 +27,9 @@ COPY --from=build --chown=app:app /app/target/*.jar /app/app.jar
 
 USER app
 
+ENV SPRING_PROFILES_ACTIVE=prod
+
 EXPOSE 8080
 
-# Usa a porta fornecida pelo Render; localmente, utiliza 8080
-ENTRYPOINT ["sh", "-c", "exec java -jar /app/app.jar --server.port=${PORT:-8080} --server.address=0.0.0.0 --spring.profiles.active=${SPRING_PROFILES_ACTIVE:-prod}"]
+# O profile prod lê a porta e as demais configurações das variáveis de ambiente
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

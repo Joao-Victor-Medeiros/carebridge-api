@@ -156,7 +156,7 @@ java -jar target/carebridge-api-0.0.1-SNAPSHOT.jar
 O profile de produção está em:
 
 ```text
-src/main/resources/application-prod.yaml
+src/main/resources/application-prod.yml
 ```
 
 Para ativá-lo localmente no PowerShell:
