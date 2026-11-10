@@ -14,6 +14,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 public class FormularioTriagem {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
