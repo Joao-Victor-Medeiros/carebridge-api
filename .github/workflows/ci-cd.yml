@@ -110,3 +110,47 @@ jobs:
       - name: Logs da API
         if: always()
         run: docker logs api
+
+  deploy:
+    name: Deploy no Render
+    needs: [test, smoke]
+    # So publica o que chegou na master por push (merge de PR), nunca a partir de PR.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: production
+      url: ${{ vars.RENDER_URL }}
+    # Nunca dois deploys ao mesmo tempo; o segundo espera o primeiro terminar.
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    steps:
+      - name: Disparar o deploy
+        env:
+          DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$DEPLOY_HOOK" ]; then
+            echo "::error::Configure o secret RENDER_DEPLOY_HOOK_URL (veja a secao CI/CD do README)"
+            exit 1
+          fi
+          curl -fsS -X POST "$DEPLOY_HOOK" > /dev/null
+          echo "Deploy solicitado ao Render"
+
+      # O Render leva alguns minutos para construir a imagem, e o plano gratuito
+      # ainda demora para acordar. Aqui so confirmamos que a API voltou a responder.
+      - name: Conferir a API publicada
+        if: vars.RENDER_URL != ''
+        env:
+          RENDER_URL: ${{ vars.RENDER_URL }}
+        run: |
+          sleep 60
+          for i in $(seq 1 40); do
+            if curl -fsS --max-time 20 "$RENDER_URL/actuator/health" | grep -q '"status":"UP"'; then
+              echo "API publicada respondendo em $RENDER_URL"
+              exit 0
+            fi
+            sleep 15
+          done
+          echo "::error::A API publicada nao respondeu UP em 11 minutos. Confira os logs no painel do Render."
+          exit 1
