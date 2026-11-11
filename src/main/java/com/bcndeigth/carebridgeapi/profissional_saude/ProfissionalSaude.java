@@ -28,8 +28,7 @@ public class ProfissionalSaude {
     @JoinColumn(name = "usuario_id", nullable = false, unique = true)
     private Usuario usuario;
 
-    // A restrição NOT NULL é aplicada pela migração após copiar os dados legados de usuarios.nome.
-    @Column
+    @Column(nullable = false)
     private String nome;
 
     @ElementCollection

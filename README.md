@@ -119,13 +119,16 @@ A aplicação será iniciada, por padrão, na porta `8080`:
 http://localhost:8080
 ```
 
-No ambiente de desenvolvimento, o arquivo `application.yaml` usa:
+O schema é gerenciado por migrations do Flyway. Ao iniciar a aplicação, as
+migrations pendentes em `src/main/resources/db/migration` são executadas antes
+da validação das entidades JPA.
 
 ```yaml
-spring.jpa.hibernate.ddl-auto: update
+spring.jpa.hibernate.ddl-auto: validate
 ```
 
-Assim, o Hibernate cria ou atualiza as tabelas com base nas entidades JPA.
+O Hibernate não cria nem altera tabelas. Se uma entidade não estiver compatível
+com o schema migrado, a aplicação falha durante a inicialização.
 
 ## Compilar o projeto
 
@@ -156,7 +159,7 @@ java -jar target/carebridge-api-0.0.1-SNAPSHOT.jar
 O profile de produção está em:
 
 ```text
-src/main/resources/application-prod.yml
+src/main/resources/application-prod.yaml
 ```
 
 Para ativá-lo localmente no PowerShell:
@@ -180,7 +183,8 @@ DATABASE_PASSWORD
 JWT_SECRET
 ```
 
-Atualmente, o profile de produção usa `ddl-auto: update`, portanto o Hibernate cria ou atualiza as tabelas no banco PostgreSQL configurado, como o Neon.
+O profile de produção usa `ddl-auto: validate`. O Flyway executa as migrations
+antes da inicialização do JPA.
 
 ## Executar com Docker
 
@@ -249,7 +253,21 @@ DATABASE_URL=jdbc:postgresql://SEU_HOST_NEON/neondb?sslmode=require&channel_bind
 DATABASE_USERNAME=SEU_USUARIO_NEON
 DATABASE_PASSWORD=SUA_SENHA_NEON
 JWT_SECRET=UMA_CHAVE_FORTE
+FLYWAY_BASELINE_ON_MIGRATE=true
 ```
+
+No primeiro deploy com Flyway, mantenha `FLYWAY_BASELINE_ON_MIGRATE=true`.
+Isso permite adotar o histórico de migrations no banco já existente:
+
+- banco vazio: executa `V1`, `V2` e as próximas migrations normalmente;
+- banco existente sem `flyway_schema_history`: registra o baseline na versão 1
+  e executa apenas migrations posteriores, começando pela `V2`;
+- banco já controlado pelo Flyway: executa somente as migrations pendentes.
+
+Antes do primeiro deploy em produção, crie um backup ou uma branch do banco no
+Neon. Depois que todos os ambientes tiverem a tabela `flyway_schema_history`, a
+variável pode ser alterada para `false` para recuperar a proteção contra uma
+conexão acidental a um banco não versionado.
 
 O Dockerfile usa a porta fornecida pelo Render:
 
@@ -445,9 +463,37 @@ DELETE /oportunidades/{id}
 
 O ofertante é obtido automaticamente do usuário autenticado. Não envie `ofertanteId` no body.
 
-## Banco e perfil de produção
+## Migrations de banco
 
-O profile `prod` pode criar/atualizar o schema com base nas entidades JPA. Para um ambiente de produção definitivo, recomenda-se substituir `ddl-auto: update` por migrations versionadas e `ddl-auto: validate`.
+As migrations versionadas ficam em:
+
+```text
+src/main/resources/db/migration
+```
+
+O projeto possui inicialmente:
+
+```text
+V1__create_initial_schema.sql
+V2__move_nome_to_profissional_saude.sql
+V3__remove_nome_from_usuarios.sql
+```
+
+A `V2` copia o nome legado de `usuarios.nome` para
+`profissional_saude.nome`. A coluna antiga é mantida temporariamente como
+nullable, com triggers de compatibilidade, para que uma instância anterior da
+API continue funcionando durante a promoção da nova instância pelo Render.
+
+A `V3` remove os triggers e funções de compatibilidade e, em seguida, exclui a
+coluna legada `usuarios.nome`. Depois da `V3`, o nome do profissional existe
+somente em `profissional_saude.nome`.
+
+Para cada mudança futura de schema:
+
+1. crie um novo arquivo, por exemplo `V4__descricao_da_mudanca.sql`;
+2. nunca edite uma migration que já tenha sido aplicada em qualquer ambiente;
+3. prefira mudanças compatíveis com a versão anterior da aplicação;
+4. valide a migration em uma cópia ou branch do banco antes do deploy.
 
 O schema inclui entidades como:
 
