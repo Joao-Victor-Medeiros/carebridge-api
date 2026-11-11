@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +43,7 @@ public class UsuarioController implements UsuarioControllerDocs {
     private AdministradorService administradorService;
 
     @Override
+    @Hidden
     @PostMapping("/sign-up")
     public void signUp(SignUpUserDto dto) {
         //aqui deve registrar segundo sua role

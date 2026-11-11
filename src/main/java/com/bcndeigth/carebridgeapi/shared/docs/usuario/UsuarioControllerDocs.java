@@ -15,11 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/user")
 public interface UsuarioControllerDocs {
 
-    @PostMapping("/register")
-    @Operation(
-            summary = "Cadastrar usuário genérico",
-            description = "Cria uma conta de usuário a partir de dados JSON, utilizando o tipo de perfil informado no campo tipoPerfil."
-    )
+
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Usuário cadastrado com sucesso."),
             @ApiResponse(responseCode = "400", description = "Dados de cadastro inválidos.",
