@@ -18,6 +18,9 @@ public class PacienteService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    public PacienteService(UsuarioRepository usuarioRepository, PacienteRepository pacienteRepository, PasswordEncoder passwordEncoder) {
+    }
+
     @Transactional
     public void cadastrarPaciente(CadastroPacienteDto cadastroPacienteDto) {
         var hashedPassword = passwordEncoder.encode(cadastroPacienteDto.usuarioDto().senha());
