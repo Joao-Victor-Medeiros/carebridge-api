@@ -33,9 +33,6 @@ public class Usuario implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false)
-    private String nome;
-
     @Column(nullable = false, unique = true)
     private String email;
 
@@ -51,8 +48,7 @@ public class Usuario implements UserDetails {
     @Column(name = "atualizado_em", nullable = false)
     private Instant atualizadoEm;
 
-    public Usuario(String nome, String email, String hashedPassword, TipoPerfil tipoPerfil) {
-        this.nome = nome;
+    public Usuario(String email, String hashedPassword, TipoPerfil tipoPerfil) {
         this.email = email;
         this.senhaHash = hashedPassword;
         this.tipoPerfil = tipoPerfil;

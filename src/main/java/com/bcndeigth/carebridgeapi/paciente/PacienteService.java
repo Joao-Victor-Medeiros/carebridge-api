@@ -3,30 +3,37 @@ package com.bcndeigth.carebridgeapi.paciente;
 import com.bcndeigth.carebridgeapi.paciente.dto.CadastroPacienteDto;
 import com.bcndeigth.carebridgeapi.users.Usuario;
 import com.bcndeigth.carebridgeapi.users.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class PacienteService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-    @Autowired
-    private PacienteRepository pacienteRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UsuarioRepository usuarioRepository;
+    private final PacienteRepository pacienteRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public PacienteService(UsuarioRepository usuarioRepository, PacienteRepository pacienteRepository, PasswordEncoder passwordEncoder) {
+        this.usuarioRepository = usuarioRepository;
+        this.pacienteRepository = pacienteRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
     public void cadastrarPaciente(CadastroPacienteDto cadastroPacienteDto) {
-        var hashedPassword = passwordEncoder.encode(cadastroPacienteDto.usuarioDto().senha());
         var usuarioDto = cadastroPacienteDto.usuarioDto();
+        if (usuarioRepository.existsByEmail(usuarioDto.email())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Já existe um usuário cadastrado com este e-mail."
+            );
+        }
+
+        var hashedPassword = passwordEncoder.encode(usuarioDto.senha());
         var usuarioSalvo = usuarioRepository.save(new Usuario(
-                cadastroPacienteDto.nome(),
                 usuarioDto.email(),
                 hashedPassword,
                 usuarioDto.tipoPerfil()

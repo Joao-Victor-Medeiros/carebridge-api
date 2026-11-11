@@ -33,7 +33,7 @@ public class UsuarioService {
         }
 
         var hashedPassword = passwordEncoder.encode(dto.senha());
-        userRepository.save(new Usuario(dto.nome(), dto.email(), hashedPassword, dto.tipoPerfil()));
+        userRepository.save(new Usuario(dto.email(), hashedPassword, dto.tipoPerfil()));
 
         return ResponseEntity
                 .status(HttpStatus.CREATED) // Código HTTP: 201

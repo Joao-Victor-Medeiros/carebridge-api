@@ -73,7 +73,7 @@ class PacienteServiceTest {
 
     private CadastroPacienteDto criarCadastro(String email) {
         return new CadastroPacienteDto(
-                new SignUpUserDto("Paciente Teste", email, "Senha123!", TipoPerfil.PACIENTE),
+                new SignUpUserDto(email, "Senha123!", TipoPerfil.PACIENTE),
                 "Paciente Teste",
                 LocalDate.of(1990, 5, 21),
                 "+55 11 99999-9999",

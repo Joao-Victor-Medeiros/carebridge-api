@@ -28,6 +28,10 @@ public class ProfissionalSaude {
     @JoinColumn(name = "usuario_id", nullable = false, unique = true)
     private Usuario usuario;
 
+    // A restrição NOT NULL é aplicada pela migração após copiar os dados legados de usuarios.nome.
+    @Column
+    private String nome;
+
     @ElementCollection
     @CollectionTable(
             name = "documentos_registro",
@@ -58,7 +62,8 @@ public class ProfissionalSaude {
     @OneToMany(mappedBy = "ofertante", fetch = FetchType.LAZY)
     private List<FormularioTriagem> formulariosTriagem = new ArrayList<>();
 
-    public ProfissionalSaude(List<Documento> documentosRegistro, String biografiaOuDescricao, Usuario usuario) {
+    public ProfissionalSaude(String nome, List<Documento> documentosRegistro, String biografiaOuDescricao, Usuario usuario) {
+        this.nome = nome;
         this.documentosRegistro = documentosRegistro;
         this.biografiaOuDescricao = biografiaOuDescricao;
         this.usuario = usuario;
