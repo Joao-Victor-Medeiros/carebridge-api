@@ -1,0 +1,19 @@
+# Source - https://stackoverflow.com/a/74297978
+# Posted by Duc Trung Mai, modified by community. See post 'Timeline' for change history
+# Retrieved 2026-09-14, License - CC BY-SA 4.0
+
+volumes:
+  postgres:
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: carebridge-db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    restart: unless-stopped
