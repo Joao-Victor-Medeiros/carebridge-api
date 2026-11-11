@@ -324,7 +324,6 @@ Body:
 
 ```json
 {
-  "nome": "Paulo Ricardo",
   "email": "paulo.ricardo@example.com",
   "senha": "Senha123!",
   "tipoPerfil": "PACIENTE"
@@ -344,7 +343,6 @@ Body:
 ```json
 {
   "usuarioDto": {
-    "nome": "Paulo Ricardo",
     "email": "paulo.ricardo@example.com",
     "senha": "Senha123!",
     "tipoPerfil": "PACIENTE"
@@ -367,7 +365,6 @@ Essa rota usa `multipart/form-data`. Envie a parte `dados` como JSON:
 ```json
 {
   "usuarioDto": {
-    "nome": "Dra. Ana Souza",
     "email": "ana.souza@example.com",
     "senha": "Senha123!",
     "tipoPerfil": "PROFISSIONAL_SAUDE"
