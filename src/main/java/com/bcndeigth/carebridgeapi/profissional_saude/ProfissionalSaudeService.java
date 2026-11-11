@@ -4,7 +4,6 @@ import com.bcndeigth.carebridgeapi.profissional_saude.dto.CadastroProfissionalSa
 import com.bcndeigth.carebridgeapi.users.TipoPerfil;
 import com.bcndeigth.carebridgeapi.users.Usuario;
 import com.bcndeigth.carebridgeapi.users.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,7 +19,6 @@ import java.util.stream.Collectors;
 @Service
 public class ProfissionalSaudeService {
 
-    @Autowired
     private final ProfissionalSaudeRepository profissionalSaudeRepository;
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;

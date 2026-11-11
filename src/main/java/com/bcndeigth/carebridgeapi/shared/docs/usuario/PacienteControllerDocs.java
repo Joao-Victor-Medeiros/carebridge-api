@@ -23,6 +23,8 @@ public interface PacienteControllerDocs {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Usuário paciente cadastrado com sucesso."),
             @ApiResponse(responseCode = "400", description = "Dados de cadastro inválidos.",
+                    content = @Content(schema = @Schema(implementation = Object.class))),
+            @ApiResponse(responseCode = "409", description = "E-mail já cadastrado.",
                     content = @Content(schema = @Schema(implementation = Object.class)))
     })
     void cadastrarPaciente(@RequestBody CadastroPacienteDto cadastroPacienteDto);

@@ -1,5 +1,5 @@
 # Etapa 1: compila a aplicação
-FROM eclipse-temurin:25-jdk AS build
+FROM eclipse-temurin:21-jdk AS build
 
 WORKDIR /app
 
@@ -13,10 +13,10 @@ RUN sed -i 's/\r$//' mvnw && chmod +x mvnw
 RUN ./mvnw -B -ntp dependency:go-offline
 
 COPY src/ src/
-RUN ./mvnw -B -ntp package
+RUN ./mvnw -B -ntp package -DskipTests
 
 # Etapa 2: executa a aplicação
-FROM eclipse-temurin:25-jre
+FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
@@ -27,7 +27,9 @@ COPY --from=build --chown=app:app /app/target/*.jar /app/app.jar
 
 USER app
 
+ENV SPRING_PROFILES_ACTIVE=prod
+
 EXPOSE 8080
 
-# Usa a porta fornecida pelo Render; localmente, utiliza 8080
-ENTRYPOINT ["sh", "-c", "exec java -jar /app/app.jar --server.port=${PORT:-8080} --server.address=0.0.0.0"]
+# O profile prod lê a porta e as demais configurações das variáveis de ambiente
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

@@ -20,7 +20,7 @@ public record ProfissionalPendenteResponse(
         return new ProfissionalPendenteResponse(
                 profissional.getId(),
                 profissional.getUsuario().getId(),
-                profissional.getUsuario().getNome(),
+                profissional.getNome(),
                 profissional.getUsuario().getEmail(),
                 profissional.getDocumentosRegistro().stream()
                         .map(documento -> documento.getNomeArquivo())
