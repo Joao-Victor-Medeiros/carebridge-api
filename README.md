@@ -283,6 +283,46 @@ O Render pode verificar a aplicação por:
 /actuator/health
 ```
 
+## CI/CD com GitHub Actions
+
+O workflow `.github/workflows/ci-cd.yml` roda em todo push e pull request para
+`master` e `develop`, e também manualmente pela aba **Actions** (botão
+**Run workflow**).
+
+| Job | Quando roda | O que faz |
+| --- | --- | --- |
+| **Build e testes** | Sempre | `./mvnw verify` com Java 21: compila e roda os testes |
+| **Imagem Docker e subida da API** | Sempre | Constrói a imagem com o mesmo `Dockerfile` do Render, sobe a API com o profile `prod` contra um PostgreSQL descartável e espera o `/actuator/health` responder `UP`. Pega migration do Flyway que não bate com as entidades antes de chegar em produção |
+| **Deploy no Render** | Só em push na `master`, e só se os dois anteriores passarem | Dispara o deploy pelo Deploy Hook do Render e confere se a API publicada voltou a responder |
+
+Pull request nunca faz deploy: o deploy acontece quando o PR é mergeado na `master`.
+
+### Configuração (uma vez só)
+
+1. **No Render:** abra o Web Service, vá em **Settings**:
+   - Em **Deploy Hook**, copie a URL.
+   - Em **Auto-Deploy**, escolha **Off**. Assim quem publica é o GitHub Actions, depois dos testes,
+     e o Render não faz um segundo deploy sozinho a cada push.
+2. **No GitHub:** em **Settings → Secrets and variables → Actions**:
+   - Aba **Secrets** → **New repository secret**: nome `RENDER_DEPLOY_HOOK_URL`, valor a URL do Deploy Hook.
+     A URL funciona como senha: quem tiver ela consegue disparar deploy.
+   - Aba **Variables** → **New repository variable**: nome `RENDER_URL`, valor o endereço público da
+     API, sem barra no final (ex.: `https://carebridge-api.onrender.com`). Opcional: sem ela o
+     deploy é disparado, mas a conferência final é pulada.
+3. **Proteção da `master` (recomendado):** em **Settings → Branches → Add rule** para `master`,
+   marque **Require status checks to pass** e escolha **Build e testes** e
+   **Imagem Docker e subida da API**. Assim nenhum PR entra quebrado.
+
+As variáveis de banco e `JWT_SECRET` de produção continuam só no Render; o
+workflow não precisa delas. O banco usado no CI é descartável e não tem relação com o Neon.
+
+### Limitações
+
+- A conferência depois do deploy confirma que a API está respondendo `UP`. Nos
+  primeiros minutos ela ainda pode estar respondendo com a versão anterior,
+  enquanto o Render termina a troca. O status exato do deploy fica no painel do Render.
+- No plano gratuito do Render a API dorme sem uso, então a primeira resposta pode levar quase um minuto.
+
 ## Health check e documentação
 
 Com a aplicação na porta `8080`:
