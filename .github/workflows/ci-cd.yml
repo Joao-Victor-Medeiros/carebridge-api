@@ -39,3 +39,74 @@ jobs:
           name: relatorio-testes
           path: target/surefire-reports/
           retention-days: 7
+
+  smoke:
+    name: Imagem Docker e subida da API
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Banco descartavel so para este teste, com as mesmas credenciais do docker-compose.
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: carebridge-db
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: admin
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U admin -d carebridge-db"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Construir a imagem (mesmo Dockerfile do Render)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: carebridge-api:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Sobe a API com o profile prod. Se uma migration do Flyway nao bater com as
+      # entidades (ddl-auto: validate), a aplicacao nem inicia e o job falha aqui,
+      # antes de chegar no Render.
+      - name: Subir a API
+        run: |
+          docker run -d --name api --network host \
+            -e SPRING_PROFILES_ACTIVE=prod \
+            -e PORT=8080 \
+            -e DATABASE_URL=jdbc:postgresql://localhost:5432/carebridge-db \
+            -e DATABASE_USERNAME=admin \
+            -e DATABASE_PASSWORD=admin \
+            -e JWT_SECRET=segredo-apenas-para-o-ci \
+            -e FLYWAY_BASELINE_ON_MIGRATE=true \
+            carebridge-api:ci
+
+      - name: Esperar o health check responder UP
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fsS http://localhost:8080/actuator/health | grep -q '"status":"UP"'; then
+              echo "API no ar depois de $((i * 3))s"
+              exit 0
+            fi
+            if [ "$(docker inspect -f '{{.State.Running}}' api)" != "true" ]; then
+              echo "::error::O container parou durante a inicializacao"
+              exit 1
+            fi
+            sleep 3
+          done
+          echo "::error::A API nao respondeu em 90s"
+          exit 1
+
+      - name: Conferir o Swagger
+        run: curl -fsS http://localhost:8080/v3/api-docs > /dev/null
+
+      - name: Logs da API
+        if: always()
+        run: docker logs api
