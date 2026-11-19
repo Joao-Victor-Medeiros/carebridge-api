@@ -21,11 +21,11 @@ import com.bcndeigth.carebridgeapi.oportunidade.FormularioTriagem;
 @NoArgsConstructor
 public class ProfissionalSaude {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "usuario_id", nullable = false, unique = true)
+    @MapsId
+    @JoinColumn(name = "id")
     private Usuario usuario;
 
     @Column(nullable = false)
@@ -47,7 +47,6 @@ public class ProfissionalSaude {
         documentoRegistro = JsonMapper.builder().build().writeValueAsString(
                 documentosRegistro.stream().map(Documento::getNomeArquivo).toList());
     }
-
 
     @Column(name = "biografia_ou_descricao", columnDefinition = "text")
     private String biografiaOuDescricao;
