@@ -1,0 +1,2 @@
+ALTER TABLE profissional_saude
+DROP COLUMN IF EXISTS validado_institucionalmente;

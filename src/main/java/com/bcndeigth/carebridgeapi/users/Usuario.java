@@ -40,7 +40,14 @@ public class Usuario implements UserDetails {
     private String senhaHash;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_perfil", nullable = false)
     private TipoPerfil tipoPerfil;
+
+    @Column(name = "termos_aceitos_em", nullable = false, updatable = false)
+    private Instant termosAceitosEm;
+
+    @Column(name = "email_verificado", nullable = false)
+    private boolean emailVerificado;
 
     @Column(name = "criado_em", nullable = false, updatable = false)
     private Instant criadoEm;
@@ -48,10 +55,16 @@ public class Usuario implements UserDetails {
     @Column(name = "atualizado_em", nullable = false)
     private Instant atualizadoEm;
 
-    public Usuario(String email, String hashedPassword, TipoPerfil tipoPerfil) {
-        this.email = email;
+    public Usuario(String email, String hashedPassword, TipoPerfil tipoPerfil, Instant termosAceitosEm) {
+        this.email = email.toLowerCase(java.util.Locale.ROOT);
         this.senhaHash = hashedPassword;
         this.tipoPerfil = tipoPerfil;
+        this.termosAceitosEm = termosAceitosEm;
+        this.emailVerificado = false;
+    }
+
+    public Usuario(String email, String hashedPassword, TipoPerfil tipoPerfil) {
+        this(email, hashedPassword, tipoPerfil, Instant.now());
     }
 
     public String getEmail() {

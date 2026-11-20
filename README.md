@@ -435,24 +435,6 @@ Essa rota usa `multipart/form-data`. Envie a parte `dados` como JSON:
 }
 ```
 
-Novos profissionais começam com `validado_institucionalmente = false`.
-
-### Administração
-
-Listar profissionais pendentes:
-
-```http
-GET /user/profissionais/pendentes
-```
-
-Aprovar profissional:
-
-```http
-PATCH /user/profissionais/{profissionalId}/aprovar
-```
-
-Essas rotas exigem token de um usuário com perfil `ADMIN`.
-
 ### Oportunidades
 
 Criar:
@@ -461,7 +443,7 @@ Criar:
 POST /oportunidades
 ```
 
-Exige profissional de saúde validado institucionalmente.
+Exige um usuário autenticado com perfil de profissional de saúde.
 
 Body:
 
@@ -517,6 +499,9 @@ O projeto possui inicialmente:
 V1__create_initial_schema.sql
 V2__move_nome_to_profissional_saude.sql
 V3__remove_nome_from_usuarios.sql
+V3_1__prepare_profile_ids_unification.sql
+V4__unify_user_id_with_profiles.sql
+V5__remove_professional_document_evaluation.sql
 ```
 
 A `V2` copia o nome legado de `usuarios.nome` para
@@ -527,6 +512,14 @@ API continue funcionando durante a promoção da nova instância pelo Render.
 A `V3` remove os triggers e funções de compatibilidade e, em seguida, exclui a
 coluna legada `usuarios.nome`. Depois da `V3`, o nome do profissional existe
 somente em `profissional_saude.nome`.
+
+A `V3.1` prepara bancos legados para a unificação dos IDs dos perfis, preservando
+as referências existentes mesmo quando as constraints foram criadas pelo
+Hibernate com nomes automáticos. Em seguida, a `V4` remove as colunas
+`usuario_id` e passa a usar o ID do usuário como ID do paciente ou profissional.
+
+A `V5` remove o estado de validação institucional enquanto a avaliação de
+documentos estiver desativada.
 
 Para cada mudança futura de schema:
 
