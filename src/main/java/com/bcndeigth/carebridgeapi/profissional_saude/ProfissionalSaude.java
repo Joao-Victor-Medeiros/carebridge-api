@@ -21,15 +21,27 @@ import com.bcndeigth.carebridgeapi.oportunidade.FormularioTriagem;
 @NoArgsConstructor
 public class ProfissionalSaude {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "usuario_id", nullable = false, unique = true)
+    @MapsId
+    @JoinColumn(name = "id")
     private Usuario usuario;
 
     @Column(nullable = false)
     private String nome;
+
+    private String conselho;
+
+    private String uf;
+
+    @Column(name = "numero_registro")
+    private String numeroRegistro;
+
+    private String especialidade;
+
+    @Column(name = "onde_atende")
+    private String ondeAtende;
 
     @ElementCollection
     @CollectionTable(
@@ -48,12 +60,8 @@ public class ProfissionalSaude {
                 documentosRegistro.stream().map(Documento::getNomeArquivo).toList());
     }
 
-
     @Column(name = "biografia_ou_descricao", columnDefinition = "text")
     private String biografiaOuDescricao;
-
-    @Column(name = "validado_institucionalmente", nullable = false)
-    private boolean validadoInstitucionalmente = false;
 
     @OneToMany(mappedBy = "ofertante", fetch = FetchType.LAZY)
     private List<Oportunidade> oportunidades = new ArrayList<>();
@@ -61,8 +69,15 @@ public class ProfissionalSaude {
     @OneToMany(mappedBy = "ofertante", fetch = FetchType.LAZY)
     private List<FormularioTriagem> formulariosTriagem = new ArrayList<>();
 
-    public ProfissionalSaude(String nome, List<Documento> documentosRegistro, String biografiaOuDescricao, Usuario usuario) {
+    public ProfissionalSaude(String nome, String conselho, String uf, String numeroRegistro,
+                             String especialidade, String ondeAtende, List<Documento> documentosRegistro,
+                             String biografiaOuDescricao, Usuario usuario) {
         this.nome = nome;
+        this.conselho = conselho;
+        this.uf = uf;
+        this.numeroRegistro = numeroRegistro;
+        this.especialidade = especialidade;
+        this.ondeAtende = ondeAtende;
         this.documentosRegistro = documentosRegistro;
         this.biografiaOuDescricao = biografiaOuDescricao;
         this.usuario = usuario;

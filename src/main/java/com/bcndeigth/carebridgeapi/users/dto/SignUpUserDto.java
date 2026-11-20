@@ -12,6 +12,12 @@ public record SignUpUserDto(
         String senha,
 
         @Schema(description = "Perfil da conta.", example = "PROFISSIONAL_SAUDE")
-        TipoPerfil tipoPerfil
+        TipoPerfil tipoPerfil,
+
+        @Schema(description = "Confirmação de aceite dos termos de uso e privacidade.", example = "true")
+        boolean acceptedTerms
 ) {
+    public SignUpUserDto(String email, String senha, TipoPerfil tipoPerfil) {
+        this(email, senha, tipoPerfil, true);
+    }
 }
