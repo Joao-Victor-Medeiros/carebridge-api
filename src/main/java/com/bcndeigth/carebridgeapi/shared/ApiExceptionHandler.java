@@ -1,25 +1,49 @@
 package com.bcndeigth.carebridgeapi.shared;
 
 import com.bcndeigth.carebridgeapi.users.dto.ErrorResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.UUID;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
+    private static final Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
+
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<ErrorResponse> tratarRegraDeNegocio(ResponseStatusException exception) {
         HttpStatus status = HttpStatus.resolve(exception.getStatusCode().value());
         String error = status == null ? "Error" : nomeErro(status);
         return resposta(exception.getStatusCode().value(), error, exception.getReason());
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> tratarNaoAutenticado(AuthenticationException exception) {
+        return resposta(HttpStatus.UNAUTHORIZED.value(), nomeErro(HttpStatus.UNAUTHORIZED),
+                "Sessão expirada ou credenciais inválidas.");
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> tratarSemPermissao(AccessDeniedException exception) {
+        return resposta(HttpStatus.FORBIDDEN.value(), nomeErro(HttpStatus.FORBIDDEN),
+                "Você não tem permissão para acessar este recurso.");
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> tratarRotaInexistente(NoResourceFoundException exception) {
+        return resposta(HttpStatus.NOT_FOUND.value(), nomeErro(HttpStatus.NOT_FOUND), "Recurso não encontrado.");
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
@@ -42,6 +66,7 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> tratarErroInesperado(Exception exception) {
+        log.error("Erro inesperado", exception);
         return resposta(HttpStatus.INTERNAL_SERVER_ERROR.value(), nomeErro(HttpStatus.INTERNAL_SERVER_ERROR),
                 "Não foi possível concluir a solicitação.");
     }

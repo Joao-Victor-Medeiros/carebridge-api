@@ -38,6 +38,7 @@ public class UsuarioService {
             return new UserProfileResponse(usuario.getId(), profissional.getNome(), usuario.getEmail(),
                     usuario.getTipoPerfil(), null, null, null);
         }
-        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Perfil de usuário não permitido.");
+        return new UserProfileResponse(usuario.getId(), null, usuario.getEmail(),
+                usuario.getTipoPerfil(), null, null, null);
     }
 }
