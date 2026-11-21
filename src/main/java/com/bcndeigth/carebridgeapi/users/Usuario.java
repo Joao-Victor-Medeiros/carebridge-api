@@ -44,37 +44,27 @@ public class Usuario implements UserDetails {
     @Column(name = "tipo_perfil", nullable = false)
     private TipoPerfil tipoPerfil;
 
-<<<<<<< HEAD
     @Column(name = "accepted_terms", nullable = false)
     private boolean acceptedTerms;
 
-    @Column(name = "termos_aceitos_em")
-    private Instant termosAceitosEm;
-
-=======
     @Column(name = "termos_aceitos_em", nullable = false, updatable = false)
     private Instant termosAceitosEm;
 
     @Column(name = "email_verificado", nullable = false)
     private boolean emailVerificado;
 
->>>>>>> origin/develop
     @Column(name = "criado_em", nullable = false, updatable = false)
     private Instant criadoEm;
 
     @Column(name = "atualizado_em", nullable = false)
     private Instant atualizadoEm;
 
-<<<<<<< HEAD
-    public Usuario(String email, String hashedPassword, TipoPerfil tipoPerfil) {
-        setEmail(email);
-=======
     public Usuario(String email, String hashedPassword, TipoPerfil tipoPerfil, Instant termosAceitosEm) {
-        this.email = email.toLowerCase(java.util.Locale.ROOT);
->>>>>>> origin/develop
+        setEmail(email);
         this.senhaHash = hashedPassword;
         this.tipoPerfil = tipoPerfil;
-        this.termosAceitosEm = termosAceitosEm;
+        this.acceptedTerms = true;
+        this.termosAceitosEm = termosAceitosEm != null ? termosAceitosEm : Instant.now();
         this.emailVerificado = false;
     }
 
@@ -87,7 +77,8 @@ public class Usuario implements UserDetails {
         this.senhaHash = hashedPassword;
         this.tipoPerfil = tipoPerfil;
         this.acceptedTerms = acceptedTerms;
-        this.termosAceitosEm = termosAceitosEm;
+        this.termosAceitosEm = termosAceitosEm != null ? termosAceitosEm : Instant.now();
+        this.emailVerificado = false;
     }
 
     public void setEmail(String email) {
@@ -105,7 +96,7 @@ public class Usuario implements UserDetails {
     @PrePersist
     protected void aoCriar() {
         setEmail(this.email);
-        if (this.acceptedTerms && this.termosAceitosEm == null) {
+        if (this.termosAceitosEm == null) {
             this.termosAceitosEm = Instant.now();
         }
         Instant agora = Instant.now();

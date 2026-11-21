@@ -16,32 +16,17 @@ public record CadastroProfissionalSaudeDto(
         @Schema(description = "Conselho profissional.", example = "CRM")
         String conselho,
 
-<<<<<<< HEAD
-        @Schema(description = "UF do registro profissional.", example = "DF")
-=======
-        @Schema(description = "UF do conselho profissional.", example = "SP")
->>>>>>> origin/develop
+        @Schema(description = "UF do conselho profissional.", example = "DF")
         String uf,
 
         @Schema(description = "Número do registro profissional.", example = "123456")
         String numeroRegistro,
 
-<<<<<<< HEAD
-        @Schema(description = "Especialidade do profissional.", example = "Cardiologia")
+        @Schema(description = "Especialidade principal.", example = "Cardiologia")
         String especialidade,
 
-        @Schema(description = "Local onde o profissional atende.", example = "Brasília - DF")
+        @Schema(description = "Instituição, clínica ou local de atendimento.", example = "Brasília - DF")
         String ondeAtende,
-
-        @Schema(description = "Referências textuais de documentos de registro profissional.", example = "[\"CRM-DF 123456\"]")
-        List<String> documentosRegistro,
-=======
-        @Schema(description = "Especialidade principal.", example = "Clínica geral")
-        String especialidade,
-
-        @Schema(description = "Instituição, clínica ou local de atendimento.", example = "Clínica Saúde")
-        String ondeAtende,
->>>>>>> origin/develop
 
         @Schema(description = "Biografia ou descrição profissional.", example = "Médica cardiologista com experiência clínica.")
         String biografiaOuDescricao,

@@ -4,6 +4,7 @@ import com.bcndeigth.carebridgeapi.profissional_saude.dto.CadastroProfissionalSa
 import com.bcndeigth.carebridgeapi.users.TipoPerfil;
 import com.bcndeigth.carebridgeapi.users.Usuario;
 import com.bcndeigth.carebridgeapi.users.UsuarioRepository;
+import com.bcndeigth.carebridgeapi.users.dto.CadastroResponse;
 import com.bcndeigth.carebridgeapi.users.dto.SignUpUserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,16 +57,19 @@ class ProfissionalSaudeServiceTest {
                 "123456",
                 "Cardiologia",
                 "Brasília - DF",
-                List.of("CRM-DF 123456"),
                 "Cardiologista",
                 true
         );
 
         when(usuarioRepository.existsByEmail("maria.santos@example.com")).thenReturn(false);
+        when(usuarioRepository.existsByEmailIgnoreCase("maria.santos@example.com")).thenReturn(false);
         when(passwordEncoder.encode("Senha123!")).thenReturn("senha-hash");
         when(usuarioRepository.save(any(Usuario.class))).thenAnswer(inv -> inv.getArgument(0));
 
-        service.cadastrarProfissionalSaude(dto, List.<MultipartFile>of());
+        CadastroResponse response = service.cadastrarProfissionalSaude(dto, List.<MultipartFile>of());
+
+        assertEquals("maria.santos@example.com", response.email());
+        assertNotNull(response);
 
         ArgumentCaptor<Usuario> usuarioCaptor = ArgumentCaptor.forClass(Usuario.class);
         verify(usuarioRepository).save(usuarioCaptor.capture());
@@ -99,7 +103,6 @@ class ProfissionalSaudeServiceTest {
                 "123456",
                 "Cardiologia",
                 "Brasília - DF",
-                List.of(),
                 "Cardiologista",
                 true
         );

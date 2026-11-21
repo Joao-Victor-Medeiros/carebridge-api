@@ -4,12 +4,8 @@ import com.bcndeigth.carebridgeapi.paciente.dto.CadastroPacienteDto;
 import com.bcndeigth.carebridgeapi.users.TipoPerfil;
 import com.bcndeigth.carebridgeapi.users.Usuario;
 import com.bcndeigth.carebridgeapi.users.UsuarioRepository;
-<<<<<<< HEAD
-import org.springframework.dao.DataIntegrityViolationException;
-=======
-import com.bcndeigth.carebridgeapi.users.TipoPerfil;
 import com.bcndeigth.carebridgeapi.users.dto.CadastroResponse;
->>>>>>> origin/develop
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,36 +33,25 @@ public class PacienteService {
     }
 
     @Transactional
-<<<<<<< HEAD
-    public void cadastrarPaciente(CadastroPacienteDto cadastroPacienteDto) {
+    public CadastroResponse cadastrarPaciente(CadastroPacienteDto cadastroPacienteDto) {
         if (cadastroPacienteDto == null || cadastroPacienteDto.usuarioDto() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Dados inválidos");
-        }
-
-        if (!Boolean.TRUE.equals(cadastroPacienteDto.acceptedTerms())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "É necessário aceitar os termos de uso");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Os dados da conta são obrigatórios.");
         }
 
         var usuarioDto = cadastroPacienteDto.usuarioDto();
-        if (usuarioDto.email() == null || usuarioDto.email().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-mail é obrigatório");
-        }
-        if (usuarioDto.senha() == null || usuarioDto.senha().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Senha é obrigatória");
-        }
-        if (cadastroPacienteDto.nome() == null || cadastroPacienteDto.nome().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nome é obrigatório");
-        }
+        validarObrigatorio(cadastroPacienteDto.nome(), "O nome é obrigatório.");
         if (cadastroPacienteDto.dataNascimento() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Data de nascimento é obrigatória");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A data de nascimento é obrigatória.");
         }
 
+        boolean aceitouTermos = !Boolean.FALSE.equals(cadastroPacienteDto.acceptedTerms()) && (Boolean.TRUE.equals(cadastroPacienteDto.acceptedTerms()) || usuarioDto.acceptedTerms());
+        validarConta(usuarioDto.email(), usuarioDto.senha(), aceitouTermos);
+
         String emailNormalizado = usuarioDto.email().trim().toLowerCase(Locale.ROOT);
-        if (usuarioRepository.existsByEmail(emailNormalizado)) {
+        if (usuarioRepository.existsByEmail(emailNormalizado) || usuarioRepository.existsByEmailIgnoreCase(emailNormalizado)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe uma conta cadastrada com este e-mail");
         }
 
-        String telefoneNormalizado = normalizarTelefone(cadastroPacienteDto.telefone());
         String hashedPassword = passwordEncoder.encode(usuarioDto.senha());
         Instant agora = Instant.now();
 
@@ -80,54 +65,17 @@ public class PacienteService {
 
         try {
             Usuario usuarioSalvo = usuarioRepository.save(usuario);
-
-            Paciente paciente = new Paciente(
+            pacienteRepository.save(new Paciente(
                     cadastroPacienteDto.nome().trim(),
                     cadastroPacienteDto.dataNascimento(),
-                    telefoneNormalizado,
+                    normalizarTelefone(cadastroPacienteDto.telefone()),
                     cadastroPacienteDto.endereco(),
                     usuarioSalvo
-            );
-
-            pacienteRepository.save(paciente);
+            ));
+            return new CadastroResponse(emailNormalizado, TipoPerfil.PACIENTE.name(), 6);
         } catch (DataIntegrityViolationException ex) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe uma conta cadastrada com este e-mail", ex);
         }
-=======
-    public CadastroResponse cadastrarPaciente(CadastroPacienteDto cadastroPacienteDto) {
-        if (cadastroPacienteDto == null || cadastroPacienteDto.usuarioDto() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Os dados da conta são obrigatórios.");
-        }
-        var usuarioDto = cadastroPacienteDto.usuarioDto();
-        validarObrigatorio(cadastroPacienteDto.nome(), "O nome é obrigatório.");
-        if (cadastroPacienteDto.dataNascimento() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A data de nascimento é obrigatória.");
-        }
-        validarConta(usuarioDto.email(), usuarioDto.senha(), usuarioDto.acceptedTerms());
-        String email = usuarioDto.email().trim().toLowerCase(java.util.Locale.ROOT);
-        if (usuarioRepository.existsByEmail(email)) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    "Já existe um usuário cadastrado com este e-mail."
-            );
-        }
-
-        var hashedPassword = passwordEncoder.encode(usuarioDto.senha());
-        var usuarioSalvo = usuarioRepository.save(new Usuario(
-                email,
-                hashedPassword,
-                TipoPerfil.PACIENTE,
-                java.time.Instant.now()
-        ));
-
-        pacienteRepository.save(new Paciente(
-                cadastroPacienteDto.nome(),
-                cadastroPacienteDto.dataNascimento(),
-                somenteDigitos(cadastroPacienteDto.telefone()),
-                cadastroPacienteDto.endereco(),
-                usuarioSalvo
-        ));
-        return new CadastroResponse(email, TipoPerfil.PACIENTE.name(), 6);
     }
 
     private void validarConta(String email, String senha, boolean acceptedTerms) {
@@ -142,15 +90,6 @@ public class PacienteService {
         if (valor == null || valor.isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, mensagem);
         }
-    }
-
-    private String somenteDigitos(String telefone) {
-        if (telefone == null || telefone.isBlank()) {
-            return null;
-        }
-        String normalizado = telefone.replaceAll("\\D", "");
-        return normalizado.isBlank() ? null : normalizado;
->>>>>>> origin/develop
     }
 
     private String normalizarTelefone(String telefone) {
