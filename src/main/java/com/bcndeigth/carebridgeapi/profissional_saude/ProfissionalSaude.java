@@ -1,6 +1,5 @@
 package com.bcndeigth.carebridgeapi.profissional_saude;
 
-import com.bcndeigth.carebridgeapi.oportunidade.FormularioTriagem;
 import com.bcndeigth.carebridgeapi.oportunidade.Oportunidade;
 import com.bcndeigth.carebridgeapi.users.Usuario;
 import jakarta.persistence.*;
@@ -60,9 +59,6 @@ public class ProfissionalSaude {
 
     @OneToMany(mappedBy = "ofertante", fetch = FetchType.LAZY)
     private List<Oportunidade> oportunidades = new ArrayList<>();
-
-    @OneToMany(mappedBy = "ofertante", fetch = FetchType.LAZY)
-    private List<FormularioTriagem> formulariosTriagem = new ArrayList<>();
 
     public ProfissionalSaude(
             String nome,

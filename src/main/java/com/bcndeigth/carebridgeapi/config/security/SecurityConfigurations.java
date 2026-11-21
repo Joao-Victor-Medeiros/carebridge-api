@@ -50,7 +50,7 @@ public class SecurityConfigurations {
                 .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .requestMatchers("/user/login", "/paciente/cadastro", "/profissional-saude/cadastro").permitAll()
-                .requestMatchers(HttpMethod.GET, "/oportunidades", "/oportunidades/*").permitAll()
+                .requestMatchers(HttpMethod.GET, "/catalogos", "/oportunidades", "/oportunidades/*").permitAll()
                 .requestMatchers("/user/profissionais/**").hasRole("ADMIN")
                 .requestMatchers("/paciente/**").hasRole("PACIENTE")
                 .requestMatchers("/profissional-saude/**").hasRole("PROFISSIONAL_SAUDE")
