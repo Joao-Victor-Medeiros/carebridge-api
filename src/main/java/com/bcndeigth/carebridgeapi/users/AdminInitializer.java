@@ -47,20 +47,12 @@ public class AdminInitializer implements ApplicationRunner {
         }
 
         String emailNormalizado = adminEmail.trim().toLowerCase(Locale.ROOT);
-        if (usuarioRepository.existsByEmail(emailNormalizado)) {
+        if (usuarioRepository.existsByEmailIgnoreCase(emailNormalizado)) {
             log.warn("E-mail do administrador inicial já está em uso por outra conta; criação automática ignorada.");
             return;
         }
 
-        Usuario admin = new Usuario(
-                emailNormalizado,
-                passwordEncoder.encode(adminPassword),
-                TipoPerfil.ADMIN,
-                true,
-                Instant.now()
-        );
-
-        usuarioRepository.save(admin);
+        usuarioRepository.save(new Usuario(emailNormalizado, passwordEncoder.encode(adminPassword), TipoPerfil.ADMIN, Instant.now()));
         log.info("Usuário administrador inicial criado com sucesso para {}", emailNormalizado);
     }
 }

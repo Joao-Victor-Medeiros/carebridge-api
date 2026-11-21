@@ -1,5 +1,7 @@
 # Especificação Completa de Regras de Negócio e Modelagem — `carebridge-api`
 
+> **Fonte única dos contratos HTTP:** rotas, nomes de campos, corpos de requisição e resposta, códigos de status e corpo de erro seguem [`contrato-api.md`](contrato-api.md) (contrato v2, o mesmo que os apps iOS e web implementam). Onde este documento divergir dele, vale o contrato.
+
 Este documento consolida as regras de negócio, modelos de dados (JPA/PostgreSQL), máquinas de estado, contratos HTTP e políticas de segurança de todos os módulos do backend Spring Boot (`carebridge-api`), alinhados ao Contrato v2 dos clientes Web (React/TypeScript) e Mobile (iOS/Swift).
 
 ---

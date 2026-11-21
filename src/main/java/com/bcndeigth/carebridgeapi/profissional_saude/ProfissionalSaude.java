@@ -1,13 +1,11 @@
 package com.bcndeigth.carebridgeapi.profissional_saude;
 
-import com.bcndeigth.carebridgeapi.oportunidade.FormularioTriagem;
 import com.bcndeigth.carebridgeapi.oportunidade.Oportunidade;
 import com.bcndeigth.carebridgeapi.users.Usuario;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import tools.jackson.databind.json.JsonMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,24 +50,15 @@ public class ProfissionalSaude {
     )
     private List<Documento> documentosRegistro = new ArrayList<>();
 
-    @Column(name = "documento_registro", length = 4096)
-    private String documentoRegistro;
-
-    @PrePersist
-    @PreUpdate
-    private void atualizarReferenciaDocumentos() {
-        documentoRegistro = JsonMapper.builder().build().writeValueAsString(
-                documentosRegistro.stream().map(Documento::getNomeArquivo).toList());
-    }
-
     @Column(name = "biografia_ou_descricao", columnDefinition = "text")
     private String biografiaOuDescricao;
 
-    @OneToMany(mappedBy = "ofertante", fetch = FetchType.LAZY)
-    private List<Oportunidade> oportunidades = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    @Column(name = "situacao_registro", nullable = false, length = 20)
+    private SituacaoRegistro situacaoRegistro = SituacaoRegistro.EM_VERIFICACAO;
 
     @OneToMany(mappedBy = "ofertante", fetch = FetchType.LAZY)
-    private List<FormularioTriagem> formulariosTriagem = new ArrayList<>();
+    private List<Oportunidade> oportunidades = new ArrayList<>();
 
     public ProfissionalSaude(
             String nome,

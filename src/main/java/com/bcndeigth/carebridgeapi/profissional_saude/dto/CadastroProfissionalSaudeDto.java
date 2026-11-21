@@ -1,12 +1,11 @@
 package com.bcndeigth.carebridgeapi.profissional_saude.dto;
 
 import com.bcndeigth.carebridgeapi.users.dto.SignUpUserDto;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.NonNull;
 
 @Schema(description = "Dados cadastrais de um profissional de saúde.")
 public record CadastroProfissionalSaudeDto(
-        @NonNull
         @Schema(description = "Dados da conta do profissional.")
         SignUpUserDto usuarioDto,
 
@@ -32,5 +31,6 @@ public record CadastroProfissionalSaudeDto(
         String biografiaOuDescricao,
 
         @Schema(description = "Indica se os termos de uso foram aceitos.", example = "true")
-        Boolean acceptedTerms
+        @JsonAlias("acceptedTerms")
+        Boolean aceitouTermos
 ) {}

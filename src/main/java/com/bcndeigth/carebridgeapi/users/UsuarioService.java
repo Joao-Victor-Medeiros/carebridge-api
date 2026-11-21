@@ -1,8 +1,10 @@
 package com.bcndeigth.carebridgeapi.users;
 
 import com.bcndeigth.carebridgeapi.paciente.PacienteRepository;
+import com.bcndeigth.carebridgeapi.profissional_saude.ProfissionalSaude;
 import com.bcndeigth.carebridgeapi.profissional_saude.ProfissionalSaudeRepository;
-import com.bcndeigth.carebridgeapi.users.dto.UserProfileResponse;
+import com.bcndeigth.carebridgeapi.profissional_saude.SituacaoRegistro;
+import com.bcndeigth.carebridgeapi.users.dto.MeResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,25 +22,29 @@ public class UsuarioService {
     }
 
     @Transactional(readOnly = true)
-    public UserProfileResponse obterPerfil(Usuario usuario) {
+    public MeResponse obterPerfil(Usuario usuario) {
         if (usuario == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuário não autenticado.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Sessão expirada ou credenciais inválidas.");
         }
-        if (usuario.getTipoPerfil() == TipoPerfil.PACIENTE) {
-            var paciente = pacienteRepository.findByUsuarioId(usuario.getId())
+        return switch (usuario.getTipoPerfil()) {
+            case PACIENTE -> pacienteRepository.findById(usuario.getId())
+                    .map(paciente -> MeResponse.de(usuario, paciente))
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                             "Perfil de paciente não encontrado."));
-            return new UserProfileResponse(usuario.getId(), paciente.getNome(), usuario.getEmail(),
-                    usuario.getTipoPerfil(), paciente.getDataNascimento(), paciente.getTelefone(), null);
-        }
-        if (usuario.getTipoPerfil() == TipoPerfil.PROFISSIONAL_SAUDE) {
-            var profissional = profissionalSaudeRepository.findByUsuarioId(usuario.getId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                            "Perfil de profissional de saúde não encontrado."));
-            return new UserProfileResponse(usuario.getId(), profissional.getNome(), usuario.getEmail(),
-                    usuario.getTipoPerfil(), null, null, null);
-        }
-        return new UserProfileResponse(usuario.getId(), null, usuario.getEmail(),
-                usuario.getTipoPerfil(), null, null, null);
+            case PROFISSIONAL_SAUDE -> MeResponse.de(profissional(usuario));
+            case ADMIN -> MeResponse.de(usuario);
+        };
+    }
+
+    @Transactional(readOnly = true)
+    public boolean validadoInstitucionalmente(Usuario usuario) {
+        return usuario.getTipoPerfil() == TipoPerfil.PROFISSIONAL_SAUDE
+                && profissional(usuario).getSituacaoRegistro() == SituacaoRegistro.VERIFICADO;
+    }
+
+    private ProfissionalSaude profissional(Usuario usuario) {
+        return profissionalSaudeRepository.findById(usuario.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Perfil de profissional de saúde não encontrado."));
     }
 }
