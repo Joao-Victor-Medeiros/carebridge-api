@@ -21,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 @Entity
@@ -43,6 +44,9 @@ public class Usuario implements UserDetails {
     @Column(name = "tipo_perfil", nullable = false)
     private TipoPerfil tipoPerfil;
 
+    @Column(name = "accepted_terms", nullable = false)
+    private boolean acceptedTerms;
+
     @Column(name = "termos_aceitos_em", nullable = false, updatable = false)
     private Instant termosAceitosEm;
 
@@ -56,15 +60,29 @@ public class Usuario implements UserDetails {
     private Instant atualizadoEm;
 
     public Usuario(String email, String hashedPassword, TipoPerfil tipoPerfil, Instant termosAceitosEm) {
-        this.email = email.toLowerCase(java.util.Locale.ROOT);
+        setEmail(email);
         this.senhaHash = hashedPassword;
         this.tipoPerfil = tipoPerfil;
-        this.termosAceitosEm = termosAceitosEm;
+        this.acceptedTerms = true;
+        this.termosAceitosEm = termosAceitosEm != null ? termosAceitosEm : Instant.now();
         this.emailVerificado = false;
     }
 
     public Usuario(String email, String hashedPassword, TipoPerfil tipoPerfil) {
         this(email, hashedPassword, tipoPerfil, Instant.now());
+    }
+
+    public Usuario(String email, String hashedPassword, TipoPerfil tipoPerfil, boolean acceptedTerms, Instant termosAceitosEm) {
+        setEmail(email);
+        this.senhaHash = hashedPassword;
+        this.tipoPerfil = tipoPerfil;
+        this.acceptedTerms = acceptedTerms;
+        this.termosAceitosEm = termosAceitosEm != null ? termosAceitosEm : Instant.now();
+        this.emailVerificado = false;
+    }
+
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim().toLowerCase(Locale.ROOT);
     }
 
     public String getEmail() {
@@ -77,6 +95,10 @@ public class Usuario implements UserDetails {
 
     @PrePersist
     protected void aoCriar() {
+        setEmail(this.email);
+        if (this.termosAceitosEm == null) {
+            this.termosAceitosEm = Instant.now();
+        }
         Instant agora = Instant.now();
         criadoEm = agora;
         atualizadoEm = agora;
@@ -84,6 +106,7 @@ public class Usuario implements UserDetails {
 
     @PreUpdate
     protected void aoAtualizar() {
+        setEmail(this.email);
         atualizadoEm = Instant.now();
     }
 
