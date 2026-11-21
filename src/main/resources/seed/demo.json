@@ -1,0 +1,3202 @@
+{
+  "referencia": "2026-11-11T15:00:00Z",
+  "profissionais": [
+    {
+      "email": "profissional@teste.com",
+      "nome": "Marcos Vieira",
+      "conselho": "CRM",
+      "uf": "DF",
+      "numeroRegistro": "123456",
+      "especialidade": "cardiologia",
+      "ondeAtende": "Espaço Cuidar",
+      "situacaoRegistro": "VERIFICADO"
+    },
+    {
+      "email": "juliana.prado@profissional.carebridge.demo",
+      "nome": "Dra. Juliana Prado",
+      "conselho": "CRP",
+      "uf": "DF",
+      "numeroRegistro": "045678",
+      "especialidade": "psicologia",
+      "ondeAtende": "Clínica Saúde",
+      "situacaoRegistro": "VERIFICADO"
+    },
+    {
+      "email": "paulo.mendes@profissional.carebridge.demo",
+      "nome": "Dr. Paulo Mendes",
+      "conselho": "CRM",
+      "uf": "DF",
+      "numeroRegistro": "654321",
+      "especialidade": "ortopedia",
+      "ondeAtende": "Boca Feliz",
+      "situacaoRegistro": "VERIFICADO"
+    },
+    {
+      "email": "lucia.prado@profissional.carebridge.demo",
+      "nome": "Dra. Lúcia Prado",
+      "conselho": "CRO",
+      "uf": "DF",
+      "numeroRegistro": "4321",
+      "especialidade": "odontologia",
+      "ondeAtende": "Espaço Cuidar",
+      "situacaoRegistro": "VERIFICADO"
+    },
+    {
+      "email": "mariana.costa@profissional.carebridge.demo",
+      "nome": "Dra. Mariana Costa",
+      "conselho": "CRM",
+      "uf": "DF",
+      "numeroRegistro": "123456",
+      "especialidade": "cardiologia",
+      "ondeAtende": "Instituto Movida",
+      "situacaoRegistro": "VERIFICADO"
+    },
+    {
+      "email": "carla.nunes@profissional.carebridge.demo",
+      "nome": "Profa. Carla Nunes",
+      "conselho": "CRP",
+      "uf": "DF",
+      "numeroRegistro": "023456",
+      "especialidade": "psicologia",
+      "ondeAtende": "Faculdade Ensine",
+      "situacaoRegistro": "VERIFICADO"
+    },
+    {
+      "email": "camila.torres@profissional.carebridge.demo",
+      "nome": "Dra. Camila Torres",
+      "conselho": "CREFITO",
+      "uf": "DF",
+      "numeroRegistro": "112233",
+      "especialidade": "fisioterapia",
+      "ondeAtende": "Boca Feliz",
+      "situacaoRegistro": "VERIFICADO"
+    },
+    {
+      "email": "rodrigo.alves@profissional.carebridge.demo",
+      "nome": "Dr. Rodrigo Alves",
+      "conselho": "CRM",
+      "uf": "DF",
+      "numeroRegistro": "778899",
+      "especialidade": "clinica-geral",
+      "ondeAtende": "Centro de Saúde 12",
+      "situacaoRegistro": "EM_VERIFICACAO"
+    },
+    {
+      "email": "helena.dias@profissional.carebridge.demo",
+      "nome": "Profa. Helena Dias",
+      "conselho": "CRN",
+      "uf": "DF",
+      "numeroRegistro": "3344",
+      "especialidade": "nutricao",
+      "ondeAtende": "Faculdade Ensine",
+      "situacaoRegistro": "VERIFICADO"
+    },
+    {
+      "email": "beatriz.rocha@profissional.carebridge.demo",
+      "nome": "Dra. Beatriz Rocha",
+      "conselho": "CREFONO",
+      "uf": "DF",
+      "numeroRegistro": "5566",
+      "especialidade": "fonoaudiologia",
+      "ondeAtende": "Espaço Cuidar",
+      "situacaoRegistro": "VERIFICADO"
+    },
+    {
+      "email": "lucas.martins@profissional.carebridge.demo",
+      "nome": "Dr. Lucas Martins",
+      "conselho": "CREFITO",
+      "uf": "DF",
+      "numeroRegistro": "7788",
+      "especialidade": "terapia-ocupacional",
+      "ondeAtende": "Instituto Movida",
+      "situacaoRegistro": "VERIFICADO"
+    },
+    {
+      "email": "henrique.alves@profissional.carebridge.demo",
+      "nome": "Dr. Henrique Alves",
+      "conselho": "CRM",
+      "uf": "DF",
+      "numeroRegistro": "246810",
+      "especialidade": "clinica-geral",
+      "ondeAtende": "Clínica Saúde",
+      "situacaoRegistro": "VERIFICADO"
+    },
+    {
+      "email": "sergio.lima@profissional.carebridge.demo",
+      "nome": "Dr. Sérgio Lima",
+      "conselho": "CRM",
+      "uf": "DF",
+      "numeroRegistro": "135790",
+      "especialidade": "cardiologia",
+      "ondeAtende": "Hospital Universitário de Brasília",
+      "situacaoRegistro": "VERIFICADO"
+    },
+    {
+      "email": "fernanda.reis@profissional.carebridge.demo",
+      "nome": "Dra. Fernanda Reis",
+      "conselho": "CRP",
+      "uf": "DF",
+      "numeroRegistro": "034567",
+      "especialidade": "psicologia",
+      "ondeAtende": "Clínica Saúde",
+      "situacaoRegistro": "VERIFICADO"
+    }
+  ],
+  "pacientes": [
+    {
+      "email": "paciente@teste.com",
+      "nome": "Ana Souza",
+      "dataNascimento": "1988-03-12",
+      "telefone": "61999990000"
+    },
+    {
+      "email": "carlos.lima@paciente.carebridge.demo",
+      "nome": "Carlos Lima",
+      "dataNascimento": "1990-05-20",
+      "telefone": null
+    },
+    {
+      "email": "beatriz.alves@paciente.carebridge.demo",
+      "nome": "Beatriz Alves",
+      "dataNascimento": "1990-05-20",
+      "telefone": null
+    },
+    {
+      "email": "joao.santos@paciente.carebridge.demo",
+      "nome": "João Santos",
+      "dataNascimento": "1990-05-20",
+      "telefone": null
+    },
+    {
+      "email": "paulo.mendes@paciente.carebridge.demo",
+      "nome": "Paulo Mendes",
+      "dataNascimento": "1990-05-20",
+      "telefone": null
+    },
+    {
+      "email": "luiza.fernandes@paciente.carebridge.demo",
+      "nome": "Luiza Fernandes",
+      "dataNascimento": "1990-05-20",
+      "telefone": null
+    },
+    {
+      "email": "rafael.costa@paciente.carebridge.demo",
+      "nome": "Rafael Costa",
+      "dataNascimento": "1990-05-20",
+      "telefone": null
+    }
+  ],
+  "oportunidades": [
+    {
+      "chave": "op-001",
+      "ofertante": "juliana.prado@profissional.carebridge.demo",
+      "titulo": "Psicologia online",
+      "descricao": "Atendimento psicológico individual por videochamada, com sessões semanais de 50 minutos.",
+      "tipoServico": "CONSULTA",
+      "especialidade": "psicologia",
+      "modalidade": "ONLINE",
+      "modalidadeAcesso": "GRATUITO",
+      "preco": null,
+      "publicoAlvo": [
+        "ADULTOS"
+      ],
+      "publicoAlvoObservacao": null,
+      "vagasTotais": 6,
+      "vagasPreenchidas": 3,
+      "cep": null,
+      "endereco": null,
+      "cidade": "Brasília",
+      "uf": "DF",
+      "inscricoesDe": "2026-11-01",
+      "inscricoesAte": "2026-12-15",
+      "criteriosElegibilidade": null,
+      "semRestricoes": true,
+      "formaContato": "PLATAFORMA",
+      "prazoRespostaDias": 15,
+      "status": "ATIVA",
+      "ultimaAtualizacao": "2026-11-08T15:00:00Z",
+      "triagem": {
+        "modo": "PADRAO",
+        "perguntas": [
+          {
+            "id": "motivo",
+            "rotulo": "Qual o motivo principal?",
+            "tipo": "TEXTO_LONGO",
+            "obrigatoria": true,
+            "minCaracteres": 10,
+            "maxCaracteres": 300
+          },
+          {
+            "id": "tempo",
+            "rotulo": "Há quanto tempo?",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Menos de 1 semana",
+              "De 1 a 4 semanas",
+              "De 1 a 6 meses",
+              "Mais de 6 meses"
+            ]
+          },
+          {
+            "id": "diagnostico",
+            "rotulo": "Já tem diagnóstico?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "qual-diagnostico",
+            "rotulo": "Qual diagnóstico?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "diagnostico",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "medicacao",
+            "rotulo": "Usa medicação contínua?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "quais-medicacoes",
+            "rotulo": "Quais medicações?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "medicacao",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "urgencia",
+            "rotulo": "Urgência percebida",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Baixa",
+              "Média",
+              "Alta"
+            ],
+            "ajuda": "Alta: atrapalha suas atividades do dia a dia."
+          },
+          {
+            "id": "horario",
+            "rotulo": "Melhor horário",
+            "tipo": "MULTIPLA",
+            "obrigatoria": false,
+            "opcoes": [
+              "Manhã",
+              "Tarde",
+              "Noite"
+            ],
+            "permiteVarias": true
+          }
+        ],
+        "documentosExigidos": [
+          {
+            "id": "rg",
+            "rotulo": "RG"
+          }
+        ]
+      }
+    },
+    {
+      "chave": "op-002",
+      "ofertante": "paulo.mendes@profissional.carebridge.demo",
+      "titulo": "Ortopedia",
+      "descricao": "Consulta ortopédica com avaliação de exames prévios e orientação de tratamento.",
+      "tipoServico": "CONSULTA",
+      "especialidade": "ortopedia",
+      "modalidade": "PRESENCIAL",
+      "modalidadeAcesso": "PRECO_SOCIAL",
+      "preco": 50,
+      "publicoAlvo": [
+        "ADULTOS",
+        "IDOSOS"
+      ],
+      "publicoAlvoObservacao": null,
+      "vagasTotais": 12,
+      "vagasPreenchidas": 4,
+      "cep": "72215-340",
+      "endereco": "QNM 34, Ceilândia",
+      "cidade": "Brasília",
+      "uf": "DF",
+      "inscricoesDe": "2026-11-01",
+      "inscricoesAte": "2026-12-15",
+      "criteriosElegibilidade": null,
+      "semRestricoes": true,
+      "formaContato": "PLATAFORMA",
+      "prazoRespostaDias": 15,
+      "status": "ATIVA",
+      "ultimaAtualizacao": "2026-11-08T15:00:00Z",
+      "triagem": {
+        "modo": "PADRAO",
+        "perguntas": [
+          {
+            "id": "motivo",
+            "rotulo": "Qual o motivo principal?",
+            "tipo": "TEXTO_LONGO",
+            "obrigatoria": true,
+            "minCaracteres": 10,
+            "maxCaracteres": 300
+          },
+          {
+            "id": "tempo",
+            "rotulo": "Há quanto tempo?",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Menos de 1 semana",
+              "De 1 a 4 semanas",
+              "De 1 a 6 meses",
+              "Mais de 6 meses"
+            ]
+          },
+          {
+            "id": "diagnostico",
+            "rotulo": "Já tem diagnóstico?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "qual-diagnostico",
+            "rotulo": "Qual diagnóstico?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "diagnostico",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "medicacao",
+            "rotulo": "Usa medicação contínua?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "quais-medicacoes",
+            "rotulo": "Quais medicações?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "medicacao",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "urgencia",
+            "rotulo": "Urgência percebida",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Baixa",
+              "Média",
+              "Alta"
+            ],
+            "ajuda": "Alta: atrapalha suas atividades do dia a dia."
+          },
+          {
+            "id": "horario",
+            "rotulo": "Melhor horário",
+            "tipo": "MULTIPLA",
+            "obrigatoria": false,
+            "opcoes": [
+              "Manhã",
+              "Tarde",
+              "Noite"
+            ],
+            "permiteVarias": true
+          }
+        ],
+        "documentosExigidos": [
+          {
+            "id": "rg",
+            "rotulo": "RG"
+          },
+          {
+            "id": "encaminhamento",
+            "rotulo": "Encaminhamento médico"
+          }
+        ]
+      }
+    },
+    {
+      "chave": "op-003",
+      "ofertante": "lucia.prado@profissional.carebridge.demo",
+      "titulo": "Avaliação odontológica",
+      "descricao": "Avaliação odontológica com limpeza e plano de tratamento feitos por alunos supervisionados.",
+      "tipoServico": "CONSULTA",
+      "especialidade": "odontologia",
+      "modalidade": "PRESENCIAL",
+      "modalidadeAcesso": "GRATUITO",
+      "preco": null,
+      "publicoAlvo": [
+        "CRIANCAS",
+        "ADULTOS"
+      ],
+      "publicoAlvoObservacao": null,
+      "vagasTotais": 10,
+      "vagasPreenchidas": 2,
+      "cep": "72225-120",
+      "endereco": "QNN 12, Ceilândia",
+      "cidade": "Brasília",
+      "uf": "DF",
+      "inscricoesDe": "2026-11-01",
+      "inscricoesAte": "2026-12-15",
+      "criteriosElegibilidade": null,
+      "semRestricoes": true,
+      "formaContato": "PLATAFORMA",
+      "prazoRespostaDias": 15,
+      "status": "ATIVA",
+      "ultimaAtualizacao": "2026-11-08T15:00:00Z",
+      "triagem": {
+        "modo": "PADRAO",
+        "perguntas": [
+          {
+            "id": "motivo",
+            "rotulo": "Qual o motivo principal?",
+            "tipo": "TEXTO_LONGO",
+            "obrigatoria": true,
+            "minCaracteres": 10,
+            "maxCaracteres": 300
+          },
+          {
+            "id": "tempo",
+            "rotulo": "Há quanto tempo?",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Menos de 1 semana",
+              "De 1 a 4 semanas",
+              "De 1 a 6 meses",
+              "Mais de 6 meses"
+            ]
+          },
+          {
+            "id": "diagnostico",
+            "rotulo": "Já tem diagnóstico?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "qual-diagnostico",
+            "rotulo": "Qual diagnóstico?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "diagnostico",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "medicacao",
+            "rotulo": "Usa medicação contínua?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "quais-medicacoes",
+            "rotulo": "Quais medicações?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "medicacao",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "urgencia",
+            "rotulo": "Urgência percebida",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Baixa",
+              "Média",
+              "Alta"
+            ],
+            "ajuda": "Alta: atrapalha suas atividades do dia a dia."
+          },
+          {
+            "id": "horario",
+            "rotulo": "Melhor horário",
+            "tipo": "MULTIPLA",
+            "obrigatoria": false,
+            "opcoes": [
+              "Manhã",
+              "Tarde",
+              "Noite"
+            ],
+            "permiteVarias": true
+          }
+        ],
+        "documentosExigidos": [
+          {
+            "id": "rg",
+            "rotulo": "RG"
+          },
+          {
+            "id": "sus",
+            "rotulo": "Cartão do SUS"
+          }
+        ]
+      }
+    },
+    {
+      "chave": "op-004",
+      "ofertante": "mariana.costa@profissional.carebridge.demo",
+      "titulo": "Cardiologia, vaga social",
+      "descricao": "Avaliação cardiológica com ECG, voltada a pacientes sem convênio. Requer triagem prévia.",
+      "tipoServico": "CONSULTA",
+      "especialidade": "cardiologia",
+      "modalidade": "HIBRIDO",
+      "modalidadeAcesso": "PRECO_SOCIAL",
+      "preco": 40,
+      "publicoAlvo": [
+        "ADULTOS"
+      ],
+      "publicoAlvoObservacao": "Adultos sem convênio",
+      "vagasTotais": 10,
+      "vagasPreenchidas": 5,
+      "cep": "70000-120",
+      "endereco": "Rua das Flores, 120",
+      "cidade": "Brasília",
+      "uf": "DF",
+      "inscricoesDe": "2026-11-01",
+      "inscricoesAte": "2026-12-15",
+      "criteriosElegibilidade": "Adultos sem convênio",
+      "semRestricoes": false,
+      "formaContato": "PLATAFORMA",
+      "prazoRespostaDias": 15,
+      "status": "ATIVA",
+      "ultimaAtualizacao": "2026-11-08T15:00:00Z",
+      "triagem": {
+        "modo": "PADRAO",
+        "perguntas": [
+          {
+            "id": "motivo",
+            "rotulo": "Qual o motivo principal?",
+            "tipo": "TEXTO_LONGO",
+            "obrigatoria": true,
+            "minCaracteres": 10,
+            "maxCaracteres": 300
+          },
+          {
+            "id": "tempo",
+            "rotulo": "Há quanto tempo?",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Menos de 1 semana",
+              "De 1 a 4 semanas",
+              "De 1 a 6 meses",
+              "Mais de 6 meses"
+            ]
+          },
+          {
+            "id": "diagnostico",
+            "rotulo": "Já tem diagnóstico?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "qual-diagnostico",
+            "rotulo": "Qual diagnóstico?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "diagnostico",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "medicacao",
+            "rotulo": "Usa medicação contínua?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "quais-medicacoes",
+            "rotulo": "Quais medicações?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "medicacao",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "urgencia",
+            "rotulo": "Urgência percebida",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Baixa",
+              "Média",
+              "Alta"
+            ],
+            "ajuda": "Alta: atrapalha suas atividades do dia a dia."
+          },
+          {
+            "id": "horario",
+            "rotulo": "Melhor horário",
+            "tipo": "MULTIPLA",
+            "obrigatoria": false,
+            "opcoes": [
+              "Manhã",
+              "Tarde",
+              "Noite"
+            ],
+            "permiteVarias": true
+          }
+        ],
+        "documentosExigidos": [
+          {
+            "id": "rg",
+            "rotulo": "RG"
+          },
+          {
+            "id": "encaminhamento",
+            "rotulo": "Encaminhamento médico"
+          }
+        ]
+      }
+    },
+    {
+      "chave": "op-005",
+      "ofertante": "carla.nunes@profissional.carebridge.demo",
+      "titulo": "Psicologia infantil",
+      "descricao": "Psicoterapia infantil na clínica-escola, com encontros semanais e retorno aos responsáveis.",
+      "tipoServico": "TERAPIA",
+      "especialidade": "psicologia",
+      "modalidade": "PRESENCIAL",
+      "modalidadeAcesso": "GRATUITO",
+      "preco": null,
+      "publicoAlvo": [
+        "CRIANCAS"
+      ],
+      "publicoAlvoObservacao": "Crianças de 6 a 12 anos",
+      "vagasTotais": 8,
+      "vagasPreenchidas": 3,
+      "cep": "72030-170",
+      "endereco": "Campus Taguatinga, bloco C",
+      "cidade": "Taguatinga",
+      "uf": "DF",
+      "inscricoesDe": "2026-11-01",
+      "inscricoesAte": "2026-12-15",
+      "criteriosElegibilidade": "Crianças de 6 a 12 anos",
+      "semRestricoes": false,
+      "formaContato": "PLATAFORMA",
+      "prazoRespostaDias": 15,
+      "status": "ATIVA",
+      "ultimaAtualizacao": "2026-11-08T15:00:00Z",
+      "triagem": {
+        "modo": "PERSONALIZADO",
+        "perguntas": [
+          {
+            "id": "idade-crianca",
+            "rotulo": "Qual a idade da criança?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true
+          },
+          {
+            "id": "escola",
+            "rotulo": "A criança frequenta a escola?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "serie",
+            "rotulo": "Em que ano está?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "escola",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "queixa",
+            "rotulo": "O que tem chamado sua atenção?",
+            "tipo": "TEXTO_LONGO",
+            "obrigatoria": true,
+            "minCaracteres": 10,
+            "maxCaracteres": 300
+          },
+          {
+            "id": "indicacao",
+            "rotulo": "Quem indicou o atendimento?",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Escola",
+              "Pediatra",
+              "Família",
+              "Outro"
+            ]
+          },
+          {
+            "id": "turno",
+            "rotulo": "Turnos disponíveis",
+            "tipo": "MULTIPLA",
+            "obrigatoria": false,
+            "opcoes": [
+              "Manhã",
+              "Tarde"
+            ],
+            "permiteVarias": true,
+            "ajuda": "Escolha todos os que servem."
+          }
+        ],
+        "documentosExigidos": [
+          {
+            "id": "outro-1",
+            "rotulo": "RG do responsável"
+          },
+          {
+            "id": "outro-2",
+            "rotulo": "Certidão de nascimento"
+          }
+        ]
+      }
+    },
+    {
+      "chave": "op-006",
+      "ofertante": "camila.torres@profissional.carebridge.demo",
+      "titulo": "Fisioterapia ortopédica",
+      "descricao": "Sessões de fisioterapia para dor no joelho, coluna e ombro, com reavaliação a cada 10 sessões.",
+      "tipoServico": "TERAPIA",
+      "especialidade": "fisioterapia",
+      "modalidade": "PRESENCIAL",
+      "modalidadeAcesso": "SUS",
+      "preco": null,
+      "publicoAlvo": [
+        "ADULTOS",
+        "IDOSOS"
+      ],
+      "publicoAlvoObservacao": null,
+      "vagasTotais": 10,
+      "vagasPreenchidas": 4,
+      "cep": "72215-340",
+      "endereco": "QNM 34, Ceilândia",
+      "cidade": "Brasília",
+      "uf": "DF",
+      "inscricoesDe": "2026-11-01",
+      "inscricoesAte": "2026-12-15",
+      "criteriosElegibilidade": null,
+      "semRestricoes": true,
+      "formaContato": "PLATAFORMA",
+      "prazoRespostaDias": 15,
+      "status": "ATIVA",
+      "ultimaAtualizacao": "2026-11-08T15:00:00Z",
+      "triagem": {
+        "modo": "PADRAO",
+        "perguntas": [
+          {
+            "id": "motivo",
+            "rotulo": "Qual o motivo principal?",
+            "tipo": "TEXTO_LONGO",
+            "obrigatoria": true,
+            "minCaracteres": 10,
+            "maxCaracteres": 300
+          },
+          {
+            "id": "tempo",
+            "rotulo": "Há quanto tempo?",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Menos de 1 semana",
+              "De 1 a 4 semanas",
+              "De 1 a 6 meses",
+              "Mais de 6 meses"
+            ]
+          },
+          {
+            "id": "diagnostico",
+            "rotulo": "Já tem diagnóstico?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "qual-diagnostico",
+            "rotulo": "Qual diagnóstico?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "diagnostico",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "medicacao",
+            "rotulo": "Usa medicação contínua?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "quais-medicacoes",
+            "rotulo": "Quais medicações?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "medicacao",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "urgencia",
+            "rotulo": "Urgência percebida",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Baixa",
+              "Média",
+              "Alta"
+            ],
+            "ajuda": "Alta: atrapalha suas atividades do dia a dia."
+          },
+          {
+            "id": "horario",
+            "rotulo": "Melhor horário",
+            "tipo": "MULTIPLA",
+            "obrigatoria": false,
+            "opcoes": [
+              "Manhã",
+              "Tarde",
+              "Noite"
+            ],
+            "permiteVarias": true
+          }
+        ],
+        "documentosExigidos": [
+          {
+            "id": "rg",
+            "rotulo": "RG"
+          },
+          {
+            "id": "encaminhamento",
+            "rotulo": "Encaminhamento médico"
+          },
+          {
+            "id": "exames",
+            "rotulo": "Exames anteriores"
+          }
+        ]
+      }
+    },
+    {
+      "chave": "op-007",
+      "ofertante": "rodrigo.alves@profissional.carebridge.demo",
+      "titulo": "Exames de sangue de rotina",
+      "descricao": "Coleta de hemograma, glicemia e colesterol. Jejum de 8 horas. Resultado em até 5 dias úteis.",
+      "tipoServico": "EXAME",
+      "especialidade": "clinica-geral",
+      "modalidade": "PRESENCIAL",
+      "modalidadeAcesso": "SUS",
+      "preco": null,
+      "publicoAlvo": [
+        "CRIANCAS",
+        "ADULTOS",
+        "IDOSOS",
+        "GESTANTES"
+      ],
+      "publicoAlvoObservacao": "Todas as idades, com pedido médico",
+      "vagasTotais": 40,
+      "vagasPreenchidas": 20,
+      "cep": "72225-150",
+      "endereco": "QNN 15, Ceilândia",
+      "cidade": "Brasília",
+      "uf": "DF",
+      "inscricoesDe": "2026-11-01",
+      "inscricoesAte": "2026-12-15",
+      "criteriosElegibilidade": "Todas as idades, com pedido médico",
+      "semRestricoes": false,
+      "formaContato": "PLATAFORMA",
+      "prazoRespostaDias": 15,
+      "status": "ATIVA",
+      "ultimaAtualizacao": "2026-11-08T15:00:00Z",
+      "triagem": {
+        "modo": "PADRAO",
+        "perguntas": [
+          {
+            "id": "motivo",
+            "rotulo": "Qual o motivo principal?",
+            "tipo": "TEXTO_LONGO",
+            "obrigatoria": true,
+            "minCaracteres": 10,
+            "maxCaracteres": 300
+          },
+          {
+            "id": "tempo",
+            "rotulo": "Há quanto tempo?",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Menos de 1 semana",
+              "De 1 a 4 semanas",
+              "De 1 a 6 meses",
+              "Mais de 6 meses"
+            ]
+          },
+          {
+            "id": "diagnostico",
+            "rotulo": "Já tem diagnóstico?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "qual-diagnostico",
+            "rotulo": "Qual diagnóstico?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "diagnostico",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "medicacao",
+            "rotulo": "Usa medicação contínua?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "quais-medicacoes",
+            "rotulo": "Quais medicações?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "medicacao",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "urgencia",
+            "rotulo": "Urgência percebida",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Baixa",
+              "Média",
+              "Alta"
+            ],
+            "ajuda": "Alta: atrapalha suas atividades do dia a dia."
+          },
+          {
+            "id": "horario",
+            "rotulo": "Melhor horário",
+            "tipo": "MULTIPLA",
+            "obrigatoria": false,
+            "opcoes": [
+              "Manhã",
+              "Tarde",
+              "Noite"
+            ],
+            "permiteVarias": true
+          }
+        ],
+        "documentosExigidos": [
+          {
+            "id": "rg",
+            "rotulo": "RG"
+          },
+          {
+            "id": "sus",
+            "rotulo": "Cartão do SUS"
+          },
+          {
+            "id": "outro-3",
+            "rotulo": "Pedido médico"
+          }
+        ]
+      }
+    },
+    {
+      "chave": "op-008",
+      "ofertante": "helena.dias@profissional.carebridge.demo",
+      "titulo": "Nutrição em grupo",
+      "descricao": "Encontros quinzenais em grupo sobre alimentação saudável com orçamento curto.",
+      "tipoServico": "GRUPO",
+      "especialidade": "nutricao",
+      "modalidade": "ONLINE",
+      "modalidadeAcesso": "GRATUITO",
+      "preco": null,
+      "publicoAlvo": [
+        "ADULTOS",
+        "GESTANTES"
+      ],
+      "publicoAlvoObservacao": null,
+      "vagasTotais": 20,
+      "vagasPreenchidas": 8,
+      "cep": null,
+      "endereco": null,
+      "cidade": "Brasília",
+      "uf": "DF",
+      "inscricoesDe": "2026-11-01",
+      "inscricoesAte": "2026-12-15",
+      "criteriosElegibilidade": null,
+      "semRestricoes": true,
+      "formaContato": "PLATAFORMA",
+      "prazoRespostaDias": 15,
+      "status": "ATIVA",
+      "ultimaAtualizacao": "2026-11-08T15:00:00Z",
+      "triagem": {
+        "modo": "PADRAO",
+        "perguntas": [
+          {
+            "id": "motivo",
+            "rotulo": "Qual o motivo principal?",
+            "tipo": "TEXTO_LONGO",
+            "obrigatoria": true,
+            "minCaracteres": 10,
+            "maxCaracteres": 300
+          },
+          {
+            "id": "tempo",
+            "rotulo": "Há quanto tempo?",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Menos de 1 semana",
+              "De 1 a 4 semanas",
+              "De 1 a 6 meses",
+              "Mais de 6 meses"
+            ]
+          },
+          {
+            "id": "diagnostico",
+            "rotulo": "Já tem diagnóstico?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "qual-diagnostico",
+            "rotulo": "Qual diagnóstico?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "diagnostico",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "medicacao",
+            "rotulo": "Usa medicação contínua?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "quais-medicacoes",
+            "rotulo": "Quais medicações?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "medicacao",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "urgencia",
+            "rotulo": "Urgência percebida",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Baixa",
+              "Média",
+              "Alta"
+            ],
+            "ajuda": "Alta: atrapalha suas atividades do dia a dia."
+          },
+          {
+            "id": "horario",
+            "rotulo": "Melhor horário",
+            "tipo": "MULTIPLA",
+            "obrigatoria": false,
+            "opcoes": [
+              "Manhã",
+              "Tarde",
+              "Noite"
+            ],
+            "permiteVarias": true
+          }
+        ],
+        "documentosExigidos": [
+          {
+            "id": "rg",
+            "rotulo": "RG"
+          }
+        ]
+      }
+    },
+    {
+      "chave": "op-009",
+      "ofertante": "beatriz.rocha@profissional.carebridge.demo",
+      "titulo": "Fonoaudiologia infantil",
+      "descricao": "Terapia de fala e linguagem para crianças de 3 a 10 anos, com sessões de 40 minutos.",
+      "tipoServico": "TERAPIA",
+      "especialidade": "fonoaudiologia",
+      "modalidade": "PRESENCIAL",
+      "modalidadeAcesso": "PRECO_SOCIAL",
+      "preco": 30,
+      "publicoAlvo": [
+        "CRIANCAS"
+      ],
+      "publicoAlvoObservacao": null,
+      "vagasTotais": 6,
+      "vagasPreenchidas": 6,
+      "cep": "72225-120",
+      "endereco": "QNN 12, Ceilândia",
+      "cidade": "Brasília",
+      "uf": "DF",
+      "inscricoesDe": "2026-11-01",
+      "inscricoesAte": "2026-12-15",
+      "criteriosElegibilidade": null,
+      "semRestricoes": true,
+      "formaContato": "PLATAFORMA",
+      "prazoRespostaDias": 15,
+      "status": "ATIVA",
+      "ultimaAtualizacao": "2026-11-08T15:00:00Z",
+      "triagem": {
+        "modo": "PADRAO",
+        "perguntas": [
+          {
+            "id": "motivo",
+            "rotulo": "Qual o motivo principal?",
+            "tipo": "TEXTO_LONGO",
+            "obrigatoria": true,
+            "minCaracteres": 10,
+            "maxCaracteres": 300
+          },
+          {
+            "id": "tempo",
+            "rotulo": "Há quanto tempo?",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Menos de 1 semana",
+              "De 1 a 4 semanas",
+              "De 1 a 6 meses",
+              "Mais de 6 meses"
+            ]
+          },
+          {
+            "id": "diagnostico",
+            "rotulo": "Já tem diagnóstico?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "qual-diagnostico",
+            "rotulo": "Qual diagnóstico?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "diagnostico",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "medicacao",
+            "rotulo": "Usa medicação contínua?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "quais-medicacoes",
+            "rotulo": "Quais medicações?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "medicacao",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "urgencia",
+            "rotulo": "Urgência percebida",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Baixa",
+              "Média",
+              "Alta"
+            ],
+            "ajuda": "Alta: atrapalha suas atividades do dia a dia."
+          },
+          {
+            "id": "horario",
+            "rotulo": "Melhor horário",
+            "tipo": "MULTIPLA",
+            "obrigatoria": false,
+            "opcoes": [
+              "Manhã",
+              "Tarde",
+              "Noite"
+            ],
+            "permiteVarias": true
+          }
+        ],
+        "documentosExigidos": [
+          {
+            "id": "outro-1",
+            "rotulo": "RG do responsável"
+          },
+          {
+            "id": "outro-2",
+            "rotulo": "Certidão de nascimento"
+          }
+        ]
+      }
+    },
+    {
+      "chave": "op-010",
+      "ofertante": "lucas.martins@profissional.carebridge.demo",
+      "titulo": "Terapia ocupacional",
+      "descricao": "Reabilitação para atividades do dia a dia, com sessões presenciais e acompanhamento online.",
+      "tipoServico": "TERAPIA",
+      "especialidade": "terapia-ocupacional",
+      "modalidade": "HIBRIDO",
+      "modalidadeAcesso": "GRATUITO",
+      "preco": null,
+      "publicoAlvo": [
+        "ADULTOS",
+        "IDOSOS"
+      ],
+      "publicoAlvoObservacao": null,
+      "vagasTotais": 8,
+      "vagasPreenchidas": 4,
+      "cep": "70000-120",
+      "endereco": "Rua das Flores, 120",
+      "cidade": "Brasília",
+      "uf": "DF",
+      "inscricoesDe": "2026-11-01",
+      "inscricoesAte": "2026-12-15",
+      "criteriosElegibilidade": null,
+      "semRestricoes": true,
+      "formaContato": "PLATAFORMA",
+      "prazoRespostaDias": 15,
+      "status": "ATIVA",
+      "ultimaAtualizacao": "2026-11-08T15:00:00Z",
+      "triagem": {
+        "modo": "PADRAO",
+        "perguntas": [
+          {
+            "id": "motivo",
+            "rotulo": "Qual o motivo principal?",
+            "tipo": "TEXTO_LONGO",
+            "obrigatoria": true,
+            "minCaracteres": 10,
+            "maxCaracteres": 300
+          },
+          {
+            "id": "tempo",
+            "rotulo": "Há quanto tempo?",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Menos de 1 semana",
+              "De 1 a 4 semanas",
+              "De 1 a 6 meses",
+              "Mais de 6 meses"
+            ]
+          },
+          {
+            "id": "diagnostico",
+            "rotulo": "Já tem diagnóstico?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "qual-diagnostico",
+            "rotulo": "Qual diagnóstico?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "diagnostico",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "medicacao",
+            "rotulo": "Usa medicação contínua?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "quais-medicacoes",
+            "rotulo": "Quais medicações?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "medicacao",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "urgencia",
+            "rotulo": "Urgência percebida",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Baixa",
+              "Média",
+              "Alta"
+            ],
+            "ajuda": "Alta: atrapalha suas atividades do dia a dia."
+          },
+          {
+            "id": "horario",
+            "rotulo": "Melhor horário",
+            "tipo": "MULTIPLA",
+            "obrigatoria": false,
+            "opcoes": [
+              "Manhã",
+              "Tarde",
+              "Noite"
+            ],
+            "permiteVarias": true
+          }
+        ],
+        "documentosExigidos": [
+          {
+            "id": "rg",
+            "rotulo": "RG"
+          },
+          {
+            "id": "encaminhamento",
+            "rotulo": "Encaminhamento médico"
+          }
+        ]
+      }
+    },
+    {
+      "chave": "op-011",
+      "ofertante": "henrique.alves@profissional.carebridge.demo",
+      "titulo": "Clínica geral, vaga social",
+      "descricao": "Consulta de clínica geral com solicitação de exames quando necessário.",
+      "tipoServico": "CONSULTA",
+      "especialidade": "clinica-geral",
+      "modalidade": "PRESENCIAL",
+      "modalidadeAcesso": "PRECO_SOCIAL",
+      "preco": 35,
+      "publicoAlvo": [
+        "ADULTOS",
+        "IDOSOS"
+      ],
+      "publicoAlvoObservacao": null,
+      "vagasTotais": 15,
+      "vagasPreenchidas": 5,
+      "cep": "70330-500",
+      "endereco": "SHCS 502, Asa Sul",
+      "cidade": "Brasília",
+      "uf": "DF",
+      "inscricoesDe": "2026-11-01",
+      "inscricoesAte": "2026-12-15",
+      "criteriosElegibilidade": null,
+      "semRestricoes": true,
+      "formaContato": "PLATAFORMA",
+      "prazoRespostaDias": 15,
+      "status": "ATIVA",
+      "ultimaAtualizacao": "2026-11-08T15:00:00Z",
+      "triagem": {
+        "modo": "PADRAO",
+        "perguntas": [
+          {
+            "id": "motivo",
+            "rotulo": "Qual o motivo principal?",
+            "tipo": "TEXTO_LONGO",
+            "obrigatoria": true,
+            "minCaracteres": 10,
+            "maxCaracteres": 300
+          },
+          {
+            "id": "tempo",
+            "rotulo": "Há quanto tempo?",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Menos de 1 semana",
+              "De 1 a 4 semanas",
+              "De 1 a 6 meses",
+              "Mais de 6 meses"
+            ]
+          },
+          {
+            "id": "diagnostico",
+            "rotulo": "Já tem diagnóstico?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "qual-diagnostico",
+            "rotulo": "Qual diagnóstico?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "diagnostico",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "medicacao",
+            "rotulo": "Usa medicação contínua?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "quais-medicacoes",
+            "rotulo": "Quais medicações?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "medicacao",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "urgencia",
+            "rotulo": "Urgência percebida",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Baixa",
+              "Média",
+              "Alta"
+            ],
+            "ajuda": "Alta: atrapalha suas atividades do dia a dia."
+          },
+          {
+            "id": "horario",
+            "rotulo": "Melhor horário",
+            "tipo": "MULTIPLA",
+            "obrigatoria": false,
+            "opcoes": [
+              "Manhã",
+              "Tarde",
+              "Noite"
+            ],
+            "permiteVarias": true
+          }
+        ],
+        "documentosExigidos": [
+          {
+            "id": "rg",
+            "rotulo": "RG"
+          }
+        ]
+      }
+    },
+    {
+      "chave": "op-012",
+      "ofertante": "sergio.lima@profissional.carebridge.demo",
+      "titulo": "Eletrocardiograma",
+      "descricao": "Eletrocardiograma gratuito para participantes de um estudo sobre hipertensão. O termo da pesquisa é assinado no local.",
+      "tipoServico": "EXAME",
+      "especialidade": "cardiologia",
+      "modalidade": "PRESENCIAL",
+      "modalidadeAcesso": "PESQUISA",
+      "preco": null,
+      "publicoAlvo": [
+        "ADULTOS",
+        "IDOSOS"
+      ],
+      "publicoAlvoObservacao": "Adultos com hipertensão",
+      "vagasTotais": 30,
+      "vagasPreenchidas": 23,
+      "cep": "70840-050",
+      "endereco": "SGAN 605, Asa Norte",
+      "cidade": "Brasília",
+      "uf": "DF",
+      "inscricoesDe": "2026-11-01",
+      "inscricoesAte": "2026-12-15",
+      "criteriosElegibilidade": "Adultos com hipertensão",
+      "semRestricoes": false,
+      "formaContato": "PLATAFORMA",
+      "prazoRespostaDias": 15,
+      "status": "ATIVA",
+      "ultimaAtualizacao": "2026-11-08T15:00:00Z",
+      "triagem": {
+        "modo": "PADRAO",
+        "perguntas": [
+          {
+            "id": "motivo",
+            "rotulo": "Qual o motivo principal?",
+            "tipo": "TEXTO_LONGO",
+            "obrigatoria": true,
+            "minCaracteres": 10,
+            "maxCaracteres": 300
+          },
+          {
+            "id": "tempo",
+            "rotulo": "Há quanto tempo?",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Menos de 1 semana",
+              "De 1 a 4 semanas",
+              "De 1 a 6 meses",
+              "Mais de 6 meses"
+            ]
+          },
+          {
+            "id": "diagnostico",
+            "rotulo": "Já tem diagnóstico?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "qual-diagnostico",
+            "rotulo": "Qual diagnóstico?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "diagnostico",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "medicacao",
+            "rotulo": "Usa medicação contínua?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "quais-medicacoes",
+            "rotulo": "Quais medicações?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "medicacao",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "urgencia",
+            "rotulo": "Urgência percebida",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Baixa",
+              "Média",
+              "Alta"
+            ],
+            "ajuda": "Alta: atrapalha suas atividades do dia a dia."
+          },
+          {
+            "id": "horario",
+            "rotulo": "Melhor horário",
+            "tipo": "MULTIPLA",
+            "obrigatoria": false,
+            "opcoes": [
+              "Manhã",
+              "Tarde",
+              "Noite"
+            ],
+            "permiteVarias": true
+          }
+        ],
+        "documentosExigidos": [
+          {
+            "id": "rg",
+            "rotulo": "RG"
+          },
+          {
+            "id": "encaminhamento",
+            "rotulo": "Encaminhamento médico"
+          }
+        ]
+      }
+    },
+    {
+      "chave": "op-013",
+      "ofertante": "fernanda.reis@profissional.carebridge.demo",
+      "titulo": "Grupo de apoio à ansiedade",
+      "descricao": "Grupo semanal de apoio com técnicas de respiração e organização da rotina.",
+      "tipoServico": "GRUPO",
+      "especialidade": "psicologia",
+      "modalidade": "ONLINE",
+      "modalidadeAcesso": "GRATUITO",
+      "preco": null,
+      "publicoAlvo": [
+        "ADULTOS"
+      ],
+      "publicoAlvoObservacao": null,
+      "vagasTotais": 15,
+      "vagasPreenchidas": 6,
+      "cep": null,
+      "endereco": null,
+      "cidade": "Brasília",
+      "uf": "DF",
+      "inscricoesDe": "2026-11-01",
+      "inscricoesAte": "2026-12-15",
+      "criteriosElegibilidade": null,
+      "semRestricoes": true,
+      "formaContato": "PLATAFORMA",
+      "prazoRespostaDias": 15,
+      "status": "ATIVA",
+      "ultimaAtualizacao": "2026-11-08T15:00:00Z",
+      "triagem": {
+        "modo": "PADRAO",
+        "perguntas": [
+          {
+            "id": "motivo",
+            "rotulo": "Qual o motivo principal?",
+            "tipo": "TEXTO_LONGO",
+            "obrigatoria": true,
+            "minCaracteres": 10,
+            "maxCaracteres": 300
+          },
+          {
+            "id": "tempo",
+            "rotulo": "Há quanto tempo?",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Menos de 1 semana",
+              "De 1 a 4 semanas",
+              "De 1 a 6 meses",
+              "Mais de 6 meses"
+            ]
+          },
+          {
+            "id": "diagnostico",
+            "rotulo": "Já tem diagnóstico?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "qual-diagnostico",
+            "rotulo": "Qual diagnóstico?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "diagnostico",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "medicacao",
+            "rotulo": "Usa medicação contínua?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "quais-medicacoes",
+            "rotulo": "Quais medicações?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "medicacao",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "urgencia",
+            "rotulo": "Urgência percebida",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Baixa",
+              "Média",
+              "Alta"
+            ],
+            "ajuda": "Alta: atrapalha suas atividades do dia a dia."
+          },
+          {
+            "id": "horario",
+            "rotulo": "Melhor horário",
+            "tipo": "MULTIPLA",
+            "obrigatoria": false,
+            "opcoes": [
+              "Manhã",
+              "Tarde",
+              "Noite"
+            ],
+            "permiteVarias": true
+          }
+        ],
+        "documentosExigidos": [
+          {
+            "id": "rg",
+            "rotulo": "RG"
+          }
+        ]
+      }
+    },
+    {
+      "chave": "op-014",
+      "ofertante": "lucia.prado@profissional.carebridge.demo",
+      "titulo": "Pré-natal odontológico",
+      "descricao": "Acompanhamento odontológico durante a gestação, com consulta a cada trimestre.",
+      "tipoServico": "CONSULTA",
+      "especialidade": "odontologia",
+      "modalidade": "PRESENCIAL",
+      "modalidadeAcesso": "SUS",
+      "preco": null,
+      "publicoAlvo": [
+        "GESTANTES"
+      ],
+      "publicoAlvoObservacao": null,
+      "vagasTotais": 10,
+      "vagasPreenchidas": 5,
+      "cep": "72225-150",
+      "endereco": "QNN 15, Ceilândia",
+      "cidade": "Brasília",
+      "uf": "DF",
+      "inscricoesDe": "2026-11-01",
+      "inscricoesAte": "2026-12-15",
+      "criteriosElegibilidade": null,
+      "semRestricoes": true,
+      "formaContato": "PLATAFORMA",
+      "prazoRespostaDias": 15,
+      "status": "ATIVA",
+      "ultimaAtualizacao": "2026-11-08T15:00:00Z",
+      "triagem": {
+        "modo": "PADRAO",
+        "perguntas": [
+          {
+            "id": "motivo",
+            "rotulo": "Qual o motivo principal?",
+            "tipo": "TEXTO_LONGO",
+            "obrigatoria": true,
+            "minCaracteres": 10,
+            "maxCaracteres": 300
+          },
+          {
+            "id": "tempo",
+            "rotulo": "Há quanto tempo?",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Menos de 1 semana",
+              "De 1 a 4 semanas",
+              "De 1 a 6 meses",
+              "Mais de 6 meses"
+            ]
+          },
+          {
+            "id": "diagnostico",
+            "rotulo": "Já tem diagnóstico?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "qual-diagnostico",
+            "rotulo": "Qual diagnóstico?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "diagnostico",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "medicacao",
+            "rotulo": "Usa medicação contínua?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "quais-medicacoes",
+            "rotulo": "Quais medicações?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "medicacao",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "urgencia",
+            "rotulo": "Urgência percebida",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Baixa",
+              "Média",
+              "Alta"
+            ],
+            "ajuda": "Alta: atrapalha suas atividades do dia a dia."
+          },
+          {
+            "id": "horario",
+            "rotulo": "Melhor horário",
+            "tipo": "MULTIPLA",
+            "obrigatoria": false,
+            "opcoes": [
+              "Manhã",
+              "Tarde",
+              "Noite"
+            ],
+            "permiteVarias": true
+          }
+        ],
+        "documentosExigidos": [
+          {
+            "id": "rg",
+            "rotulo": "RG"
+          },
+          {
+            "id": "sus",
+            "rotulo": "Cartão do SUS"
+          },
+          {
+            "id": "outro-3",
+            "rotulo": "Cartão da gestante"
+          }
+        ]
+      }
+    },
+    {
+      "chave": "op-101",
+      "ofertante": "profissional@teste.com",
+      "titulo": "Cardiologia - vaga social",
+      "descricao": "Avaliação cardiológica com ECG, voltada a pacientes sem convênio. Requer triagem prévia.",
+      "tipoServico": "CONSULTA",
+      "especialidade": "cardiologia",
+      "modalidade": "PRESENCIAL",
+      "modalidadeAcesso": "PRECO_SOCIAL",
+      "preco": 60,
+      "publicoAlvo": [
+        "ADULTOS",
+        "IDOSOS"
+      ],
+      "publicoAlvoObservacao": null,
+      "vagasTotais": 5,
+      "vagasPreenchidas": 3,
+      "cep": "70000-000",
+      "endereco": "Rua das Flores, 120, Brasília",
+      "cidade": "Brasília",
+      "uf": "DF",
+      "inscricoesDe": "2026-09-01",
+      "inscricoesAte": "2026-10-15",
+      "criteriosElegibilidade": "Adultos sem convênio, moradores do DF.",
+      "semRestricoes": false,
+      "formaContato": "PLATAFORMA",
+      "prazoRespostaDias": 15,
+      "status": "ENCERRADA",
+      "ultimaAtualizacao": "2026-10-05T14:00:00Z",
+      "triagem": {
+        "modo": "PADRAO",
+        "perguntas": [
+          {
+            "id": "motivo",
+            "rotulo": "Qual o motivo principal?",
+            "tipo": "TEXTO_LONGO",
+            "obrigatoria": true,
+            "minCaracteres": 10,
+            "maxCaracteres": 300
+          },
+          {
+            "id": "tempo",
+            "rotulo": "Há quanto tempo?",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Menos de 1 semana",
+              "De 1 a 4 semanas",
+              "De 1 a 6 meses",
+              "Mais de 6 meses"
+            ]
+          },
+          {
+            "id": "diagnostico",
+            "rotulo": "Já tem diagnóstico?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "qual-diagnostico",
+            "rotulo": "Qual diagnóstico?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "diagnostico",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "medicacao",
+            "rotulo": "Usa medicação contínua?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "quais-medicacoes",
+            "rotulo": "Quais medicações?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "medicacao",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "urgencia",
+            "rotulo": "Urgência percebida",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Baixa",
+              "Média",
+              "Alta"
+            ],
+            "ajuda": "Alta: atrapalha suas atividades do dia a dia."
+          },
+          {
+            "id": "horario",
+            "rotulo": "Melhor horário",
+            "tipo": "MULTIPLA",
+            "obrigatoria": false,
+            "opcoes": [
+              "Manhã",
+              "Tarde",
+              "Noite"
+            ],
+            "permiteVarias": true
+          }
+        ],
+        "documentosExigidos": [
+          {
+            "id": "rg",
+            "rotulo": "RG"
+          },
+          {
+            "id": "encaminhamento",
+            "rotulo": "Encaminhamento médico"
+          }
+        ]
+      }
+    },
+    {
+      "chave": "op-102",
+      "ofertante": "profissional@teste.com",
+      "titulo": "Fisioterapia ortopédica",
+      "descricao": "Sessões de fisioterapia para recuperação de lesões ortopédicas, com avaliação inicial.",
+      "tipoServico": "TERAPIA",
+      "especialidade": "fisioterapia",
+      "modalidade": "PRESENCIAL",
+      "modalidadeAcesso": "GRATUITO",
+      "preco": null,
+      "publicoAlvo": [
+        "ADULTOS"
+      ],
+      "publicoAlvoObservacao": null,
+      "vagasTotais": 10,
+      "vagasPreenchidas": 8,
+      "cep": "70000-000",
+      "endereco": "Quadra 302, Brasília",
+      "cidade": "Brasília",
+      "uf": "DF",
+      "inscricoesDe": "2026-08-20",
+      "inscricoesAte": "2026-10-10",
+      "criteriosElegibilidade": null,
+      "semRestricoes": true,
+      "formaContato": "PLATAFORMA",
+      "prazoRespostaDias": 15,
+      "status": "ENCERRADA",
+      "ultimaAtualizacao": "2026-10-04T10:30:00Z",
+      "triagem": {
+        "modo": "PADRAO",
+        "perguntas": [
+          {
+            "id": "motivo",
+            "rotulo": "Qual o motivo principal?",
+            "tipo": "TEXTO_LONGO",
+            "obrigatoria": true,
+            "minCaracteres": 10,
+            "maxCaracteres": 300
+          },
+          {
+            "id": "tempo",
+            "rotulo": "Há quanto tempo?",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Menos de 1 semana",
+              "De 1 a 4 semanas",
+              "De 1 a 6 meses",
+              "Mais de 6 meses"
+            ]
+          },
+          {
+            "id": "diagnostico",
+            "rotulo": "Já tem diagnóstico?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "qual-diagnostico",
+            "rotulo": "Qual diagnóstico?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "diagnostico",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "medicacao",
+            "rotulo": "Usa medicação contínua?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "quais-medicacoes",
+            "rotulo": "Quais medicações?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "medicacao",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "urgencia",
+            "rotulo": "Urgência percebida",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Baixa",
+              "Média",
+              "Alta"
+            ],
+            "ajuda": "Alta: atrapalha suas atividades do dia a dia."
+          },
+          {
+            "id": "horario",
+            "rotulo": "Melhor horário",
+            "tipo": "MULTIPLA",
+            "obrigatoria": false,
+            "opcoes": [
+              "Manhã",
+              "Tarde",
+              "Noite"
+            ],
+            "permiteVarias": true
+          }
+        ],
+        "documentosExigidos": [
+          {
+            "id": "rg",
+            "rotulo": "RG"
+          },
+          {
+            "id": "exames",
+            "rotulo": "Exames anteriores"
+          }
+        ]
+      }
+    },
+    {
+      "chave": "op-103",
+      "ofertante": "profissional@teste.com",
+      "titulo": "Estudo sobre hipertensão",
+      "descricao": null,
+      "tipoServico": null,
+      "especialidade": "cardiologia",
+      "modalidade": "PRESENCIAL",
+      "modalidadeAcesso": "PESQUISA",
+      "preco": null,
+      "publicoAlvo": [],
+      "publicoAlvoObservacao": null,
+      "vagasTotais": 20,
+      "vagasPreenchidas": 0,
+      "cep": null,
+      "endereco": "Hospital Universitário, Brasília",
+      "cidade": "Brasília",
+      "uf": "DF",
+      "inscricoesDe": null,
+      "inscricoesAte": null,
+      "criteriosElegibilidade": null,
+      "semRestricoes": false,
+      "formaContato": null,
+      "prazoRespostaDias": 15,
+      "status": "RASCUNHO",
+      "ultimaAtualizacao": "2026-10-18T09:00:00Z",
+      "triagem": {
+        "modo": "PADRAO",
+        "perguntas": [
+          {
+            "id": "motivo",
+            "rotulo": "Qual o motivo principal?",
+            "tipo": "TEXTO_LONGO",
+            "obrigatoria": true,
+            "minCaracteres": 10,
+            "maxCaracteres": 300
+          },
+          {
+            "id": "tempo",
+            "rotulo": "Há quanto tempo?",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Menos de 1 semana",
+              "De 1 a 4 semanas",
+              "De 1 a 6 meses",
+              "Mais de 6 meses"
+            ]
+          },
+          {
+            "id": "diagnostico",
+            "rotulo": "Já tem diagnóstico?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "qual-diagnostico",
+            "rotulo": "Qual diagnóstico?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "diagnostico",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "medicacao",
+            "rotulo": "Usa medicação contínua?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "quais-medicacoes",
+            "rotulo": "Quais medicações?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "medicacao",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "urgencia",
+            "rotulo": "Urgência percebida",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Baixa",
+              "Média",
+              "Alta"
+            ],
+            "ajuda": "Alta: atrapalha suas atividades do dia a dia."
+          },
+          {
+            "id": "horario",
+            "rotulo": "Melhor horário",
+            "tipo": "MULTIPLA",
+            "obrigatoria": false,
+            "opcoes": [
+              "Manhã",
+              "Tarde",
+              "Noite"
+            ],
+            "permiteVarias": true
+          }
+        ],
+        "documentosExigidos": [
+          {
+            "id": "rg",
+            "rotulo": "RG"
+          }
+        ]
+      }
+    },
+    {
+      "chave": "op-104",
+      "ofertante": "profissional@teste.com",
+      "titulo": "Nutrição esportiva",
+      "descricao": "Orientação nutricional para praticantes de esporte amador, com plano alimentar.",
+      "tipoServico": "CONSULTA",
+      "especialidade": "nutricao",
+      "modalidade": "ONLINE",
+      "modalidadeAcesso": "PRECO_SOCIAL",
+      "preco": 45,
+      "publicoAlvo": [
+        "ADOLESCENTES",
+        "ADULTOS"
+      ],
+      "publicoAlvoObservacao": null,
+      "vagasTotais": 6,
+      "vagasPreenchidas": 6,
+      "cep": null,
+      "endereco": null,
+      "cidade": null,
+      "uf": null,
+      "inscricoesDe": "2026-07-10",
+      "inscricoesAte": "2026-09-30",
+      "criteriosElegibilidade": "Praticantes de esporte amador.",
+      "semRestricoes": false,
+      "formaContato": "TELEFONE",
+      "prazoRespostaDias": 15,
+      "status": "ENCERRADA",
+      "ultimaAtualizacao": "2026-09-30T18:00:00Z",
+      "triagem": {
+        "modo": "PADRAO",
+        "perguntas": [
+          {
+            "id": "motivo",
+            "rotulo": "Qual o motivo principal?",
+            "tipo": "TEXTO_LONGO",
+            "obrigatoria": true,
+            "minCaracteres": 10,
+            "maxCaracteres": 300
+          },
+          {
+            "id": "tempo",
+            "rotulo": "Há quanto tempo?",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Menos de 1 semana",
+              "De 1 a 4 semanas",
+              "De 1 a 6 meses",
+              "Mais de 6 meses"
+            ]
+          },
+          {
+            "id": "diagnostico",
+            "rotulo": "Já tem diagnóstico?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "qual-diagnostico",
+            "rotulo": "Qual diagnóstico?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "diagnostico",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "medicacao",
+            "rotulo": "Usa medicação contínua?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "quais-medicacoes",
+            "rotulo": "Quais medicações?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "medicacao",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "urgencia",
+            "rotulo": "Urgência percebida",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Baixa",
+              "Média",
+              "Alta"
+            ],
+            "ajuda": "Alta: atrapalha suas atividades do dia a dia."
+          },
+          {
+            "id": "horario",
+            "rotulo": "Melhor horário",
+            "tipo": "MULTIPLA",
+            "obrigatoria": false,
+            "opcoes": [
+              "Manhã",
+              "Tarde",
+              "Noite"
+            ],
+            "permiteVarias": true
+          }
+        ],
+        "documentosExigidos": [
+          {
+            "id": "rg",
+            "rotulo": "RG"
+          }
+        ]
+      }
+    },
+    {
+      "chave": "op-105",
+      "ofertante": "profissional@teste.com",
+      "titulo": "Psicologia adulto",
+      "descricao": "Atendimento psicológico individual para adultos, com encontros semanais de 50 minutos.",
+      "tipoServico": "TERAPIA",
+      "especialidade": "psicologia",
+      "modalidade": "ONLINE",
+      "modalidadeAcesso": "GRATUITO",
+      "preco": null,
+      "publicoAlvo": [
+        "ADULTOS"
+      ],
+      "publicoAlvoObservacao": null,
+      "vagasTotais": 8,
+      "vagasPreenchidas": 2,
+      "cep": null,
+      "endereco": null,
+      "cidade": null,
+      "uf": null,
+      "inscricoesDe": "2026-10-01",
+      "inscricoesAte": "2026-12-20",
+      "criteriosElegibilidade": null,
+      "semRestricoes": true,
+      "formaContato": "PLATAFORMA",
+      "prazoRespostaDias": 15,
+      "status": "ATIVA",
+      "ultimaAtualizacao": "2026-10-20T11:15:00Z",
+      "triagem": {
+        "modo": "PADRAO",
+        "perguntas": [
+          {
+            "id": "motivo",
+            "rotulo": "Qual o motivo principal?",
+            "tipo": "TEXTO_LONGO",
+            "obrigatoria": true,
+            "minCaracteres": 10,
+            "maxCaracteres": 300
+          },
+          {
+            "id": "tempo",
+            "rotulo": "Há quanto tempo?",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Menos de 1 semana",
+              "De 1 a 4 semanas",
+              "De 1 a 6 meses",
+              "Mais de 6 meses"
+            ]
+          },
+          {
+            "id": "diagnostico",
+            "rotulo": "Já tem diagnóstico?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "qual-diagnostico",
+            "rotulo": "Qual diagnóstico?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "diagnostico",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "medicacao",
+            "rotulo": "Usa medicação contínua?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "quais-medicacoes",
+            "rotulo": "Quais medicações?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "medicacao",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "urgencia",
+            "rotulo": "Urgência percebida",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Baixa",
+              "Média",
+              "Alta"
+            ],
+            "ajuda": "Alta: atrapalha suas atividades do dia a dia."
+          },
+          {
+            "id": "horario",
+            "rotulo": "Melhor horário",
+            "tipo": "MULTIPLA",
+            "obrigatoria": false,
+            "opcoes": [
+              "Manhã",
+              "Tarde",
+              "Noite"
+            ],
+            "permiteVarias": true
+          }
+        ],
+        "documentosExigidos": [
+          {
+            "id": "rg",
+            "rotulo": "RG"
+          }
+        ]
+      }
+    },
+    {
+      "chave": "op-106",
+      "ofertante": "profissional@teste.com",
+      "titulo": "Avaliação odontológica",
+      "descricao": "Avaliação odontológica completa com orientação de higiene e encaminhamento quando preciso.",
+      "tipoServico": "EXAME",
+      "especialidade": "odontologia",
+      "modalidade": "PRESENCIAL",
+      "modalidadeAcesso": "GRATUITO",
+      "preco": null,
+      "publicoAlvo": [
+        "CRIANCAS",
+        "ADOLESCENTES",
+        "ADULTOS"
+      ],
+      "publicoAlvoObservacao": null,
+      "vagasTotais": 8,
+      "vagasPreenchidas": 1,
+      "cep": "70000-000",
+      "endereco": "Espaço Cuidar, Brasília",
+      "cidade": "Brasília",
+      "uf": "DF",
+      "inscricoesDe": "2026-10-05",
+      "inscricoesAte": "2026-11-30",
+      "criteriosElegibilidade": null,
+      "semRestricoes": true,
+      "formaContato": "EMAIL",
+      "prazoRespostaDias": 15,
+      "status": "ATIVA",
+      "ultimaAtualizacao": "2026-10-21T08:40:00Z",
+      "triagem": {
+        "modo": "PADRAO",
+        "perguntas": [
+          {
+            "id": "motivo",
+            "rotulo": "Qual o motivo principal?",
+            "tipo": "TEXTO_LONGO",
+            "obrigatoria": true,
+            "minCaracteres": 10,
+            "maxCaracteres": 300
+          },
+          {
+            "id": "tempo",
+            "rotulo": "Há quanto tempo?",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Menos de 1 semana",
+              "De 1 a 4 semanas",
+              "De 1 a 6 meses",
+              "Mais de 6 meses"
+            ]
+          },
+          {
+            "id": "diagnostico",
+            "rotulo": "Já tem diagnóstico?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "qual-diagnostico",
+            "rotulo": "Qual diagnóstico?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "diagnostico",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "medicacao",
+            "rotulo": "Usa medicação contínua?",
+            "tipo": "SIM_NAO",
+            "obrigatoria": true
+          },
+          {
+            "id": "quais-medicacoes",
+            "rotulo": "Quais medicações?",
+            "tipo": "TEXTO_CURTO",
+            "obrigatoria": true,
+            "dependeDe": {
+              "perguntaId": "medicacao",
+              "resposta": "Sim"
+            }
+          },
+          {
+            "id": "urgencia",
+            "rotulo": "Urgência percebida",
+            "tipo": "MULTIPLA",
+            "obrigatoria": true,
+            "opcoes": [
+              "Baixa",
+              "Média",
+              "Alta"
+            ],
+            "ajuda": "Alta: atrapalha suas atividades do dia a dia."
+          },
+          {
+            "id": "horario",
+            "rotulo": "Melhor horário",
+            "tipo": "MULTIPLA",
+            "obrigatoria": false,
+            "opcoes": [
+              "Manhã",
+              "Tarde",
+              "Noite"
+            ],
+            "permiteVarias": true
+          }
+        ],
+        "documentosExigidos": [
+          {
+            "id": "rg",
+            "rotulo": "RG"
+          },
+          {
+            "id": "sus",
+            "rotulo": "Cartão do SUS"
+          }
+        ]
+      }
+    }
+  ],
+  "inscricoes": [
+    {
+      "paciente": "paciente@teste.com",
+      "oportunidade": "op-004",
+      "status": "EM_ANALISE",
+      "dataInscricao": "2026-11-11T17:32:00Z",
+      "prazoResposta": "2026-11-26T17:32:00Z",
+      "decididaEm": null,
+      "motivoDecisao": null,
+      "pedidoInformacao": null,
+      "combinado": null,
+      "respostasTriagem": [
+        {
+          "perguntaId": "motivo",
+          "pergunta": "Qual o motivo principal?",
+          "resposta": "Dor no peito ao subir escadas"
+        },
+        {
+          "perguntaId": "tempo",
+          "pergunta": "Há quanto tempo?",
+          "resposta": "De 1 a 4 semanas"
+        },
+        {
+          "perguntaId": "diagnostico",
+          "pergunta": "Já tem diagnóstico?",
+          "resposta": "Sim"
+        },
+        {
+          "perguntaId": "qual-diagnostico",
+          "pergunta": "Qual diagnóstico?",
+          "resposta": "Hipertensão"
+        },
+        {
+          "perguntaId": "medicacao",
+          "pergunta": "Usa medicação contínua?",
+          "resposta": "Não"
+        },
+        {
+          "perguntaId": "urgencia",
+          "pergunta": "Urgência percebida",
+          "resposta": "Média"
+        },
+        {
+          "perguntaId": "horario",
+          "pergunta": "Melhor horário",
+          "resposta": "Manhã"
+        }
+      ],
+      "consentimentoDadosSaudeEm": "2026-11-11T17:32:00Z",
+      "documentos": [
+        {
+          "documentoId": "rg",
+          "nomeArquivo": "RG_frente.jpg",
+          "tamanhoBytes": 1200000,
+          "enviadoEm": "2026-11-11T17:32:00Z"
+        },
+        {
+          "documentoId": "encaminhamento",
+          "nomeArquivo": "Encaminhamento.pdf",
+          "tamanhoBytes": 348160,
+          "enviadoEm": "2026-11-11T17:32:00Z"
+        }
+      ],
+      "mensagens": []
+    },
+    {
+      "paciente": "paciente@teste.com",
+      "oportunidade": "op-006",
+      "status": "AGUARDANDO_INFORMACOES",
+      "dataInscricao": "2026-10-28T13:15:00Z",
+      "prazoResposta": "2026-11-12T13:15:00Z",
+      "decididaEm": null,
+      "motivoDecisao": null,
+      "pedidoInformacao": {
+        "texto": "Pode enviar o raio X mais recente do joelho?",
+        "prazo": "2026-11-15T02:59:00Z"
+      },
+      "combinado": null,
+      "respostasTriagem": [
+        {
+          "perguntaId": "motivo",
+          "pergunta": "Qual o motivo principal?",
+          "resposta": "Dor no joelho direito ao caminhar"
+        },
+        {
+          "perguntaId": "tempo",
+          "pergunta": "Há quanto tempo?",
+          "resposta": "De 1 a 6 meses"
+        },
+        {
+          "perguntaId": "diagnostico",
+          "pergunta": "Já tem diagnóstico?",
+          "resposta": "Não"
+        },
+        {
+          "perguntaId": "medicacao",
+          "pergunta": "Usa medicação contínua?",
+          "resposta": "Sim"
+        },
+        {
+          "perguntaId": "quais-medicacoes",
+          "pergunta": "Quais medicações?",
+          "resposta": "Ibuprofeno quando dói"
+        },
+        {
+          "perguntaId": "urgencia",
+          "pergunta": "Urgência percebida",
+          "resposta": "Média"
+        },
+        {
+          "perguntaId": "horario",
+          "pergunta": "Melhor horário",
+          "resposta": "Tarde"
+        }
+      ],
+      "consentimentoDadosSaudeEm": "2026-10-28T13:15:00Z",
+      "documentos": [
+        {
+          "documentoId": "rg",
+          "nomeArquivo": "RG.jpg",
+          "tamanhoBytes": 1200000,
+          "enviadoEm": "2026-10-28T13:15:00Z"
+        },
+        {
+          "documentoId": "encaminhamento",
+          "nomeArquivo": "Encaminhamento_fisio.pdf",
+          "tamanhoBytes": 348160,
+          "enviadoEm": "2026-10-28T13:15:00Z"
+        }
+      ],
+      "mensagens": []
+    },
+    {
+      "paciente": "paciente@teste.com",
+      "oportunidade": "op-001",
+      "status": "APROVADA",
+      "dataInscricao": "2026-10-20T22:05:00Z",
+      "prazoResposta": "2026-11-04T22:05:00Z",
+      "decididaEm": "2026-11-02T12:00:00Z",
+      "motivoDecisao": null,
+      "pedidoInformacao": null,
+      "combinado": {
+        "quando": "A combinar",
+        "onde": "Online",
+        "levar": "RG e exames"
+      },
+      "respostasTriagem": [
+        {
+          "perguntaId": "motivo",
+          "pergunta": "Qual o motivo principal?",
+          "resposta": "Ansiedade e insônia há três meses"
+        },
+        {
+          "perguntaId": "tempo",
+          "pergunta": "Há quanto tempo?",
+          "resposta": "De 1 a 6 meses"
+        },
+        {
+          "perguntaId": "diagnostico",
+          "pergunta": "Já tem diagnóstico?",
+          "resposta": "Não"
+        },
+        {
+          "perguntaId": "medicacao",
+          "pergunta": "Usa medicação contínua?",
+          "resposta": "Não"
+        },
+        {
+          "perguntaId": "urgencia",
+          "pergunta": "Urgência percebida",
+          "resposta": "Média"
+        },
+        {
+          "perguntaId": "horario",
+          "pergunta": "Melhor horário",
+          "resposta": "Noite"
+        }
+      ],
+      "consentimentoDadosSaudeEm": "2026-10-20T22:05:00Z",
+      "documentos": [
+        {
+          "documentoId": "rg",
+          "nomeArquivo": "RG.jpg",
+          "tamanhoBytes": 1200000,
+          "enviadoEm": "2026-10-20T22:05:00Z"
+        }
+      ],
+      "mensagens": [
+        {
+          "autor": "PROFISSIONAL_SAUDE",
+          "texto": "Olá Ana, podemos marcar na terça às 10h?",
+          "enviadaEm": "2026-11-11T15:45:00Z",
+          "lida": true
+        }
+      ]
+    },
+    {
+      "paciente": "paciente@teste.com",
+      "oportunidade": "op-003",
+      "status": "RECUSADA",
+      "dataInscricao": "2026-10-08T11:40:00Z",
+      "prazoResposta": "2026-10-23T11:40:00Z",
+      "decididaEm": "2026-10-22T19:20:00Z",
+      "motivoDecisao": "As vagas desta turma são para moradores de Ceilândia. Há uma turma aberta na unidade de Taguatinga.",
+      "pedidoInformacao": null,
+      "combinado": null,
+      "respostasTriagem": [
+        {
+          "perguntaId": "motivo",
+          "pergunta": "Qual o motivo principal?",
+          "resposta": "Dor em um dente do fundo ao mastigar"
+        },
+        {
+          "perguntaId": "tempo",
+          "pergunta": "Há quanto tempo?",
+          "resposta": "De 1 a 4 semanas"
+        },
+        {
+          "perguntaId": "diagnostico",
+          "pergunta": "Já tem diagnóstico?",
+          "resposta": "Não"
+        },
+        {
+          "perguntaId": "medicacao",
+          "pergunta": "Usa medicação contínua?",
+          "resposta": "Não"
+        },
+        {
+          "perguntaId": "urgencia",
+          "pergunta": "Urgência percebida",
+          "resposta": "Baixa"
+        }
+      ],
+      "consentimentoDadosSaudeEm": "2026-10-08T11:40:00Z",
+      "documentos": [
+        {
+          "documentoId": "rg",
+          "nomeArquivo": "RG.jpg",
+          "tamanhoBytes": 1200000,
+          "enviadoEm": "2026-10-08T11:40:00Z"
+        },
+        {
+          "documentoId": "sus",
+          "nomeArquivo": "Cartao_SUS.jpg",
+          "tamanhoBytes": 348160,
+          "enviadoEm": "2026-10-08T11:40:00Z"
+        }
+      ],
+      "mensagens": []
+    },
+    {
+      "paciente": "paciente@teste.com",
+      "oportunidade": "op-101",
+      "status": "APROVADA",
+      "dataInscricao": "2026-10-21T09:12:00Z",
+      "prazoResposta": "2026-11-05T09:12:00Z",
+      "decididaEm": "2026-10-21T12:30:00Z",
+      "motivoDecisao": null,
+      "pedidoInformacao": null,
+      "combinado": {
+        "quando": "A combinar",
+        "onde": "Rua das Flores, 120, Brasília",
+        "levar": "RG, Encaminhamento médico"
+      },
+      "respostasTriagem": [
+        {
+          "perguntaId": "motivo",
+          "pergunta": "Qual o motivo principal?",
+          "resposta": "Dor no peito ao esforço"
+        },
+        {
+          "perguntaId": "tempo",
+          "pergunta": "Há quanto tempo?",
+          "resposta": "De 1 a 6 meses"
+        },
+        {
+          "perguntaId": "diagnostico",
+          "pergunta": "Já tem diagnóstico?",
+          "resposta": "Sim"
+        },
+        {
+          "perguntaId": "qual-diagnostico",
+          "pergunta": "Qual diagnóstico?",
+          "resposta": "Hipertensão"
+        },
+        {
+          "perguntaId": "medicacao",
+          "pergunta": "Usa medicação contínua?",
+          "resposta": "Sim"
+        },
+        {
+          "perguntaId": "quais-medicacoes",
+          "pergunta": "Quais medicações?",
+          "resposta": "Losartana"
+        },
+        {
+          "perguntaId": "urgencia",
+          "pergunta": "Urgência percebida",
+          "resposta": "Média"
+        },
+        {
+          "perguntaId": "horario",
+          "pergunta": "Melhor horário",
+          "resposta": "Manhã, Tarde"
+        }
+      ],
+      "consentimentoDadosSaudeEm": "2026-10-21T09:12:00Z",
+      "documentos": [
+        {
+          "documentoId": "rg",
+          "nomeArquivo": "RG_frente.jpg",
+          "tamanhoBytes": 430080,
+          "enviadoEm": "2026-10-21T09:12:00Z"
+        },
+        {
+          "documentoId": "encaminhamento",
+          "nomeArquivo": "Encaminhamento.pdf",
+          "tamanhoBytes": 131072,
+          "enviadoEm": "2026-10-21T09:12:00Z"
+        }
+      ],
+      "mensagens": [
+        {
+          "autor": "PACIENTE",
+          "texto": "Olá, posso levar os exames antigos?",
+          "enviadaEm": "2026-10-21T12:45:00Z",
+          "lida": true
+        },
+        {
+          "autor": "PROFISSIONAL_SAUDE",
+          "texto": "Bom dia, pode sim!",
+          "enviadaEm": "2026-10-21T12:46:00Z",
+          "lida": true
+        }
+      ]
+    },
+    {
+      "paciente": "carlos.lima@paciente.carebridge.demo",
+      "oportunidade": "op-102",
+      "status": "EM_ANALISE",
+      "dataInscricao": "2026-10-20T15:40:00Z",
+      "prazoResposta": "2026-11-04T15:40:00Z",
+      "decididaEm": null,
+      "motivoDecisao": null,
+      "pedidoInformacao": null,
+      "combinado": null,
+      "respostasTriagem": [
+        {
+          "perguntaId": "motivo",
+          "pergunta": "Qual o motivo principal?",
+          "resposta": "Dor no joelho direito ao caminhar"
+        },
+        {
+          "perguntaId": "tempo",
+          "pergunta": "Há quanto tempo?",
+          "resposta": "De 1 a 4 semanas"
+        },
+        {
+          "perguntaId": "diagnostico",
+          "pergunta": "Já tem diagnóstico?",
+          "resposta": "Não"
+        },
+        {
+          "perguntaId": "medicacao",
+          "pergunta": "Usa medicação contínua?",
+          "resposta": "Não"
+        },
+        {
+          "perguntaId": "urgencia",
+          "pergunta": "Urgência percebida",
+          "resposta": "Média"
+        },
+        {
+          "perguntaId": "horario",
+          "pergunta": "Melhor horário",
+          "resposta": "Tarde"
+        }
+      ],
+      "consentimentoDadosSaudeEm": "2026-10-20T15:40:00Z",
+      "documentos": [
+        {
+          "documentoId": "rg",
+          "nomeArquivo": "RG.jpg",
+          "tamanhoBytes": 1200128,
+          "enviadoEm": "2026-10-20T15:40:00Z"
+        },
+        {
+          "documentoId": "exames",
+          "nomeArquivo": "Raio_X_joelho.pdf",
+          "tamanhoBytes": 880640,
+          "enviadoEm": "2026-10-20T15:40:00Z"
+        }
+      ],
+      "mensagens": []
+    },
+    {
+      "paciente": "beatriz.alves@paciente.carebridge.demo",
+      "oportunidade": "op-101",
+      "status": "APROVADA",
+      "dataInscricao": "2026-10-19T11:05:00Z",
+      "prazoResposta": "2026-11-03T11:05:00Z",
+      "decididaEm": "2026-10-20T10:00:00Z",
+      "motivoDecisao": null,
+      "pedidoInformacao": null,
+      "combinado": {
+        "quando": "A combinar",
+        "onde": "Rua das Flores, 120, Brasília",
+        "levar": "RG, Encaminhamento médico"
+      },
+      "respostasTriagem": [
+        {
+          "perguntaId": "motivo",
+          "pergunta": "Qual o motivo principal?",
+          "resposta": "Palpitações à noite"
+        },
+        {
+          "perguntaId": "tempo",
+          "pergunta": "Há quanto tempo?",
+          "resposta": "Mais de 6 meses"
+        },
+        {
+          "perguntaId": "diagnostico",
+          "pergunta": "Já tem diagnóstico?",
+          "resposta": "Não"
+        },
+        {
+          "perguntaId": "medicacao",
+          "pergunta": "Usa medicação contínua?",
+          "resposta": "Não"
+        },
+        {
+          "perguntaId": "urgencia",
+          "pergunta": "Urgência percebida",
+          "resposta": "Baixa"
+        }
+      ],
+      "consentimentoDadosSaudeEm": "2026-10-19T11:05:00Z",
+      "documentos": [
+        {
+          "documentoId": "rg",
+          "nomeArquivo": "RG_frente.jpg",
+          "tamanhoBytes": 430080,
+          "enviadoEm": "2026-10-19T11:05:00Z"
+        },
+        {
+          "documentoId": "encaminhamento",
+          "nomeArquivo": "Encaminhamento.pdf",
+          "tamanhoBytes": 131072,
+          "enviadoEm": "2026-10-19T11:05:00Z"
+        }
+      ],
+      "mensagens": []
+    },
+    {
+      "paciente": "joao.santos@paciente.carebridge.demo",
+      "oportunidade": "op-102",
+      "status": "RECUSADA",
+      "dataInscricao": "2026-10-18T16:20:00Z",
+      "prazoResposta": "2026-11-02T16:20:00Z",
+      "decididaEm": "2026-10-19T09:00:00Z",
+      "motivoDecisao": "As vagas desta turma são para recuperação pós-cirúrgica.",
+      "pedidoInformacao": null,
+      "combinado": null,
+      "respostasTriagem": [
+        {
+          "perguntaId": "motivo",
+          "pergunta": "Qual o motivo principal?",
+          "resposta": "Dor lombar ao levantar peso"
+        },
+        {
+          "perguntaId": "tempo",
+          "pergunta": "Há quanto tempo?",
+          "resposta": "Mais de 6 meses"
+        },
+        {
+          "perguntaId": "diagnostico",
+          "pergunta": "Já tem diagnóstico?",
+          "resposta": "Sim"
+        },
+        {
+          "perguntaId": "qual-diagnostico",
+          "pergunta": "Qual diagnóstico?",
+          "resposta": "Hérnia de disco"
+        },
+        {
+          "perguntaId": "medicacao",
+          "pergunta": "Usa medicação contínua?",
+          "resposta": "Não"
+        },
+        {
+          "perguntaId": "urgencia",
+          "pergunta": "Urgência percebida",
+          "resposta": "Alta"
+        }
+      ],
+      "consentimentoDadosSaudeEm": "2026-10-18T16:20:00Z",
+      "documentos": [
+        {
+          "documentoId": "rg",
+          "nomeArquivo": "RG.pdf",
+          "tamanhoBytes": 317440,
+          "enviadoEm": "2026-10-18T16:20:00Z"
+        }
+      ],
+      "mensagens": []
+    },
+    {
+      "paciente": "paulo.mendes@paciente.carebridge.demo",
+      "oportunidade": "op-105",
+      "status": "RECEBIDA",
+      "dataInscricao": "2026-10-21T08:05:00Z",
+      "prazoResposta": "2026-11-05T08:05:00Z",
+      "decididaEm": null,
+      "motivoDecisao": null,
+      "pedidoInformacao": null,
+      "combinado": null,
+      "respostasTriagem": [
+        {
+          "perguntaId": "motivo",
+          "pergunta": "Qual o motivo principal?",
+          "resposta": "Ansiedade que atrapalha o trabalho"
+        },
+        {
+          "perguntaId": "tempo",
+          "pergunta": "Há quanto tempo?",
+          "resposta": "De 1 a 6 meses"
+        },
+        {
+          "perguntaId": "diagnostico",
+          "pergunta": "Já tem diagnóstico?",
+          "resposta": "Não"
+        },
+        {
+          "perguntaId": "medicacao",
+          "pergunta": "Usa medicação contínua?",
+          "resposta": "Não"
+        },
+        {
+          "perguntaId": "urgencia",
+          "pergunta": "Urgência percebida",
+          "resposta": "Alta"
+        },
+        {
+          "perguntaId": "horario",
+          "pergunta": "Melhor horário",
+          "resposta": "Noite"
+        }
+      ],
+      "consentimentoDadosSaudeEm": "2026-10-21T08:05:00Z",
+      "documentos": [
+        {
+          "documentoId": "rg",
+          "nomeArquivo": "RG_frente.jpg",
+          "tamanhoBytes": 524288,
+          "enviadoEm": "2026-10-21T08:05:00Z"
+        }
+      ],
+      "mensagens": []
+    },
+    {
+      "paciente": "luiza.fernandes@paciente.carebridge.demo",
+      "oportunidade": "op-106",
+      "status": "AGUARDANDO_INFORMACOES",
+      "dataInscricao": "2026-10-20T10:30:00Z",
+      "prazoResposta": "2026-11-04T10:30:00Z",
+      "decididaEm": null,
+      "motivoDecisao": null,
+      "pedidoInformacao": {
+        "texto": "Pode enviar a foto do Cartão do SUS? O arquivo veio cortado.",
+        "prazo": "2026-10-23T23:59:00Z"
+      },
+      "combinado": null,
+      "respostasTriagem": [
+        {
+          "perguntaId": "motivo",
+          "pergunta": "Qual o motivo principal?",
+          "resposta": "Sangramento na gengiva ao escovar"
+        },
+        {
+          "perguntaId": "tempo",
+          "pergunta": "Há quanto tempo?",
+          "resposta": "De 1 a 4 semanas"
+        },
+        {
+          "perguntaId": "diagnostico",
+          "pergunta": "Já tem diagnóstico?",
+          "resposta": "Não"
+        },
+        {
+          "perguntaId": "medicacao",
+          "pergunta": "Usa medicação contínua?",
+          "resposta": "Não"
+        },
+        {
+          "perguntaId": "urgencia",
+          "pergunta": "Urgência percebida",
+          "resposta": "Média"
+        },
+        {
+          "perguntaId": "horario",
+          "pergunta": "Melhor horário",
+          "resposta": "Manhã"
+        }
+      ],
+      "consentimentoDadosSaudeEm": "2026-10-20T10:30:00Z",
+      "documentos": [
+        {
+          "documentoId": "rg",
+          "nomeArquivo": "RG.jpg",
+          "tamanhoBytes": 655360,
+          "enviadoEm": "2026-10-20T10:30:00Z"
+        },
+        {
+          "documentoId": "sus",
+          "nomeArquivo": "Cartao_SUS.jpg",
+          "tamanhoBytes": 97280,
+          "enviadoEm": "2026-10-20T10:30:00Z"
+        }
+      ],
+      "mensagens": []
+    },
+    {
+      "paciente": "rafael.costa@paciente.carebridge.demo",
+      "oportunidade": "op-105",
+      "status": "CANCELADA",
+      "dataInscricao": "2026-10-19T14:10:00Z",
+      "prazoResposta": "2026-11-03T14:10:00Z",
+      "decididaEm": "2026-10-20T08:15:00Z",
+      "motivoDecisao": null,
+      "pedidoInformacao": null,
+      "combinado": null,
+      "respostasTriagem": [],
+      "consentimentoDadosSaudeEm": "2026-10-19T14:10:00Z",
+      "documentos": [],
+      "mensagens": []
+    }
+  ]
+}
