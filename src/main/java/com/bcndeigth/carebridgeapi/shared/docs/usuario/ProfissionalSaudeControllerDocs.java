@@ -2,6 +2,7 @@ package com.bcndeigth.carebridgeapi.shared.docs.usuario;
 
 import com.bcndeigth.carebridgeapi.profissional_saude.dto.CadastroProfissionalSaudeDto;
 import com.bcndeigth.carebridgeapi.shared.docs.profissional_saude.CadastroProfissionalSaudeMultipartSchema;
+import com.bcndeigth.carebridgeapi.users.dto.CadastroResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Encoding;
@@ -44,7 +45,7 @@ public interface ProfissionalSaudeControllerDocs {
             @ApiResponse(responseCode = "413", description = "Arquivo acima de 10 MB ou requisição multipart acima de 22 MB."),
             @ApiResponse(responseCode = "415", description = "A parte dados não foi enviada com Content-Type application/json.")
     })
-    ResponseEntity<Void> cadastrarProfissionalSaude(
+    ResponseEntity<CadastroResponse> cadastrarProfissionalSaude(
             @Validated @RequestPart("dados") CadastroProfissionalSaudeDto cadastroProfissionalSaudeDto,
             @RequestPart(value = "documentos", required = false) List<MultipartFile> documentos
     );

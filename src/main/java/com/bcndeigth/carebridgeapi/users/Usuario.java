@@ -41,24 +41,45 @@ public class Usuario implements UserDetails {
     private String senhaHash;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_perfil", nullable = false)
     private TipoPerfil tipoPerfil;
 
+<<<<<<< HEAD
     @Column(name = "accepted_terms", nullable = false)
     private boolean acceptedTerms;
 
     @Column(name = "termos_aceitos_em")
     private Instant termosAceitosEm;
 
+=======
+    @Column(name = "termos_aceitos_em", nullable = false, updatable = false)
+    private Instant termosAceitosEm;
+
+    @Column(name = "email_verificado", nullable = false)
+    private boolean emailVerificado;
+
+>>>>>>> origin/develop
     @Column(name = "criado_em", nullable = false, updatable = false)
     private Instant criadoEm;
 
     @Column(name = "atualizado_em", nullable = false)
     private Instant atualizadoEm;
 
+<<<<<<< HEAD
     public Usuario(String email, String hashedPassword, TipoPerfil tipoPerfil) {
         setEmail(email);
+=======
+    public Usuario(String email, String hashedPassword, TipoPerfil tipoPerfil, Instant termosAceitosEm) {
+        this.email = email.toLowerCase(java.util.Locale.ROOT);
+>>>>>>> origin/develop
         this.senhaHash = hashedPassword;
         this.tipoPerfil = tipoPerfil;
+        this.termosAceitosEm = termosAceitosEm;
+        this.emailVerificado = false;
+    }
+
+    public Usuario(String email, String hashedPassword, TipoPerfil tipoPerfil) {
+        this(email, hashedPassword, tipoPerfil, Instant.now());
     }
 
     public Usuario(String email, String hashedPassword, TipoPerfil tipoPerfil, boolean acceptedTerms, Instant termosAceitosEm) {

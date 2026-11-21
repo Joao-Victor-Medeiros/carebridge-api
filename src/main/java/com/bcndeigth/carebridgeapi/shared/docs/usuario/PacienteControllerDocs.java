@@ -1,6 +1,7 @@
 package com.bcndeigth.carebridgeapi.shared.docs.usuario;
 
 import com.bcndeigth.carebridgeapi.paciente.dto.CadastroPacienteDto;
+import com.bcndeigth.carebridgeapi.users.dto.CadastroResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.ResponseEntity;
 
 @Tag(name = "Usuários", description = "Operações de cadastro de usuários, pacientes e profissionais de saúde.")
 @RequestMapping("/paciente")
@@ -21,11 +23,11 @@ public interface PacienteControllerDocs {
             description = "Cria uma conta de usuário com perfil de paciente e registra seus dados de nascimento, telefone e endereço."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Usuário paciente cadastrado com sucesso."),
+            @ApiResponse(responseCode = "201", description = "Usuário paciente cadastrado com sucesso."),
             @ApiResponse(responseCode = "400", description = "Dados de cadastro inválidos.",
                     content = @Content(schema = @Schema(implementation = Object.class))),
             @ApiResponse(responseCode = "409", description = "E-mail já cadastrado.",
                     content = @Content(schema = @Schema(implementation = Object.class)))
     })
-    void cadastrarPaciente(@RequestBody CadastroPacienteDto cadastroPacienteDto);
+    ResponseEntity<CadastroResponse> cadastrarPaciente(@RequestBody CadastroPacienteDto cadastroPacienteDto);
 }

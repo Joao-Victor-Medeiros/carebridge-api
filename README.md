@@ -435,24 +435,6 @@ Essa rota usa `multipart/form-data`. Envie a parte `dados` como JSON:
 }
 ```
 
-Novos profissionais começam com `validado_institucionalmente = false`.
-
-### Administração
-
-Listar profissionais pendentes:
-
-```http
-GET /user/profissionais/pendentes
-```
-
-Aprovar profissional:
-
-```http
-PATCH /user/profissionais/{profissionalId}/aprovar
-```
-
-Essas rotas exigem token de um usuário com perfil `ADMIN`.
-
 ### Oportunidades
 
 Criar:
@@ -461,7 +443,7 @@ Criar:
 POST /oportunidades
 ```
 
-Exige profissional de saúde validado institucionalmente.
+Exige um usuário autenticado com perfil de profissional de saúde.
 
 Body:
 
@@ -517,6 +499,10 @@ O projeto possui inicialmente:
 V1__create_initial_schema.sql
 V2__move_nome_to_profissional_saude.sql
 V3__remove_nome_from_usuarios.sql
+V4__add_professional_registration_data.sql
+V5__unify_user_id_with_profiles.sql
+V6__remove_professional_document_evaluation.sql
+V7__add_onboarding_and_professional_profile_fields.sql
 ```
 
 A `V2` copia o nome legado de `usuarios.nome` para
@@ -528,12 +514,37 @@ A `V3` remove os triggers e funções de compatibilidade e, em seguida, exclui a
 coluna legada `usuarios.nome`. Depois da `V3`, o nome do profissional existe
 somente em `profissional_saude.nome`.
 
+A `V4` preserva a migration de dados de registro profissional que já havia sido
+aplicada em produção. O comentário de compatibilidade no final do arquivo faz
+parte do checksum histórico e não deve ser alterado.
+
+A `V5` prepara bancos legados e unifica os IDs dos perfis em uma única transação,
+preservando as referências existentes mesmo quando as constraints foram criadas
+pelo Hibernate com nomes automáticos. Ao final, ela remove as colunas
+`usuario_id` e passa a usar o ID do usuário como ID do paciente ou profissional.
+Não crie migrations com versão intermediária menor que uma versão já publicada;
+uma correção posterior deve sempre receber uma versão maior que a última aplicada.
+
+A `V6` remove o estado de validação institucional enquanto a avaliação de
+documentos estiver desativada.
+
+A `V7` adiciona os campos de onboarding do usuário e garante os campos do perfil
+profissional de forma idempotente.
+
 Para cada mudança futura de schema:
 
-1. crie um novo arquivo, por exemplo `V4__descricao_da_mudanca.sql`;
+1. crie um novo arquivo com versão maior que a última existente, por exemplo
+   `V8__descricao_da_mudanca.sql`;
 2. nunca edite uma migration que já tenha sido aplicada em qualquer ambiente;
 3. prefira mudanças compatíveis com a versão anterior da aplicação;
 4. valide a migration em uma cópia ou branch do banco antes do deploy.
+
+### Bancos locais com o histórico experimental
+
+Se um banco local já executou `V3.1`, a antiga `V4` de unificação, `V5` e `V6`,
+ele não representa o histórico de produção. Recrie apenas esse banco local e
+deixe o Flyway executar a sequência oficial de `V1` a `V7`. Não execute `repair`
+nesse caso e nunca apague ou recrie o banco de produção.
 
 O schema inclui entidades como:
 

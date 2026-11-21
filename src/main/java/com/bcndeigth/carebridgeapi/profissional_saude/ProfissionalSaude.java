@@ -30,6 +30,7 @@ public class ProfissionalSaude {
     @Column(nullable = false)
     private String nome;
 
+<<<<<<< HEAD
     @Column(name = "conselho", length = 50)
     private String conselho;
 
@@ -43,6 +44,18 @@ public class ProfissionalSaude {
     private String especialidade;
 
     @Column(name = "onde_atende", length = 255)
+=======
+    private String conselho;
+
+    private String uf;
+
+    @Column(name = "numero_registro")
+    private String numeroRegistro;
+
+    private String especialidade;
+
+    @Column(name = "onde_atende")
+>>>>>>> origin/develop
     private String ondeAtende;
 
     @ElementCollection
@@ -65,15 +78,13 @@ public class ProfissionalSaude {
     @Column(name = "biografia_ou_descricao", columnDefinition = "text")
     private String biografiaOuDescricao;
 
-    @Column(name = "validado_institucionalmente", nullable = false)
-    private boolean validadoInstitucionalmente = false;
-
     @OneToMany(mappedBy = "ofertante", fetch = FetchType.LAZY)
     private List<Oportunidade> oportunidades = new ArrayList<>();
 
     @OneToMany(mappedBy = "ofertante", fetch = FetchType.LAZY)
     private List<FormularioTriagem> formulariosTriagem = new ArrayList<>();
 
+<<<<<<< HEAD
     public ProfissionalSaude(
             String nome,
             String conselho,
@@ -85,6 +96,11 @@ public class ProfissionalSaude {
             String biografiaOuDescricao,
             Usuario usuario
     ) {
+=======
+    public ProfissionalSaude(String nome, String conselho, String uf, String numeroRegistro,
+                             String especialidade, String ondeAtende, List<Documento> documentosRegistro,
+                             String biografiaOuDescricao, Usuario usuario) {
+>>>>>>> origin/develop
         this.nome = nome;
         this.conselho = conselho;
         this.uf = uf;

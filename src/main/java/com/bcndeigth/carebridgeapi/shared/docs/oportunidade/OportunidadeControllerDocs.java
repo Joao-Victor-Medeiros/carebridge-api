@@ -22,13 +22,13 @@ public interface OportunidadeControllerDocs {
 
     @PostMapping
     @Operation(summary = "Criar oportunidade",
-            description = "Cria uma oportunidade para o profissional de saúde autenticado e validado institucionalmente.")
+            description = "Cria uma oportunidade para o profissional de saúde autenticado.")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Oportunidade criada com sucesso.",
                     content = @Content(schema = @Schema(implementation = OportunidadeResponse.class))),
             @ApiResponse(responseCode = "400", description = "Título ausente ou dados inválidos."),
             @ApiResponse(responseCode = "401", description = "Usuário não autenticado."),
-            @ApiResponse(responseCode = "403", description = "Usuário não é profissional validado institucionalmente.")
+            @ApiResponse(responseCode = "403", description = "Usuário não possui perfil de profissional de saúde.")
     })
     ResponseEntity<OportunidadeResponse> criar(@RequestBody OportunidadeRequest request,
                                                @AuthenticationPrincipal Usuario usuario);
