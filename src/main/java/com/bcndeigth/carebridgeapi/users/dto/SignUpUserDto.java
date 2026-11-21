@@ -15,6 +15,6 @@ public record SignUpUserDto(
         TipoPerfil tipoPerfil,
 
         @Schema(description = "Confirmação de aceite dos termos de uso e privacidade.", example = "true")
-        boolean acceptedTerms
+        Boolean acceptedTerms
 ) {
 }
