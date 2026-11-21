@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import tools.jackson.databind.json.JsonMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,16 +50,6 @@ public class ProfissionalSaude {
             joinColumns = @JoinColumn(name = "profissional_id")
     )
     private List<Documento> documentosRegistro = new ArrayList<>();
-
-    @Column(name = "documento_registro", length = 4096)
-    private String documentoRegistro;
-
-    @PrePersist
-    @PreUpdate
-    private void atualizarReferenciaDocumentos() {
-        documentoRegistro = JsonMapper.builder().build().writeValueAsString(
-                documentosRegistro.stream().map(Documento::getNomeArquivo).toList());
-    }
 
     @Column(name = "biografia_ou_descricao", columnDefinition = "text")
     private String biografiaOuDescricao;

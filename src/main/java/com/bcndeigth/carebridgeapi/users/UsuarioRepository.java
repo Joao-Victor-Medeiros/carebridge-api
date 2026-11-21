@@ -11,8 +11,4 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
     boolean existsByEmailIgnoreCase(String email);
 
     boolean existsByTipoPerfil(TipoPerfil tipoPerfil);
-
-    default boolean existsByEmail(String email) {
-        return existsByEmailIgnoreCase(email);
-    }
 }

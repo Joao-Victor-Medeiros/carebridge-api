@@ -1,6 +1,7 @@
 package com.bcndeigth.carebridgeapi.profissional_saude;
 
 import com.bcndeigth.carebridgeapi.profissional_saude.dto.CadastroProfissionalSaudeDto;
+import com.bcndeigth.carebridgeapi.users.ContaService;
 import com.bcndeigth.carebridgeapi.users.TipoPerfil;
 import com.bcndeigth.carebridgeapi.users.Usuario;
 import com.bcndeigth.carebridgeapi.users.UsuarioRepository;
@@ -44,13 +45,13 @@ class ProfissionalSaudeServiceTest {
 
     @BeforeEach
     void setUp() {
-        service = new ProfissionalSaudeService(profissionalSaudeRepository, usuarioRepository, passwordEncoder);
+        service = new ProfissionalSaudeService(new ContaService(usuarioRepository, passwordEncoder), profissionalSaudeRepository);
     }
 
     @Test
     void devePersistirDadosProfissionaisNormalizarEmailERegistrarTermos() {
         CadastroProfissionalSaudeDto dto = new CadastroProfissionalSaudeDto(
-                new SignUpUserDto("  MARIA.SANTOS@EXAMPLE.COM ", "Senha123!", TipoPerfil.PACIENTE),
+                new SignUpUserDto("  MARIA.SANTOS@EXAMPLE.COM ", "Senha123!", TipoPerfil.PACIENTE, true),
                 "Maria Santos",
                 "CRM",
                 "df",
@@ -61,7 +62,6 @@ class ProfissionalSaudeServiceTest {
                 true
         );
 
-        when(usuarioRepository.existsByEmail("maria.santos@example.com")).thenReturn(false);
         when(usuarioRepository.existsByEmailIgnoreCase("maria.santos@example.com")).thenReturn(false);
         when(passwordEncoder.encode("Senha123!")).thenReturn("senha-hash");
         when(usuarioRepository.save(any(Usuario.class))).thenAnswer(inv -> inv.getArgument(0));
@@ -96,7 +96,7 @@ class ProfissionalSaudeServiceTest {
     @Test
     void deveRetornar409QuandoEmailJaExistirNoCadastroProfissional() {
         CadastroProfissionalSaudeDto dto = new CadastroProfissionalSaudeDto(
-                new SignUpUserDto("MARIA@EXAMPLE.COM", "Senha123!", TipoPerfil.PROFISSIONAL_SAUDE),
+                new SignUpUserDto("MARIA@EXAMPLE.COM", "Senha123!", TipoPerfil.PROFISSIONAL_SAUDE, true),
                 "Maria Santos",
                 "CRM",
                 "DF",
@@ -107,7 +107,7 @@ class ProfissionalSaudeServiceTest {
                 true
         );
 
-        when(usuarioRepository.existsByEmail("maria@example.com")).thenReturn(true);
+        when(usuarioRepository.existsByEmailIgnoreCase("maria@example.com")).thenReturn(true);
 
         ResponseStatusException ex = assertThrows(
                 ResponseStatusException.class,

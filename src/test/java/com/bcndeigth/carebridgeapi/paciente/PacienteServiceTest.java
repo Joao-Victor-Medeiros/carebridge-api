@@ -1,6 +1,7 @@
 package com.bcndeigth.carebridgeapi.paciente;
 
 import com.bcndeigth.carebridgeapi.paciente.dto.CadastroPacienteDto;
+import com.bcndeigth.carebridgeapi.users.ContaService;
 import com.bcndeigth.carebridgeapi.users.TipoPerfil;
 import com.bcndeigth.carebridgeapi.users.Usuario;
 import com.bcndeigth.carebridgeapi.users.UsuarioRepository;
@@ -42,13 +43,13 @@ class PacienteServiceTest {
 
     @BeforeEach
     void setUp() {
-        pacienteService = new PacienteService(usuarioRepository, pacienteRepository, passwordEncoder);
+        pacienteService = new PacienteService(new ContaService(usuarioRepository, passwordEncoder), pacienteRepository);
     }
 
     @Test
     void deveRetornarConflitoQuandoEmailJaEstiverCadastrado() {
         CadastroPacienteDto cadastro = criarCadastro("PACIENTE@EXAMPLE.COM", "+55 (11) 99999-9999", true);
-        when(usuarioRepository.existsByEmail("paciente@example.com")).thenReturn(true);
+        when(usuarioRepository.existsByEmailIgnoreCase("paciente@example.com")).thenReturn(true);
 
         ResponseStatusException exception = assertThrows(
                 ResponseStatusException.class,
@@ -64,7 +65,7 @@ class PacienteServiceTest {
     @Test
     void deveCadastrarPacienteNormalizandoEmailTelefoneEForcandoPerfilPaciente() {
         CadastroPacienteDto cadastro = new CadastroPacienteDto(
-                new SignUpUserDto("  ANA.SOUZA@EXAMPLE.COM  ", "Senha123!", TipoPerfil.PROFISSIONAL_SAUDE),
+                new SignUpUserDto("  ANA.SOUZA@EXAMPLE.COM  ", "Senha123!", TipoPerfil.PROFISSIONAL_SAUDE, true),
                 "Ana de Souza",
                 LocalDate.of(1990, 5, 21),
                 "+55 (11) 99999-9999",
@@ -72,7 +73,7 @@ class PacienteServiceTest {
                 true
         );
 
-        when(usuarioRepository.existsByEmail("ana.souza@example.com")).thenReturn(false);
+        when(usuarioRepository.existsByEmailIgnoreCase("ana.souza@example.com")).thenReturn(false);
         when(passwordEncoder.encode("Senha123!")).thenReturn("senha-hash");
         when(usuarioRepository.save(any(Usuario.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -112,7 +113,7 @@ class PacienteServiceTest {
 
     private CadastroPacienteDto criarCadastro(String email, String telefone, Boolean acceptedTerms) {
         return new CadastroPacienteDto(
-                new SignUpUserDto(email, "Senha123!", TipoPerfil.PACIENTE),
+                new SignUpUserDto(email, "Senha123!", TipoPerfil.PACIENTE, true),
                 "Paciente Teste",
                 LocalDate.of(1990, 5, 21),
                 telefone,

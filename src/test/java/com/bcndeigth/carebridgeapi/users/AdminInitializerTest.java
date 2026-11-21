@@ -28,7 +28,7 @@ class AdminInitializerTest {
     @Test
     void deveCriarAdminQuandoNaoExistirAdminEVariaveisEstiveremConfiguradas() {
         when(usuarioRepository.existsByTipoPerfil(TipoPerfil.ADMIN)).thenReturn(false);
-        when(usuarioRepository.existsByEmail("admin@carebridge.com")).thenReturn(false);
+        when(usuarioRepository.existsByEmailIgnoreCase("admin@carebridge.com")).thenReturn(false);
         when(passwordEncoder.encode("SenhaForte@123")).thenReturn("hash-bcrypt");
 
         AdminInitializer initializer = new AdminInitializer(

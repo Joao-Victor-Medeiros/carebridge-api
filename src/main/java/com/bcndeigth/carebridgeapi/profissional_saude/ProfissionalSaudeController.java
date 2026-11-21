@@ -3,7 +3,6 @@ package com.bcndeigth.carebridgeapi.profissional_saude;
 import com.bcndeigth.carebridgeapi.profissional_saude.dto.CadastroProfissionalSaudeDto;
 import com.bcndeigth.carebridgeapi.shared.docs.usuario.ProfissionalSaudeControllerDocs;
 import com.bcndeigth.carebridgeapi.users.dto.CadastroResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,8 +13,11 @@ import java.util.List;
 @RestController
 public class ProfissionalSaudeController implements ProfissionalSaudeControllerDocs {
 
-    @Autowired
-    private ProfissionalSaudeService profissionalSaudeService;
+    private final ProfissionalSaudeService profissionalSaudeService;
+
+    public ProfissionalSaudeController(ProfissionalSaudeService profissionalSaudeService) {
+        this.profissionalSaudeService = profissionalSaudeService;
+    }
 
     @Override
     public ResponseEntity<CadastroResponse> cadastrarProfissionalSaude(
