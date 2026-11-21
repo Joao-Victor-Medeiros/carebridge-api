@@ -28,3 +28,8 @@ api:
   security:
     token:
       secret: ${JWT_SECRET}
+
+app:
+  admin:
+    email: ${ADMIN_EMAIL:}
+    password: ${ADMIN_PASSWORD:}

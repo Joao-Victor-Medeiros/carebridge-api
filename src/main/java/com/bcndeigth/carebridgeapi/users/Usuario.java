@@ -21,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 @Entity
@@ -42,6 +43,12 @@ public class Usuario implements UserDetails {
     @Enumerated(EnumType.STRING)
     private TipoPerfil tipoPerfil;
 
+    @Column(name = "accepted_terms", nullable = false)
+    private boolean acceptedTerms;
+
+    @Column(name = "termos_aceitos_em")
+    private Instant termosAceitosEm;
+
     @Column(name = "criado_em", nullable = false, updatable = false)
     private Instant criadoEm;
 
@@ -49,9 +56,21 @@ public class Usuario implements UserDetails {
     private Instant atualizadoEm;
 
     public Usuario(String email, String hashedPassword, TipoPerfil tipoPerfil) {
-        this.email = email;
+        setEmail(email);
         this.senhaHash = hashedPassword;
         this.tipoPerfil = tipoPerfil;
+    }
+
+    public Usuario(String email, String hashedPassword, TipoPerfil tipoPerfil, boolean acceptedTerms, Instant termosAceitosEm) {
+        setEmail(email);
+        this.senhaHash = hashedPassword;
+        this.tipoPerfil = tipoPerfil;
+        this.acceptedTerms = acceptedTerms;
+        this.termosAceitosEm = termosAceitosEm;
+    }
+
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim().toLowerCase(Locale.ROOT);
     }
 
     public String getEmail() {
@@ -64,6 +83,10 @@ public class Usuario implements UserDetails {
 
     @PrePersist
     protected void aoCriar() {
+        setEmail(this.email);
+        if (this.acceptedTerms && this.termosAceitosEm == null) {
+            this.termosAceitosEm = Instant.now();
+        }
         Instant agora = Instant.now();
         criadoEm = agora;
         atualizadoEm = agora;
@@ -71,6 +94,7 @@ public class Usuario implements UserDetails {
 
     @PreUpdate
     protected void aoAtualizar() {
+        setEmail(this.email);
         atualizadoEm = Instant.now();
     }
 

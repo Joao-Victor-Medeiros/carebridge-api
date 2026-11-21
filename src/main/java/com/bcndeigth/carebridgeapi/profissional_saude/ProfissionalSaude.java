@@ -1,5 +1,7 @@
 package com.bcndeigth.carebridgeapi.profissional_saude;
 
+import com.bcndeigth.carebridgeapi.oportunidade.FormularioTriagem;
+import com.bcndeigth.carebridgeapi.oportunidade.Oportunidade;
 import com.bcndeigth.carebridgeapi.users.Usuario;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,9 +12,6 @@ import tools.jackson.databind.json.JsonMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import com.bcndeigth.carebridgeapi.oportunidade.Oportunidade;
-import com.bcndeigth.carebridgeapi.oportunidade.FormularioTriagem;
 
 @Entity
 @Table(name = "profissional_saude")
@@ -30,6 +29,21 @@ public class ProfissionalSaude {
 
     @Column(nullable = false)
     private String nome;
+
+    @Column(name = "conselho", length = 50)
+    private String conselho;
+
+    @Column(name = "uf", length = 2)
+    private String uf;
+
+    @Column(name = "numero_registro", length = 50)
+    private String numeroRegistro;
+
+    @Column(name = "especialidade", length = 150)
+    private String especialidade;
+
+    @Column(name = "onde_atende", length = 255)
+    private String ondeAtende;
 
     @ElementCollection
     @CollectionTable(
@@ -60,8 +74,23 @@ public class ProfissionalSaude {
     @OneToMany(mappedBy = "ofertante", fetch = FetchType.LAZY)
     private List<FormularioTriagem> formulariosTriagem = new ArrayList<>();
 
-    public ProfissionalSaude(String nome, List<Documento> documentosRegistro, String biografiaOuDescricao, Usuario usuario) {
+    public ProfissionalSaude(
+            String nome,
+            String conselho,
+            String uf,
+            String numeroRegistro,
+            String especialidade,
+            String ondeAtende,
+            List<Documento> documentosRegistro,
+            String biografiaOuDescricao,
+            Usuario usuario
+    ) {
         this.nome = nome;
+        this.conselho = conselho;
+        this.uf = uf;
+        this.numeroRegistro = numeroRegistro;
+        this.especialidade = especialidade;
+        this.ondeAtende = ondeAtende;
         this.documentosRegistro = documentosRegistro;
         this.biografiaOuDescricao = biografiaOuDescricao;
         this.usuario = usuario;
