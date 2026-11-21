@@ -75,6 +75,14 @@ class UsuarioServiceTest {
         assertFalse(service.validadoInstitucionalmente(usuario("ana@example.com", TipoPerfil.PACIENTE)));
     }
 
+    @Test
+    void adminTemPerfilParaConseguirFazerLogin() {
+        MeResponse perfil = service.obterPerfil(usuario("admin@carebridge.com", TipoPerfil.ADMIN));
+
+        assertEquals(TipoPerfil.ADMIN, perfil.tipoPerfil());
+        assertEquals("admin@carebridge.com", perfil.email());
+    }
+
     private Usuario usuario(String email, TipoPerfil perfil) {
         Usuario usuario = new Usuario(email, "hash", perfil, Instant.now());
         usuario.setId(UUID.randomUUID());
