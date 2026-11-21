@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,7 +23,6 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
 public class SecurityConfigurations {
 
     private final SecurityFilter securityFilter;
@@ -51,9 +49,10 @@ public class SecurityConfigurations {
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .requestMatchers("/user/login", "/paciente/cadastro", "/profissional-saude/cadastro").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.GET, "/oportunidades", "/oportunidades/*").permitAll()
+                .requestMatchers("/user/profissionais/**").hasRole("ADMIN")
                 .requestMatchers("/paciente/**").hasRole("PACIENTE")
                 .requestMatchers("/profissional-saude/**").hasRole("PROFISSIONAL_SAUDE")
-                .requestMatchers("/oportunidades/**").authenticated()
+                .requestMatchers("/oportunidades", "/oportunidades/**").hasRole("PROFISSIONAL_SAUDE")
                 .anyRequest().authenticated()
             )
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
