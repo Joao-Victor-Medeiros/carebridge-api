@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,11 +41,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Carrega as contas, oportunidades e solicitações de demonstração (as mesmas
- * fixtures dos apps) quando DEMO_PASSWORD está definida e o banco ainda não as
- * tem. As datas são deslocadas para que "agora" seja a data de referência.
+ * Só roda com o profile "demo" e DEMO_PASSWORD definida, e só se o banco ainda
+ * não tem as contas de demonstração. Todas as contas usam a mesma senha.
  */
 @Component
+@Profile("demo")
 public class DemoSeeder implements ApplicationRunner {
 
     static final String CONTA_SENTINELA = "paciente@teste.com";

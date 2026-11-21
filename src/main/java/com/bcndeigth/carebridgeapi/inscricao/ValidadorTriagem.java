@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 final class ValidadorTriagem {
@@ -47,7 +48,7 @@ final class ValidadorTriagem {
 
     private static boolean visivel(Pergunta pergunta, Map<String, String> respostas) {
         var dependencia = pergunta.dependeDe();
-        return dependencia == null || dependencia.resposta().equals(respostas.get(dependencia.perguntaId()));
+        return dependencia == null || Objects.equals(dependencia.resposta(), respostas.get(dependencia.perguntaId()));
     }
 
     private static void conferir(Pergunta pergunta, String resposta) {
@@ -60,7 +61,8 @@ final class ValidadorTriagem {
             case MULTIPLA -> {
                 List<String> escolhidas = Boolean.TRUE.equals(pergunta.permiteVarias())
                         ? Arrays.asList(resposta.split(SEPARADOR)) : List.of(resposta);
-                if (!pergunta.opcoes().containsAll(escolhidas)) {
+                List<String> opcoes = pergunta.opcoes() == null ? List.of() : pergunta.opcoes();
+                if (!opcoes.containsAll(escolhidas)) {
                     throw invalida(pergunta, "precisa de uma das opções da lista.");
                 }
             }

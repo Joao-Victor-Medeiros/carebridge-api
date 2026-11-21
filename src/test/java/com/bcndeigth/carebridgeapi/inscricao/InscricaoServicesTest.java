@@ -11,6 +11,7 @@ import com.bcndeigth.carebridgeapi.oportunidade.triagem.DocumentoExigido;
 import com.bcndeigth.carebridgeapi.paciente.Paciente;
 import com.bcndeigth.carebridgeapi.paciente.PacienteRepository;
 import com.bcndeigth.carebridgeapi.profissional_saude.ProfissionalSaude;
+import com.bcndeigth.carebridgeapi.shared.Datas;
 import com.bcndeigth.carebridgeapi.users.TipoPerfil;
 import com.bcndeigth.carebridgeapi.users.Usuario;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -34,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -80,7 +83,7 @@ class InscricaoServicesTest {
         oportunidade.definirTriagem(triagem);
 
         when(oportunidadeRepository.findById(oportunidade.getId())).thenReturn(Optional.of(oportunidade));
-        when(oportunidadeRepository.findComBloqueio(oportunidade.getId())).thenReturn(oportunidade);
+        when(oportunidadeRepository.ocuparVaga(oportunidade.getId())).thenReturn(1);
         when(pacienteRepository.findById(pacienteUsuario.getId())).thenReturn(Optional.of(paciente));
         when(inscricaoRepository.proximoProtocolo()).thenReturn(20001L);
         when(inscricaoRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
@@ -119,13 +122,34 @@ class InscricaoServicesTest {
     }
 
     @Test
+    void foraDoPeriodoDeInscricoesNaoRecebeSolicitacao() {
+        oportunidade.setInscricoesAte(Datas.hoje().minusDays(1));
+        assertStatus(HttpStatus.CONFLICT, () -> pacienteService.inscrever(pedido(true, true), pacienteUsuario));
+
+        oportunidade.setInscricoesAte(null);
+        oportunidade.setInscricoesDe(Datas.hoje().plusDays(1));
+        assertStatus(HttpStatus.CONFLICT, () -> pacienteService.inscrever(pedido(true, true), pacienteUsuario));
+
+        oportunidade.setInscricoesDe(Datas.hoje());
+        oportunidade.setInscricoesAte(Datas.hoje());
+        assertEquals(StatusInscricao.EM_ANALISE, pacienteService.inscrever(pedido(true, true), pacienteUsuario).status());
+    }
+
+    @Test
+    void indiceUnicoViraConflitoQuandoDuasSolicitacoesChegamJuntas() {
+        when(inscricaoRepository.saveAndFlush(any())).thenThrow(new DataIntegrityViolationException("uk_inscricoes_aberta_por_paciente"));
+
+        assertStatus(HttpStatus.CONFLICT, () -> pacienteService.inscrever(pedido(true, true), pacienteUsuario));
+    }
+
+    @Test
     void aprovarOcupaVagaECombinaPadrao() {
         Inscricao inscricao = inscricao(StatusInscricao.EM_ANALISE);
 
         InscricaoResponse resposta = profissionalService.decidir(inscricao.getId(),
                 new DecisaoRequest(StatusInscricao.APROVADA, null, null), profissionalUsuario);
 
-        assertEquals(1, oportunidade.getVagasPreenchidas());
+        verify(oportunidadeRepository).ocuparVaga(oportunidade.getId());
         assertEquals("A combinar", resposta.combinado().quando());
         assertEquals(true, resposta.podeTrocarMensagens());
     }
@@ -136,7 +160,7 @@ class InscricaoServicesTest {
         assertStatus(HttpStatus.BAD_REQUEST, () -> profissionalService.decidir(aberta.getId(),
                 new DecisaoRequest(StatusInscricao.RECUSADA, " ", null), profissionalUsuario));
 
-        oportunidade.setVagasPreenchidas(1);
+        when(oportunidadeRepository.ocuparVaga(oportunidade.getId())).thenReturn(0);
         assertStatus(HttpStatus.CONFLICT, () -> profissionalService.decidir(aberta.getId(),
                 new DecisaoRequest(StatusInscricao.APROVADA, null, null), profissionalUsuario));
 
@@ -158,6 +182,12 @@ class InscricaoServicesTest {
                 new com.bcndeigth.carebridgeapi.inscricao.dto.RespostaPedidoRequest("Segue em anexo", null), pacienteUsuario);
         assertEquals(StatusInscricao.EM_ANALISE, resposta.status());
         assertEquals("Envie o raio X", resposta.respostasTriagem().getLast().pergunta());
+        assertEquals("pedido-informacao-1", resposta.respostasTriagem().getLast().perguntaId());
+
+        profissionalService.pedirInformacao(inscricao.getId(), "Envie o laudo", profissionalUsuario);
+        InscricaoResponse segunda = pacienteService.responderPedido(inscricao.getId(),
+                new com.bcndeigth.carebridgeapi.inscricao.dto.RespostaPedidoRequest("Segue o laudo", null), pacienteUsuario);
+        assertEquals("pedido-informacao-2", segunda.respostasTriagem().getLast().perguntaId());
     }
 
     @Test

@@ -485,6 +485,17 @@ DELETE /oportunidades/{id}
 
 O ofertante é obtido automaticamente do usuário autenticado. Não envie `ofertanteId` no body.
 
+## Dados de demonstração
+
+O seed em `src/main/resources/seed/demo.json` cria as contas `paciente@teste.com` e `profissional@teste.com` (verificado), os demais profissionais e pacientes das fixtures dos apps, 20 oportunidades e 11 solicitações. Ele só roda com o profile `demo` e a variável `DEMO_PASSWORD`, que vira a senha de todas essas contas:
+
+```bash
+SPRING_PROFILES_ACTIVE=prod,demo
+DEMO_PASSWORD=<senha da apresentação>
+```
+
+Não roda de novo se `paciente@teste.com` já existe. Depois da apresentação, tire o profile `demo` e troque a senha ou remova as contas.
+
 ## Migrations de banco
 
 As migrations versionadas ficam em:

@@ -120,6 +120,34 @@ class OportunidadeServiceTest {
     }
 
     @Test
+    void dependenciaDaTriagemPrecisaApontarParaPerguntaAnteriorEResposta() {
+        Pergunta escola = new Pergunta("escola", "Frequenta a escola?", TipoPergunta.SIM_NAO, true, null, null, null, null, null, null);
+        Pergunta semResposta = condicional("serie", "escola", null);
+        Pergunta paraFrente = condicional("serie", "turno", "Sim");
+        Pergunta respostaImpossivel = condicional("serie", "escola", "Talvez");
+
+        assertInvalido(publicavel(r -> com(r, "triagem", personalizada(escola, semResposta))), "Informe qual resposta");
+        assertInvalido(publicavel(r -> com(r, "triagem", personalizada(paraFrente, escola))), "precisa vir antes");
+        assertInvalido(publicavel(r -> com(r, "triagem", personalizada(escola, respostaImpossivel))), "não oferece");
+        OportunidadeService.validar(publicavel(r -> com(r, "triagem", personalizada(escola, condicional("serie", "escola", "Sim")))),
+                StatusOportunidade.ATIVA);
+    }
+
+    @Test
+    void editarSemTriagemMantemAQueExiste() {
+        Oportunidade ativa = oportunidade(StatusOportunidade.ATIVA);
+        FormularioTriagem triagem = new FormularioTriagem();
+        triagem.setDocumentosExigidos(List.of(new DocumentoExigido("rg", "RG")));
+        ativa.definirTriagem(triagem);
+        when(oportunidadeRepository.findById(ativa.getId())).thenReturn(Optional.of(ativa));
+        when(oportunidadeRepository.saveAndFlush(any())).thenAnswer(inv -> inv.getArgument(0));
+
+        OportunidadeResponse resposta = service.atualizar(ativa.getId(), publicavel(r -> com(r, "triagem", null)), usuario);
+
+        assertEquals("rg", resposta.triagem().documentosExigidos().getFirst().id());
+    }
+
+    @Test
     void naoEncontraOportunidadeDeOutroProfissional() {
         Oportunidade alheia = oportunidade(StatusOportunidade.ATIVA);
         alheia.getOfertante().setId(UUID.randomUUID());
@@ -182,6 +210,15 @@ class OportunidadeServiceTest {
                 publicavel(r -> com(r, "status", StatusOportunidade.RASCUNHO)), usuario);
 
         assertEquals(StatusOportunidade.ATIVA, resposta.status());
+    }
+
+    private static TriagemRequest personalizada(Pergunta... perguntas) {
+        return new TriagemRequest(ModoTriagem.PERSONALIZADO, List.of(perguntas), List.of());
+    }
+
+    private static Pergunta condicional(String id, String origem, String resposta) {
+        return new Pergunta(id, "Qual a série?", TipoPergunta.TEXTO_CURTO, true, null, null, null, null, null,
+                new Pergunta.Dependencia(origem, resposta));
     }
 
     private void assertInvalido(OportunidadeRequest request, String trecho) {

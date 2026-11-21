@@ -3,7 +3,6 @@ package com.bcndeigth.carebridgeapi.inscricao;
 import com.bcndeigth.carebridgeapi.inscricao.dto.DecisaoRequest;
 import com.bcndeigth.carebridgeapi.inscricao.dto.InscricaoResponse;
 import com.bcndeigth.carebridgeapi.inscricao.dto.MensagemResponse;
-import com.bcndeigth.carebridgeapi.oportunidade.Oportunidade;
 import com.bcndeigth.carebridgeapi.oportunidade.OportunidadeRepository;
 import com.bcndeigth.carebridgeapi.users.TipoPerfil;
 import com.bcndeigth.carebridgeapi.users.Usuario;
@@ -63,11 +62,9 @@ public class ProfissionalInscricaoService {
         }
 
         if (decisao == StatusInscricao.APROVADA) {
-            Oportunidade oportunidade = oportunidadeRepository.findComBloqueio(inscricao.getOportunidade().getId());
-            if (oportunidade.getVagasTotais() == null || oportunidade.getVagasPreenchidas() >= oportunidade.getVagasTotais()) {
+            if (oportunidadeRepository.ocuparVaga(inscricao.getOportunidade().getId()) == 0) {
                 throw Erros.conflito("Não há vagas restantes nesta oportunidade.");
             }
-            oportunidade.setVagasPreenchidas(oportunidade.getVagasPreenchidas() + 1);
             var combinado = request.combinado();
             inscricao.setCombinadoQuando(ouACombinar(combinado == null ? null : combinado.quando()));
             inscricao.setCombinadoOnde(ouACombinar(combinado == null ? null : combinado.onde()));

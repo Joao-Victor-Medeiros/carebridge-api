@@ -19,6 +19,10 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import tools.jackson.databind.exc.MismatchedInputException;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
@@ -53,7 +57,7 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> corpoInvalido(HttpMessageNotReadableException exception, HttpServletRequest request) {
-        return resposta(request, HttpStatus.BAD_REQUEST, "O corpo da requisição está ausente ou possui formato inválido.");
+        return resposta(request, HttpStatus.BAD_REQUEST, mensagemDeCorpoInvalido(exception));
     }
 
     @ExceptionHandler({
@@ -84,6 +88,25 @@ public class ApiExceptionHandler {
     public ResponseEntity<ErrorResponse> erroInesperado(Exception exception, HttpServletRequest request) {
         log.error("Erro inesperado", exception);
         return resposta(request, HttpStatus.INTERNAL_SERVER_ERROR, null);
+    }
+
+    static String mensagemDeCorpoInvalido(Throwable exception) {
+        Throwable causa = exception;
+        while (causa != null && !(causa instanceof MismatchedInputException)) {
+            causa = causa.getCause();
+        }
+        if (!(causa instanceof MismatchedInputException erro) || erro.getPath().isEmpty()) {
+            return "O corpo da requisição está ausente ou possui formato inválido.";
+        }
+        String campo = erro.getPath().stream()
+                .map(r -> r.getPropertyName() != null ? r.getPropertyName() : "[" + r.getIndex() + "]")
+                .collect(Collectors.joining("."));
+        Class<?> tipo = erro.getTargetType();
+        if (tipo != null && tipo.isEnum()) {
+            String aceitos = Arrays.stream(tipo.getEnumConstants()).map(Object::toString).collect(Collectors.joining(", "));
+            return "Valor inválido em " + campo + ". Use um destes: " + aceitos + ".";
+        }
+        return "Valor inválido em " + campo + ".";
     }
 
     private ResponseEntity<ErrorResponse> resposta(HttpServletRequest request, HttpStatus status, String message) {

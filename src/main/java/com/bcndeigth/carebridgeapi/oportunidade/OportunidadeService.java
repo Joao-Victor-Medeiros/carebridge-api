@@ -20,8 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -31,6 +32,7 @@ public class OportunidadeService {
     static final String NAO_VERIFICADO =
             "Seu cadastro ainda está em verificação. Salve como rascunho; publicar fica liberado depois da verificação.";
     private static final int TAMANHO_PAGINA_MAXIMO = 50;
+    private static final Set<String> SIM_NAO = Set.of("Sim", "Não");
     private static final Set<Modalidade> PRESENCIAIS = Set.of(Modalidade.PRESENCIAL, Modalidade.HIBRIDO);
 
     private final OportunidadeRepository oportunidadeRepository;
@@ -176,17 +178,41 @@ public class OportunidadeService {
         if (perguntas.isEmpty()) {
             throw invalido("A triagem personalizada precisa de ao menos uma pergunta.");
         }
-        Set<String> ids = new HashSet<>();
+        Map<String, Pergunta> anteriores = new HashMap<>();
         for (Pergunta pergunta : perguntas) {
             if (vazio(pergunta.id()) || vazio(pergunta.rotulo()) || pergunta.tipo() == null) {
                 throw invalido("Cada pergunta precisa de id, texto e tipo.");
             }
-            if (!ids.add(pergunta.id())) {
+            if (anteriores.containsKey(pergunta.id())) {
                 throw invalido("Há perguntas com o mesmo id.");
             }
             if (pergunta.tipo() == TipoPergunta.MULTIPLA && (pergunta.opcoes() == null || pergunta.opcoes().size() < 2)) {
                 throw invalido("Pergunta de múltipla escolha precisa de duas opções ou mais.");
             }
+            validarDependencia(pergunta, anteriores);
+            anteriores.put(pergunta.id(), pergunta);
+        }
+    }
+
+    private static void validarDependencia(Pergunta pergunta, Map<String, Pergunta> anteriores) {
+        Pergunta.Dependencia dependencia = pergunta.dependeDe();
+        if (dependencia == null) {
+            return;
+        }
+        Pergunta origem = anteriores.get(dependencia.perguntaId());
+        if (origem == null) {
+            throw invalido("\"" + pergunta.rotulo() + "\" depende de uma pergunta que precisa vir antes dela.");
+        }
+        if (vazio(dependencia.resposta())) {
+            throw invalido("Informe qual resposta de \"" + origem.rotulo() + "\" mostra \"" + pergunta.rotulo() + "\".");
+        }
+        boolean respostaPossivel = switch (origem.tipo()) {
+            case SIM_NAO -> SIM_NAO.contains(dependencia.resposta());
+            case MULTIPLA -> origem.opcoes().contains(dependencia.resposta());
+            case TEXTO_CURTO, TEXTO_LONGO -> false;
+        };
+        if (!respostaPossivel) {
+            throw invalido("\"" + pergunta.rotulo() + "\" depende de uma resposta que \"" + origem.rotulo() + "\" não oferece.");
         }
     }
 
@@ -213,13 +239,12 @@ public class OportunidadeService {
         o.setFormaContato(r.formaContato());
         o.setPrazoRespostaDias(r.prazoRespostaDias() == null ? Oportunidade.PRAZO_RESPOSTA_PADRAO : r.prazoRespostaDias());
         o.setStatus(status);
-        o.definirTriagem(triagem(r.triagem(), o.getFormularioTriagem()));
+        if (r.triagem() != null) {
+            o.definirTriagem(triagem(r.triagem(), o.getFormularioTriagem()));
+        }
     }
 
     private FormularioTriagem triagem(TriagemRequest request, FormularioTriagem atual) {
-        if (request == null) {
-            return null;
-        }
         FormularioTriagem formulario = atual == null ? new FormularioTriagem() : atual;
         ModoTriagem modo = request.modo() == null ? ModoTriagem.PADRAO : request.modo();
         List<DocumentoExigido> documentos = request.documentosExigidos() == null ? List.of() : request.documentosExigidos();

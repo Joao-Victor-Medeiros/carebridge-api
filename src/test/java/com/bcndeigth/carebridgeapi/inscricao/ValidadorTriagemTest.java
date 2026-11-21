@@ -1,5 +1,7 @@
 package com.bcndeigth.carebridgeapi.inscricao;
 
+import com.bcndeigth.carebridgeapi.oportunidade.triagem.Pergunta;
+import com.bcndeigth.carebridgeapi.oportunidade.triagem.TipoPergunta;
 import com.bcndeigth.carebridgeapi.oportunidade.triagem.TriagemPadrao;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.server.ResponseStatusException;
@@ -46,6 +48,18 @@ class ValidadorTriagemTest {
         curta.set(0, new RespostaTriagem("motivo", "", "Dor"));
 
         assertThrows(ResponseStatusException.class, () -> ValidadorTriagem.validar(TriagemPadrao.PERGUNTAS, curta));
+    }
+
+    @Test
+    void dependenciaSemRespostaNaoDerrubaAInscricao() {
+        Pergunta escola = new Pergunta("escola", "Frequenta a escola?", TipoPergunta.SIM_NAO, true, null, null, null, null, null, null);
+        Pergunta serie = new Pergunta("serie", "Qual a série?", TipoPergunta.TEXTO_CURTO, true, null, null, null, null, null,
+                new Pergunta.Dependencia("escola", null));
+
+        List<RespostaTriagem> aceitas = ValidadorTriagem.validar(List.of(escola, serie),
+                List.of(new RespostaTriagem("escola", "", "Sim")));
+
+        assertEquals(1, aceitas.size());
     }
 
     static List<RespostaTriagem> respostas(String diagnostico, String medicacao) {
