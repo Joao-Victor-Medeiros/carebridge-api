@@ -20,5 +20,8 @@ public record CadastroPacienteDto(
         String telefone,
 
         @Schema(description = "Endereço do paciente.", example = "Rua das Flores, 123, São Paulo - SP")
-        String endereco
+        String endereco,
+
+        @Schema(description = "Indica se os termos de uso foram aceitos.", example = "true")
+        Boolean acceptedTerms
 ) {}
