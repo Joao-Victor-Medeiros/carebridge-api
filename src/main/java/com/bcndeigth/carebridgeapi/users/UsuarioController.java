@@ -2,8 +2,8 @@ package com.bcndeigth.carebridgeapi.users;
 
 import com.bcndeigth.carebridgeapi.config.TokenService;
 import com.bcndeigth.carebridgeapi.users.dto.AuthenticationDTO;
-import com.bcndeigth.carebridgeapi.users.dto.LoginResponseDTO;
-import com.bcndeigth.carebridgeapi.users.dto.UserProfileResponse;
+import com.bcndeigth.carebridgeapi.users.dto.LoginResponse;
+import com.bcndeigth.carebridgeapi.users.dto.MeResponse;
 import com.bcndeigth.carebridgeapi.shared.docs.usuario.UsuarioControllerDocs;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -36,7 +36,7 @@ public class UsuarioController implements UsuarioControllerDocs {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody AuthenticationDTO authenticationDTO,
+    public ResponseEntity<LoginResponse> login(@RequestBody AuthenticationDTO authenticationDTO,
                                                    HttpServletRequest request) {
         if (authenticationDTO == null || authenticationDTO.email() == null
                 || authenticationDTO.email().isBlank() || authenticationDTO.password() == null
@@ -51,10 +51,12 @@ public class UsuarioController implements UsuarioControllerDocs {
             var authentication = authenticationManager.authenticate(authenticationToken);
             Usuario usuario = (Usuario) authentication.getPrincipal();
             loginAttemptService.registrarSucesso(authenticationDTO.email(), ip);
-            return ResponseEntity.ok(new LoginResponseDTO(
+            return ResponseEntity.ok(new LoginResponse(
                     tokenService.generateToken(usuario),
-                    TokenService.EXPIRATION_SECONDS,
-                    usuarioService.obterPerfil(usuario)
+                    true,
+                    usuario.getTipoPerfil(),
+                    usuarioService.validadoInstitucionalmente(usuario),
+                    TokenService.EXPIRATION_SECONDS
             ));
         } catch (AuthenticationException exception) {
             loginAttemptService.registrarFalha(authenticationDTO.email(), ip);
@@ -64,7 +66,7 @@ public class UsuarioController implements UsuarioControllerDocs {
     }
 
     @GetMapping("/me")
-    public UserProfileResponse me(@AuthenticationPrincipal Usuario usuario) {
+    public MeResponse me(@AuthenticationPrincipal Usuario usuario) {
         return usuarioService.obterPerfil(usuario);
     }
 }

@@ -10,10 +10,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+
 import static com.bcndeigth.carebridgeapi.users.ContaService.exigir;
 
 @Service
 public class PacienteService {
+
+    private static final int IDADE_MINIMA = 18;
 
     private final ContaService contaService;
     private final PacienteRepository pacienteRepository;
@@ -32,8 +36,11 @@ public class PacienteService {
         if (dto.dataNascimento() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A data de nascimento é obrigatória.");
         }
+        if (dto.dataNascimento().isAfter(LocalDate.now().minusYears(IDADE_MINIMA))) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "É preciso ter 18 anos ou mais para criar uma conta.");
+        }
 
-        Usuario usuario = contaService.criar(dto.usuarioDto(), dto.acceptedTerms(), TipoPerfil.PACIENTE);
+        Usuario usuario = contaService.criar(dto.usuarioDto(), dto.aceitouTermos(), TipoPerfil.PACIENTE);
         pacienteRepository.save(new Paciente(
                 dto.nome().trim(),
                 dto.dataNascimento(),
@@ -41,7 +48,7 @@ public class PacienteService {
                 dto.endereco(),
                 usuario
         ));
-        return new CadastroResponse(usuario.getEmail(), TipoPerfil.PACIENTE.name(), 6);
+        return CadastroResponse.semVerificacao(usuario.getEmail(), TipoPerfil.PACIENTE);
     }
 
     private String somenteDigitos(String telefone) {

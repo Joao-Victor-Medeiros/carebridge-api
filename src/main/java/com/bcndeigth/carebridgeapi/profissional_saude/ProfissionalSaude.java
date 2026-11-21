@@ -54,6 +54,10 @@ public class ProfissionalSaude {
     @Column(name = "biografia_ou_descricao", columnDefinition = "text")
     private String biografiaOuDescricao;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "situacao_registro", nullable = false, length = 20)
+    private SituacaoRegistro situacaoRegistro = SituacaoRegistro.EM_VERIFICACAO;
+
     @OneToMany(mappedBy = "ofertante", fetch = FetchType.LAZY)
     private List<Oportunidade> oportunidades = new ArrayList<>();
 

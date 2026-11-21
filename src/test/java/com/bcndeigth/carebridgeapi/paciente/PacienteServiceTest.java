@@ -5,6 +5,7 @@ import com.bcndeigth.carebridgeapi.users.ContaService;
 import com.bcndeigth.carebridgeapi.users.TipoPerfil;
 import com.bcndeigth.carebridgeapi.users.Usuario;
 import com.bcndeigth.carebridgeapi.users.UsuarioRepository;
+import com.bcndeigth.carebridgeapi.users.dto.CadastroResponse;
 import com.bcndeigth.carebridgeapi.users.dto.SignUpUserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -65,7 +67,7 @@ class PacienteServiceTest {
     @Test
     void deveCadastrarPacienteNormalizandoEmailTelefoneEForcandoPerfilPaciente() {
         CadastroPacienteDto cadastro = new CadastroPacienteDto(
-                new SignUpUserDto("  ANA.SOUZA@EXAMPLE.COM  ", "Senha123!", TipoPerfil.PROFISSIONAL_SAUDE, true),
+                new SignUpUserDto("  ANA.SOUZA@EXAMPLE.COM  ", "Senha123!", TipoPerfil.PROFISSIONAL_SAUDE),
                 "Ana de Souza",
                 LocalDate.of(1990, 5, 21),
                 "+55 (11) 99999-9999",
@@ -111,9 +113,37 @@ class PacienteServiceTest {
         verify(pacienteRepository, never()).save(any(Paciente.class));
     }
 
+    @Test
+    void deveRejeitarMenorDeIdade() {
+        CadastroPacienteDto cadastro = new CadastroPacienteDto(
+                new SignUpUserDto("jovem@example.com", "Senha123!", TipoPerfil.PACIENTE),
+                "Jovem", LocalDate.now().minusYears(17), null, null, true);
+
+        ResponseStatusException exception = assertThrows(
+                ResponseStatusException.class,
+                () -> pacienteService.cadastrarPaciente(cadastro)
+        );
+
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
+        verify(usuarioRepository, never()).save(any(Usuario.class));
+    }
+
+    @Test
+    void deveResponderSemExigirVerificacao() {
+        when(usuarioRepository.existsByEmailIgnoreCase("ana@example.com")).thenReturn(false);
+        when(passwordEncoder.encode("Senha123!")).thenReturn("senha-hash");
+        when(usuarioRepository.save(any(Usuario.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        CadastroResponse response = pacienteService.cadastrarPaciente(criarCadastro("ana@example.com", null, true));
+
+        assertEquals("ana@example.com", response.email());
+        assertEquals(TipoPerfil.PACIENTE, response.tipoPerfil());
+        assertFalse(response.exigeVerificacao());
+    }
+
     private CadastroPacienteDto criarCadastro(String email, String telefone, Boolean acceptedTerms) {
         return new CadastroPacienteDto(
-                new SignUpUserDto(email, "Senha123!", TipoPerfil.PACIENTE, true),
+                new SignUpUserDto(email, "Senha123!", TipoPerfil.PACIENTE),
                 "Paciente Teste",
                 LocalDate.of(1990, 5, 21),
                 telefone,

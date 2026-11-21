@@ -41,9 +41,9 @@ public class SecurityConfigurations {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .exceptionHandling(errors -> errors
                 .authenticationEntryPoint((request, response, exception) -> ApiErrorWriter.write(
-                        response, HttpStatus.UNAUTHORIZED, "Sessão expirada ou credenciais inválidas."))
+                        request, response, HttpStatus.UNAUTHORIZED, "Sessão expirada ou credenciais inválidas."))
                 .accessDeniedHandler((request, response, exception) -> ApiErrorWriter.write(
-                        response, HttpStatus.FORBIDDEN, "Você não tem permissão para acessar este recurso.")))
+                        request, response, HttpStatus.FORBIDDEN, "Você não tem permissão para acessar este recurso.")))
             .authorizeHttpRequests(auth -> auth
                 .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
@@ -51,6 +51,7 @@ public class SecurityConfigurations {
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .requestMatchers("/user/login", "/paciente/cadastro", "/profissional-saude/cadastro").permitAll()
                 .requestMatchers(HttpMethod.GET, "/oportunidades", "/oportunidades/*").permitAll()
+                .requestMatchers("/user/profissionais/**").hasRole("ADMIN")
                 .requestMatchers("/paciente/**").hasRole("PACIENTE")
                 .requestMatchers("/profissional-saude/**").hasRole("PROFISSIONAL_SAUDE")
                 .requestMatchers("/oportunidades", "/oportunidades/**").hasRole("PROFISSIONAL_SAUDE")

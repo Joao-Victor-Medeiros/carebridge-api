@@ -52,11 +52,14 @@ public class ProfissionalSaudeService {
         exigir(dto.conselho(), "O conselho profissional é obrigatório.");
         exigir(dto.uf(), "A UF do conselho é obrigatória.");
         exigir(dto.numeroRegistro(), "O número de registro é obrigatório.");
+        if (!dto.numeroRegistro().trim().matches("\\d{4,7}")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O número de registro deve ter de 4 a 7 dígitos.");
+        }
         exigir(dto.especialidade(), "A especialidade é obrigatória.");
         exigir(dto.ondeAtende(), "O local de atendimento é obrigatório.");
 
         List<Documento> documentosRegistro = arquivos.stream().map(this::converterDocumento).toList();
-        Usuario usuario = contaService.criar(dto.usuarioDto(), dto.acceptedTerms(), TipoPerfil.PROFISSIONAL_SAUDE);
+        Usuario usuario = contaService.criar(dto.usuarioDto(), dto.aceitouTermos(), TipoPerfil.PROFISSIONAL_SAUDE);
 
         profissionalSaudeRepository.save(new ProfissionalSaude(
                 dto.nome().trim(),
@@ -69,7 +72,7 @@ public class ProfissionalSaudeService {
                 dto.biografiaOuDescricao(),
                 usuario
         ));
-        return new CadastroResponse(usuario.getEmail(), TipoPerfil.PROFISSIONAL_SAUDE.name(), 6);
+        return CadastroResponse.semVerificacao(usuario.getEmail(), TipoPerfil.PROFISSIONAL_SAUDE);
     }
 
     private Documento converterDocumento(MultipartFile documento) {

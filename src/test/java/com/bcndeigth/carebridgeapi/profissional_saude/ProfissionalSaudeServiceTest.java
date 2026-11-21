@@ -51,7 +51,7 @@ class ProfissionalSaudeServiceTest {
     @Test
     void devePersistirDadosProfissionaisNormalizarEmailERegistrarTermos() {
         CadastroProfissionalSaudeDto dto = new CadastroProfissionalSaudeDto(
-                new SignUpUserDto("  MARIA.SANTOS@EXAMPLE.COM ", "Senha123!", TipoPerfil.PACIENTE, true),
+                new SignUpUserDto("  MARIA.SANTOS@EXAMPLE.COM ", "Senha123!", TipoPerfil.PACIENTE),
                 "Maria Santos",
                 "CRM",
                 "df",
@@ -96,7 +96,7 @@ class ProfissionalSaudeServiceTest {
     @Test
     void deveRetornar409QuandoEmailJaExistirNoCadastroProfissional() {
         CadastroProfissionalSaudeDto dto = new CadastroProfissionalSaudeDto(
-                new SignUpUserDto("MARIA@EXAMPLE.COM", "Senha123!", TipoPerfil.PROFISSIONAL_SAUDE, true),
+                new SignUpUserDto("MARIA@EXAMPLE.COM", "Senha123!", TipoPerfil.PROFISSIONAL_SAUDE),
                 "Maria Santos",
                 "CRM",
                 "DF",
@@ -118,5 +118,36 @@ class ProfissionalSaudeServiceTest {
         assertEquals("Já existe uma conta cadastrada com este e-mail", ex.getReason());
         verify(usuarioRepository, never()).save(any(Usuario.class));
         verify(profissionalSaudeRepository, never()).save(any(ProfissionalSaude.class));
+    }
+
+    @Test
+    void deveRejeitarNumeroDeRegistroForaDoFormato() {
+        CadastroProfissionalSaudeDto dto = new CadastroProfissionalSaudeDto(
+                new SignUpUserDto("maria@example.com", "Senha123!", TipoPerfil.PROFISSIONAL_SAUDE),
+                "Maria Santos", "CRM", "DF", "12-AB", "cardiologia", "Brasília - DF", null, true);
+
+        ResponseStatusException ex = assertThrows(
+                ResponseStatusException.class,
+                () -> service.cadastrarProfissionalSaude(dto, List.<MultipartFile>of())
+        );
+
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
+        verify(usuarioRepository, never()).save(any(Usuario.class));
+    }
+
+    @Test
+    void deveNascerEmVerificacao() {
+        CadastroProfissionalSaudeDto dto = new CadastroProfissionalSaudeDto(
+                new SignUpUserDto("maria@example.com", "Senha123!", TipoPerfil.PROFISSIONAL_SAUDE),
+                "Maria Santos", "CRM", "DF", "123456", "cardiologia", "Brasília - DF", null, true);
+        when(usuarioRepository.existsByEmailIgnoreCase("maria@example.com")).thenReturn(false);
+        when(passwordEncoder.encode("Senha123!")).thenReturn("senha-hash");
+        when(usuarioRepository.save(any(Usuario.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        service.cadastrarProfissionalSaude(dto, List.<MultipartFile>of());
+
+        ArgumentCaptor<ProfissionalSaude> captor = ArgumentCaptor.forClass(ProfissionalSaude.class);
+        verify(profissionalSaudeRepository).save(captor.capture());
+        assertEquals(SituacaoRegistro.EM_VERIFICACAO, captor.getValue().getSituacaoRegistro());
     }
 }

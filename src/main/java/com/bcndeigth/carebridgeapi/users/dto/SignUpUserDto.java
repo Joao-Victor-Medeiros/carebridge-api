@@ -12,9 +12,6 @@ public record SignUpUserDto(
         String senha,
 
         @Schema(description = "Ignorado: o perfil é definido pela rota de cadastro.", example = "PACIENTE")
-        TipoPerfil tipoPerfil,
-
-        @Schema(description = "Confirmação de aceite dos termos de uso e privacidade.", example = "true")
-        Boolean acceptedTerms
+        TipoPerfil tipoPerfil
 ) {
 }
