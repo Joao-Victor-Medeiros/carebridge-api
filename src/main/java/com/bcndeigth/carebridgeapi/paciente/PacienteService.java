@@ -40,7 +40,8 @@ public class PacienteService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "É preciso ter 18 anos ou mais para criar uma conta.");
         }
 
-        Usuario usuario = contaService.criar(dto.usuarioDto(), dto.aceitouTermos(), TipoPerfil.PACIENTE);
+        Usuario usuario = contaService.criar(dto.usuarioDto(), dto.acceptedTerms(), TipoPerfil.PACIENTE);
+        usuario.marcarEmailComoVerificado();
         pacienteRepository.save(new Paciente(
                 dto.nome().trim(),
                 dto.dataNascimento(),

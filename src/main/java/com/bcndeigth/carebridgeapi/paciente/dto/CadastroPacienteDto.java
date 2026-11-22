@@ -1,5 +1,6 @@
 package com.bcndeigth.carebridgeapi.paciente.dto;
 
+import com.bcndeigth.carebridgeapi.auth.dto.CadastroUsuarioRequest;
 import com.bcndeigth.carebridgeapi.users.dto.SignUpUserDto;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,6 +25,6 @@ public record CadastroPacienteDto(
         String endereco,
 
         @Schema(description = "Indica se os termos de uso foram aceitos.", example = "true")
-        @JsonAlias("acceptedTerms")
-        Boolean aceitouTermos
-) {}
+        @JsonAlias("aceitouTermos")
+        Boolean acceptedTerms
+) implements CadastroUsuarioRequest {}

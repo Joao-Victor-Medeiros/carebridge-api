@@ -49,9 +49,11 @@ public class SecurityConfigurations {
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                .requestMatchers("/user/login", "/paciente/cadastro", "/profissional-saude/cadastro").permitAll()
+                .requestMatchers("/auth/login", "/auth/register", "/auth/verify",
+                        "/auth/resend-code", "/auth/password-reset").permitAll()
                 .requestMatchers(HttpMethod.GET, "/catalogos", "/oportunidades", "/oportunidades/*").permitAll()
                 .requestMatchers("/user/profissionais/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/me/documents").hasRole("PACIENTE")
                 .requestMatchers("/paciente/**").hasRole("PACIENTE")
                 .requestMatchers("/profissional-saude/**").hasRole("PROFISSIONAL_SAUDE")
                 .requestMatchers("/oportunidades", "/oportunidades/**").hasRole("PROFISSIONAL_SAUDE")

@@ -23,7 +23,14 @@ api:
     token:
       secret: ${JWT_SECRET}
 
+app:
+  brevo:
+    enabled: ${BREVO_ENABLED:true}
+
 management:
+  health:
+    mail:
+      enabled: ${BREVO_ENABLED:true}
   endpoints:
     web:
       exposure:

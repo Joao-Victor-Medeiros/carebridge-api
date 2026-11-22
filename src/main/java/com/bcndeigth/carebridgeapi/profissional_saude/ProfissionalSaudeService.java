@@ -1,5 +1,6 @@
 package com.bcndeigth.carebridgeapi.profissional_saude;
 
+import com.bcndeigth.carebridgeapi.auth.VerificacaoEmailService;
 import com.bcndeigth.carebridgeapi.profissional_saude.dto.CadastroProfissionalSaudeDto;
 import com.bcndeigth.carebridgeapi.users.ContaService;
 import com.bcndeigth.carebridgeapi.users.TipoPerfil;
@@ -32,10 +33,16 @@ public class ProfissionalSaudeService {
 
     private final ContaService contaService;
     private final ProfissionalSaudeRepository profissionalSaudeRepository;
+    private final VerificacaoEmailService verificacaoEmailService;
 
-    public ProfissionalSaudeService(ContaService contaService, ProfissionalSaudeRepository profissionalSaudeRepository) {
+    public ProfissionalSaudeService(
+            ContaService contaService,
+            ProfissionalSaudeRepository profissionalSaudeRepository,
+            VerificacaoEmailService verificacaoEmailService
+    ) {
         this.contaService = contaService;
         this.profissionalSaudeRepository = profissionalSaudeRepository;
+        this.verificacaoEmailService = verificacaoEmailService;
     }
 
     @Transactional
@@ -59,9 +66,8 @@ public class ProfissionalSaudeService {
         exigir(dto.ondeAtende(), "O local de atendimento é obrigatório.");
 
         List<Documento> documentosRegistro = arquivos.stream().map(this::converterDocumento).toList();
-        Usuario usuario = contaService.criar(dto.usuarioDto(), dto.aceitouTermos(), TipoPerfil.PROFISSIONAL_SAUDE);
-
-        profissionalSaudeRepository.save(new ProfissionalSaude(
+        Usuario usuario = contaService.criar(dto.usuarioDto(), dto.acceptedTerms(), TipoPerfil.PROFISSIONAL_SAUDE);
+        ProfissionalSaude profissional = profissionalSaudeRepository.save(new ProfissionalSaude(
                 dto.nome().trim(),
                 dto.conselho().trim().toUpperCase(Locale.ROOT),
                 dto.uf().trim().toUpperCase(Locale.ROOT),
@@ -72,7 +78,8 @@ public class ProfissionalSaudeService {
                 dto.biografiaOuDescricao(),
                 usuario
         ));
-        return CadastroResponse.semVerificacao(usuario.getEmail(), TipoPerfil.PROFISSIONAL_SAUDE);
+        verificacaoEmailService.gerarEEnviarCodigo(usuario, profissional.getNome());
+        return new CadastroResponse(usuario.getEmail(), TipoPerfil.PROFISSIONAL_SAUDE, true, 6);
     }
 
     private Documento converterDocumento(MultipartFile documento) {
@@ -82,13 +89,13 @@ public class ProfissionalSaudeService {
         }
         nome = nome.replace('\\', '/');
         nome = nome.substring(nome.lastIndexOf('/') + 1);
-        if (nome.isBlank() || nome.length() > 255) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nome de arquivo inválido.");
+        String tipo = documento.getContentType();
+        if (nome.isBlank() || nome.length() > 255 || (tipo != null && tipo.length() > 255)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nome ou tipo de arquivo inválido.");
         }
         if (documento.getSize() > TAMANHO_MAXIMO_DOCUMENTO) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cada documento pode ter no máximo 10 MB.");
         }
-        String tipo = documento.getContentType();
         if (tipo == null || !TIPOS_DOCUMENTO_PERMITIDOS.contains(tipo.toLowerCase(Locale.ROOT))) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Envie documentos nos formatos PDF, JPG ou PNG.");
         }

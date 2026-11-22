@@ -70,14 +70,34 @@ public class Usuario implements UserDetails {
         this.email = email == null ? null : email.trim().toLowerCase(Locale.ROOT);
     }
 
+    public void marcarEmailComoVerificado() {
+        this.emailVerificado = true;
+    }
+
+    public void alterarSenha(String novaSenhaHash) {
+        this.senhaHash = novaSenhaHash;
+    }
+
+    public void anonimizar(String emailAnonimo, String senhaAleatoriaHash) {
+        setEmail(emailAnonimo);
+        this.senhaHash = senhaAleatoriaHash;
+        this.emailVerificado = false;
+    }
+
     @PrePersist
     protected void aoCriar() {
-        criadoEm = Instant.now();
-        atualizadoEm = criadoEm;
+        setEmail(this.email);
+        if (this.termosAceitosEm == null) {
+            this.termosAceitosEm = Instant.now();
+        }
+        Instant agora = Instant.now();
+        criadoEm = agora;
+        atualizadoEm = agora;
     }
 
     @PreUpdate
     protected void aoAtualizar() {
+        setEmail(this.email);
         atualizadoEm = Instant.now();
     }
 
