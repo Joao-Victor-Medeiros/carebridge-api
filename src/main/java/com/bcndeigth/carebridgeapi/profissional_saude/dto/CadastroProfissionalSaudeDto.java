@@ -1,5 +1,6 @@
 package com.bcndeigth.carebridgeapi.profissional_saude.dto;
 
+import com.bcndeigth.carebridgeapi.auth.dto.CadastroUsuarioRequest;
 import com.bcndeigth.carebridgeapi.users.dto.SignUpUserDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.NonNull;
@@ -33,4 +34,4 @@ public record CadastroProfissionalSaudeDto(
 
         @Schema(description = "Indica se os termos de uso foram aceitos.", example = "true")
         Boolean acceptedTerms
-) {}
+) implements CadastroUsuarioRequest {}

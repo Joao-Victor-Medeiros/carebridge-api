@@ -47,8 +47,8 @@ public class SecurityConfigurations {
                 .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                .requestMatchers("/user/login", "/paciente/cadastro", "/profissional-saude/cadastro",
-                        "/auth/verify", "/auth/resend-code", "/auth/password-reset").permitAll()
+                .requestMatchers("/auth/login", "/auth/register", "/auth/verify",
+                        "/auth/resend-code", "/auth/password-reset").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.GET, "/oportunidades", "/oportunidades/*").permitAll()
                 .requestMatchers("/user/profissionais/**").hasRole("ADMIN")
                 .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/me/documents").hasRole("PACIENTE")

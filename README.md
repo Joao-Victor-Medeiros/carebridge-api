@@ -374,7 +374,7 @@ http://localhost:8082/swagger-ui/index.html
 Login:
 
 ```http
-POST /user/login
+POST /auth/login
 ```
 
 Body:
@@ -392,68 +392,60 @@ Use o token retornado nas rotas protegidas:
 Authorization: Bearer SEU_TOKEN
 ```
 
-Cadastro genérico:
+Cadastro de paciente ou profissional de saúde:
 
 ```http
-POST /user/register
+POST /auth/register
 ```
 
-Body:
+Essa rota usa `multipart/form-data`. Envie os dados cadastrais na parte `dados`
+com `Content-Type: application/json`. O campo `tipoPerfil` no início do JSON
+define qual formato será processado.
+
+Cadastro de paciente na parte `dados`:
 
 ```json
 {
-  "email": "paulo.ricardo@example.com",
-  "senha": "Senha123!",
-  "tipoPerfil": "PACIENTE"
-}
-```
-
-O cadastro público de `ADMIN` é bloqueado.
-
-### Paciente
-
-```http
-POST /paciente/cadastro
-```
-
-Body:
-
-```json
-{
+  "tipoPerfil": "PACIENTE",
   "usuarioDto": {
     "email": "paulo.ricardo@example.com",
     "senha": "Senha123!",
-    "tipoPerfil": "PACIENTE"
+    "tipoPerfil": "PACIENTE",
+    "acceptedTerms": true
   },
   "nome": "Paulo Ricardo",
   "dataNascimento": "1990-05-21",
   "telefone": "+55 11 99999-9999",
-  "endereco": "Rua das Flores, 123"
+  "endereco": "Rua das Flores, 123",
+  "acceptedTerms": true
 }
 ```
 
-### Profissional de saúde
-
-```http
-POST /profissional-saude/cadastro
-```
-
-Essa rota usa `multipart/form-data`. Envie a parte `dados` como JSON:
+Cadastro de profissional de saúde na parte `dados`:
 
 ```json
 {
+  "tipoPerfil": "PROFISSIONAL_SAUDE",
   "usuarioDto": {
     "email": "ana.souza@example.com",
     "senha": "Senha123!",
-    "tipoPerfil": "PROFISSIONAL_SAUDE"
+    "tipoPerfil": "PROFISSIONAL_SAUDE",
+    "acceptedTerms": true
   },
   "nome": "Dra. Ana Souza",
-  "documentosRegistro": [
-    "CRM-SP 123456"
-  ],
-  "biografiaOuDescricao": "Médica clínica geral."
+  "conselho": "CRM",
+  "uf": "SP",
+  "numeroRegistro": "123456",
+  "especialidade": "Clínica Geral",
+  "ondeAtende": "São Paulo - SP",
+  "biografiaOuDescricao": "Médica clínica geral.",
+  "acceptedTerms": true
 }
 ```
+
+Para profissionais, envie opcionalmente até dois arquivos PDF, JPG ou PNG em
+partes `documentos`. Pacientes não podem enviar documentos. O cadastro público
+de `ADMIN` não é aceito pelo discriminador polimórfico.
 
 ### Oportunidades
 

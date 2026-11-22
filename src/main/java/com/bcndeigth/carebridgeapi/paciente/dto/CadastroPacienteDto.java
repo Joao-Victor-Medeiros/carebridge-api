@@ -1,5 +1,6 @@
 package com.bcndeigth.carebridgeapi.paciente.dto;
 
+import com.bcndeigth.carebridgeapi.auth.dto.CadastroUsuarioRequest;
 import com.bcndeigth.carebridgeapi.users.dto.SignUpUserDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -24,4 +25,4 @@ public record CadastroPacienteDto(
 
         @Schema(description = "Indica se os termos de uso foram aceitos.", example = "true")
         Boolean acceptedTerms
-) {}
+) implements CadastroUsuarioRequest {}
