@@ -27,6 +27,9 @@ app:
     enabled: ${BREVO_ENABLED:true}
 
 management:
+  health:
+    mail:
+      enabled: ${BREVO_ENABLED:true}
   endpoints:
     web:
       exposure:

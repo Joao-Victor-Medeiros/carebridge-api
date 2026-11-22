@@ -52,3 +52,8 @@ app:
     enabled: ${BREVO_ENABLED:false}
     sender-email: ${BREVO_SENDER_EMAIL:}
     sender-name: ${BREVO_SENDER_NAME:CareBridge}
+
+management:
+  health:
+    mail:
+      enabled: ${BREVO_ENABLED:false}
