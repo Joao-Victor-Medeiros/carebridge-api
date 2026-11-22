@@ -36,7 +36,7 @@ public class UsuarioService {
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                             "Perfil de profissional de saúde não encontrado."));
             return new UserProfileResponse(usuario.getId(), profissional.getNome(), usuario.getEmail(),
-                    usuario.getTipoPerfil(), null, null, null);
+                    usuario.getTipoPerfil(), null, null, profissional.getStatusVerificacao().name());
         }
         return new UserProfileResponse(usuario.getId(), null, usuario.getEmail(),
                 usuario.getTipoPerfil(), null, null, null);

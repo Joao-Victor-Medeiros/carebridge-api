@@ -1,11 +1,13 @@
 package com.bcndeigth.carebridgeapi.profissional_saude;
 
+import com.bcndeigth.carebridgeapi.auth.VerificacaoEmailService;
 import com.bcndeigth.carebridgeapi.profissional_saude.dto.CadastroProfissionalSaudeDto;
 import com.bcndeigth.carebridgeapi.users.TipoPerfil;
 import com.bcndeigth.carebridgeapi.users.Usuario;
 import com.bcndeigth.carebridgeapi.users.UsuarioRepository;
 import com.bcndeigth.carebridgeapi.users.dto.CadastroResponse;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,15 +36,27 @@ public class ProfissionalSaudeService {
     private final ProfissionalSaudeRepository profissionalSaudeRepository;
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+    private final VerificacaoEmailService verificacaoEmailService;
+
+    @Autowired
+    public ProfissionalSaudeService(
+            ProfissionalSaudeRepository profissionalSaudeRepository,
+            UsuarioRepository usuarioRepository,
+            PasswordEncoder passwordEncoder,
+            VerificacaoEmailService verificacaoEmailService
+    ) {
+        this.profissionalSaudeRepository = profissionalSaudeRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.verificacaoEmailService = verificacaoEmailService;
+    }
 
     public ProfissionalSaudeService(
             ProfissionalSaudeRepository profissionalSaudeRepository,
             UsuarioRepository usuarioRepository,
             PasswordEncoder passwordEncoder
     ) {
-        this.profissionalSaudeRepository = profissionalSaudeRepository;
-        this.usuarioRepository = usuarioRepository;
-        this.passwordEncoder = passwordEncoder;
+        this(profissionalSaudeRepository, usuarioRepository, passwordEncoder, null);
     }
 
     @Transactional
@@ -92,7 +106,7 @@ public class ProfissionalSaudeService {
 
         try {
             Usuario usuarioSalvo = usuarioRepository.save(usuario);
-            profissionalSaudeRepository.save(new ProfissionalSaude(
+            ProfissionalSaude profissional = profissionalSaudeRepository.save(new ProfissionalSaude(
                     dto.nome().trim(),
                     dto.conselho().trim().toUpperCase(Locale.ROOT),
                     dto.uf().trim().toUpperCase(Locale.ROOT),
@@ -103,6 +117,9 @@ public class ProfissionalSaudeService {
                     dto.biografiaOuDescricao(),
                     usuarioSalvo
             ));
+            if (verificacaoEmailService != null) {
+                verificacaoEmailService.gerarEEnviarCodigo(usuarioSalvo, profissional.getNome());
+            }
             return new CadastroResponse(emailNormalizado, TipoPerfil.PROFISSIONAL_SAUDE.name(), 6);
         } catch (DataIntegrityViolationException ex) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe uma conta cadastrada com este e-mail", ex);

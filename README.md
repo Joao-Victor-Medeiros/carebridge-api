@@ -181,6 +181,11 @@ DATABASE_URL
 DATABASE_USERNAME
 DATABASE_PASSWORD
 JWT_SECRET
+BREVO_ENABLED
+BREVO_SMTP_USERNAME
+BREVO_SMTP_KEY
+BREVO_SENDER_EMAIL
+BREVO_SENDER_NAME
 ```
 
 O profile de produção usa `ddl-auto: validate`. O Flyway executa as migrations
@@ -254,7 +259,20 @@ DATABASE_USERNAME=SEU_USUARIO_NEON
 DATABASE_PASSWORD=SUA_SENHA_NEON
 JWT_SECRET=UMA_CHAVE_FORTE
 FLYWAY_BASELINE_ON_MIGRATE=true
+BREVO_ENABLED=true
+BREVO_SMTP_HOST=smtp-relay.brevo.com
+BREVO_SMTP_PORT=587
+BREVO_SMTP_USERNAME=SEU_USUARIO_SMTP_BREVO
+BREVO_SMTP_KEY=SUA_CHAVE_SMTP_BREVO
+BREVO_SENDER_EMAIL=REMETENTE_VALIDADO_NA_BREVO
+BREVO_SENDER_NAME=CareBridge
 ```
+
+As credenciais de e-mail são obtidas no painel da Brevo em **SMTP & API → SMTP**.
+Use uma **SMTP key** em `BREVO_SMTP_KEY`; uma API key da Brevo não funciona no
+relay SMTP. O endereço de `BREVO_SENDER_EMAIL` deve estar cadastrado e validado
+como remetente. Não coloque a SMTP key no repositório, no `.env.exemple` ou em
+comandos versionados.
 
 No primeiro deploy com Flyway, mantenha `FLYWAY_BASELINE_ON_MIGRATE=true`.
 Isso permite adotar o histórico de migrations no banco já existente:
@@ -314,7 +332,9 @@ Pull request nunca faz deploy: o deploy acontece quando o PR é mergeado na `mas
    **Imagem Docker e subida da API**. Assim nenhum PR entra quebrado.
 
 As variáveis de banco e `JWT_SECRET` de produção continuam só no Render; o
-workflow não precisa delas. O banco usado no CI é descartável e não tem relação com o Neon.
+workflow não precisa delas. As credenciais SMTP da Brevo também ficam somente no
+Render. O job de smoke test executa com `BREVO_ENABLED=false`, portanto não envia
+e-mails nem acessa a Brevo. O banco usado no CI é descartável e não tem relação com o Neon.
 
 ### Limitações
 

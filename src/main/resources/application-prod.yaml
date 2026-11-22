@@ -22,6 +22,10 @@ api:
     token:
       secret: ${JWT_SECRET}
 
+app:
+  brevo:
+    enabled: ${BREVO_ENABLED:true}
+
 management:
   endpoints:
     web:

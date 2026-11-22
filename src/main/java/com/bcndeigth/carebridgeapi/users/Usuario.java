@@ -89,6 +89,20 @@ public class Usuario implements UserDetails {
         return email;
     }
 
+    public void marcarEmailComoVerificado() {
+        this.emailVerificado = true;
+    }
+
+    public void alterarSenha(String novaSenhaHash) {
+        this.senhaHash = novaSenhaHash;
+    }
+
+    public void anonimizar(String emailAnonimo, String senhaAleatoriaHash) {
+        setEmail(emailAnonimo);
+        this.senhaHash = senhaAleatoriaHash;
+        this.emailVerificado = false;
+    }
+
     public TipoPerfil getTipoPerfil() {
         return tipoPerfil;
     }

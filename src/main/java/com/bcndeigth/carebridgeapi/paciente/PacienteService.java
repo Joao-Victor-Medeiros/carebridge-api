@@ -62,6 +62,7 @@ public class PacienteService {
                 true,
                 agora
         );
+        usuario.marcarEmailComoVerificado();
 
         try {
             Usuario usuarioSalvo = usuarioRepository.save(usuario);

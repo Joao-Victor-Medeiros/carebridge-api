@@ -65,6 +65,10 @@ public class ProfissionalSaude {
     @Column(name = "biografia_ou_descricao", columnDefinition = "text")
     private String biografiaOuDescricao;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status_verificacao", nullable = false)
+    private StatusVerificacao statusVerificacao = StatusVerificacao.EM_VERIFICACAO;
+
     @OneToMany(mappedBy = "ofertante", fetch = FetchType.LAZY)
     private List<Oportunidade> oportunidades = new ArrayList<>();
 
@@ -90,6 +94,7 @@ public class ProfissionalSaude {
         this.ondeAtende = ondeAtende;
         this.documentosRegistro = documentosRegistro;
         this.biografiaOuDescricao = biografiaOuDescricao;
+        this.statusVerificacao = StatusVerificacao.EM_VERIFICACAO;
         this.usuario = usuario;
     }
 }

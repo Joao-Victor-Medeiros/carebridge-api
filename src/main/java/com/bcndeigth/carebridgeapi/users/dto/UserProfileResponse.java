@@ -1,6 +1,7 @@
 package com.bcndeigth.carebridgeapi.users.dto;
 
 import com.bcndeigth.carebridgeapi.users.TipoPerfil;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -12,6 +13,6 @@ public record UserProfileResponse(
         TipoPerfil tipoPerfil,
         LocalDate dataNascimento,
         String telefone,
-        String verification
+        @JsonInclude(JsonInclude.Include.NON_NULL) String verification
 ) {
 }
