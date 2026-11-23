@@ -50,6 +50,8 @@ app:
     password: ${ADMIN_PASSWORD:}
   demo:
     password: ${DEMO_PASSWORD:}
+  # Vazio volta ao codigo aleatorio enviado pelo Brevo.
+  codigo-fixo: ${CODIGO_FIXO:218218}
   brevo:
     enabled: ${BREVO_ENABLED:false}
     sender-email: ${BREVO_SENDER_EMAIL:}

@@ -51,7 +51,7 @@ Todo erro, em qualquer rota, tem pelo menos `status` e `message`. Os campos padr
   "status": 409,
   "message": "Já existe um usuário cadastrado com este e-mail.",
   "error": "Conflict",
-  "path": "/paciente/cadastro",
+  "path": "/auth/register",
   "timestamp": "2026-11-19T02:52:06Z"
 }
 ```
@@ -83,10 +83,10 @@ Valor desconhecido não quebra os clientes: cada um cai num padrão seguro. Mesm
 
 ## 3. Acesso
 
-### POST /user/login · existe com outro formato
+### POST /auth/login · existe
 
 ```json
-{ "email": "paciente@teste.com", "password": "Senha2026" }
+{ "email": "paciente@teste.com", "password": "Senha@2026" }
 ```
 
 Resposta 200:
@@ -101,7 +101,7 @@ Resposta 200:
 }
 ```
 
-Muda: `expiraEmSegundos` é novo; senha errada passa a ser 401, e 429 depois de 5 erros seguidos.
+400 sem e-mail ou senha, 401 com credenciais erradas e 429 depois de 5 erros seguidos (bloqueio de 15 minutos por e-mail e IP).
 
 ### GET /user/me 🔒 · nova
 
@@ -138,36 +138,30 @@ Para `PROFISSIONAL_SAUDE`, o mesmo objeto traz o registro, que o painel mostra n
 
 `situacaoRegistro`, `conselho`, `uf`, `numeroRegistro`, `especialidade` e `ondeAtende` só vêm para `PROFISSIONAL_SAUDE`. `dataNascimento` e `telefone` só para `PACIENTE`. Campo que não se aplica vem nulo ou ausente.
 
-### POST /paciente/cadastro · existe com outro formato
+### POST /auth/register · existe
+
+`multipart/form-data`. A parte `dados` (JSON, `Content-Type: application/json`) leva o `tipoPerfil` na raiz, que escolhe o tipo do cadastro. O profissional pode mandar até 2 arquivos na parte `documentos`.
+
+Paciente:
 
 ```json
 {
-  "usuarioDto": { "email": "ana@email.com", "senha": "Senha2026", "tipoPerfil": "PACIENTE" },
+  "tipoPerfil": "PACIENTE",
+  "usuarioDto": { "email": "ana@email.com", "senha": "Senha@2026", "tipoPerfil": "PACIENTE" },
   "nome": "Ana Souza",
   "dataNascimento": "1988-03-12",
   "telefone": "61999990000",
   "endereco": null,
-  "aceitouTermos": true
+  "acceptedTerms": true
 }
 ```
 
-Resposta 201:
-
-```json
-{ "email": "ana@email.com", "tipoPerfil": "PACIENTE", "exigeVerificacao": true, "tamanhoCodigo": 4 }
-```
-
-Regras: o servidor ignora o `tipoPerfil` enviado e grava sempre `PACIENTE` (hoje aceita `ADMIN`). 409 se o e-mail existe. 400 se `aceitouTermos` for falso ou se a pessoa tiver menos de 18 anos. `telefone` é opcional, só dígitos.
-
-`exigeVerificacao: false` significa que a conta já nasce ativa: o cliente faz login direto. Enquanto o código por e-mail não existir, o backend devolve `false` (ou 201 sem corpo, que os clientes leem como `false`).
-
-### POST /profissional-saude/cadastro · existe com outro formato
-
-`multipart/form-data` com a parte `dados` (JSON, `Content-Type: application/json`) e até 2 arquivos na parte `documentos`.
+Profissional:
 
 ```json
 {
-  "usuarioDto": { "email": "mariana@clinica.com", "senha": "Senha2026", "tipoPerfil": "PROFISSIONAL_SAUDE" },
+  "tipoPerfil": "PROFISSIONAL_SAUDE",
+  "usuarioDto": { "email": "mariana@clinica.com", "senha": "Senha@2026", "tipoPerfil": "PROFISSIONAL_SAUDE" },
   "nome": "Mariana Costa",
   "conselho": "CRM",
   "uf": "DF",
@@ -175,29 +169,42 @@ Regras: o servidor ignora o `tipoPerfil` enviado e grava sempre `PACIENTE` (hoje
   "especialidade": "cardiologia",
   "ondeAtende": "Instituto Movida",
   "biografiaOuDescricao": null,
-  "aceitouTermos": true
+  "acceptedTerms": true
 }
 ```
 
-Resposta 201 igual à do paciente, com `"tipoPerfil": "PROFISSIONAL_SAUDE"`. O profissional nasce com `situacaoRegistro: EM_VERIFICACAO`.
-
-Muda: `conselho`, `uf`, `numeroRegistro`, `especialidade` e `ondeAtende` substituem `documentosRegistro` (que hoje é descartado no serviço). `numeroRegistro` tem de 4 a 7 dígitos. 409 se o e-mail existe.
-
-### POST /user/verificacao · nova (etapa 4)
+Resposta 201:
 
 ```json
-{ "email": "ana@email.com", "codigo": "0000" }
+{ "email": "mariana@clinica.com", "tipoPerfil": "PROFISSIONAL_SAUDE", "exigeVerificacao": true, "tamanhoCodigo": 6 }
 ```
 
-Resposta 200 igual à do login. 401 se o código está errado ou venceu.
+Regras:
 
-### POST /user/verificacao/reenvio · nova (etapa 4)
+- Termos: `acceptedTerms` ou `aceitouTermos` (os dois nomes valem). 400 se for falso.
+- Senha: 8 caracteres ou mais, com maiúscula, minúscula, número e caractere especial. É a mesma regra da troca de senha.
+- Paciente: maior de 18 anos; `telefone` opcional. Nasce ativo, com `exigeVerificacao: false` e `tamanhoCodigo: null`.
+- Profissional: `conselho`, `uf`, `numeroRegistro` (4 a 7 dígitos), `especialidade` e `ondeAtende` são obrigatórios. Nasce com `situacaoRegistro: EM_VERIFICACAO` e recebe um código de 6 dígitos por e-mail.
+- 409 se o e-mail já tem conta.
 
-`{ "email": "ana@email.com" }` → 204.
+### POST /auth/verify · existe
 
-### POST /user/senha/recuperacao · nova (etapa 4)
+```json
+{ "email": "mariana@clinica.com", "code": "123456" }
+```
 
-`{ "email": "ana@email.com" }` → 204, exista ou não a conta (a resposta não pode revelar quem tem cadastro). O link vale 30 minutos.
+Resposta 200 `{ "message": "E-mail verificado com sucesso." }`, sem token: o cliente faz o login em seguida. 400 com código errado ou vencido (vale 15 minutos); na quinta tentativa errada o código é invalidado e é preciso pedir outro.
+
+### POST /auth/resend-code · existe
+
+`{ "email": "mariana@clinica.com" }` → 200 com `message`. 429 se o código anterior tem menos de 60 segundos; 409 se o e-mail já foi verificado.
+
+### POST /auth/password-reset · existe
+
+Dois passos na mesma rota:
+
+1. `{ "email": "ana@email.com" }` → 200 com mensagem genérica, exista ou não a conta. Se existir, chega um código de 6 dígitos por e-mail, válido por 15 minutos. 429 se o pedido anterior tem menos de 60 segundos.
+2. `{ "email": "ana@email.com", "code": "123456", "newPassword": "Nova@2026" }` → 200 `{ "message": "Senha redefinida com sucesso." }`. 400 com código errado ou vencido, senha fora da regra ou igual à atual. Conta ADMIN não usa este fluxo.
 
 ---
 
@@ -490,13 +497,13 @@ Aprovar soma 1 em `vagasPreenchidas`. Decisão final não volta atrás.
 
 ---
 
-## 8. Conta do paciente (LGPD)
+## 8. Minha conta (LGPD)
 
-| Rota | Estado | Corpo | Resposta |
+| Rota | Perfil | Corpo | Resposta |
 | --- | --- | --- | --- |
-| `POST /paciente/exportacao-dados` 🔒 | nova | | 202; cópia por e-mail em até 15 dias |
-| `DELETE /paciente/documentos` 🔒 | nova | | 204; apaga os arquivos de todas as inscrições |
-| `DELETE /paciente/conta` 🔒 | nova | `{senha}` | 204; 401 se a senha não confere; cancela as inscrições abertas |
+| `POST /me/data-export` 🔒 | paciente e profissional | | 200 com a cópia dos dados em JSON |
+| `DELETE /me/documents` 🔒 | paciente | | 204; apaga os arquivos de todas as inscrições |
+| `DELETE /me` 🔒 | paciente e profissional | `{ "password": "..." }` | 204; anonimiza a conta. 401 se a senha não confere |
 
 ---
 

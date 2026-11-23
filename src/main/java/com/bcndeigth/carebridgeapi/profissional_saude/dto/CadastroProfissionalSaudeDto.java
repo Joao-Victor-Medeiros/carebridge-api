@@ -32,5 +32,6 @@ public record CadastroProfissionalSaudeDto(
         String biografiaOuDescricao,
 
         @Schema(description = "Indica se os termos de uso foram aceitos.", example = "true")
+        @JsonAlias("aceitouTermos")
         Boolean acceptedTerms
 ) implements CadastroUsuarioRequest {}

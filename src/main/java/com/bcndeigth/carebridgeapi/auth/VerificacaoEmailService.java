@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Locale;
@@ -20,7 +19,6 @@ public class VerificacaoEmailService {
     private static final Duration VALIDADE_CODIGO = Duration.ofMinutes(15);
     private static final Duration INTERVALO_REENVIO = Duration.ofSeconds(60);
     private static final int LIMITE_TENTATIVAS = 5;
-    private static final SecureRandom RANDOM = new SecureRandom();
 
     private final CodigoVerificacaoEmailRepository codigoRepository;
     private final UsuarioRepository usuarioRepository;
@@ -28,6 +26,7 @@ public class VerificacaoEmailService {
     private final PasswordEncoder passwordEncoder;
     private final BrevoEmailService brevoEmailService;
     private final RegistroTentativaVerificacaoService registroTentativaService;
+    private final CodigoAcesso codigoAcesso;
 
     public VerificacaoEmailService(
             CodigoVerificacaoEmailRepository codigoRepository,
@@ -35,7 +34,8 @@ public class VerificacaoEmailService {
             ProfissionalSaudeRepository profissionalRepository,
             PasswordEncoder passwordEncoder,
             BrevoEmailService brevoEmailService,
-            RegistroTentativaVerificacaoService registroTentativaService
+            RegistroTentativaVerificacaoService registroTentativaService,
+            CodigoAcesso codigoAcesso
     ) {
         this.codigoRepository = codigoRepository;
         this.usuarioRepository = usuarioRepository;
@@ -43,6 +43,7 @@ public class VerificacaoEmailService {
         this.passwordEncoder = passwordEncoder;
         this.brevoEmailService = brevoEmailService;
         this.registroTentativaService = registroTentativaService;
+        this.codigoAcesso = codigoAcesso;
     }
 
     @Transactional
@@ -108,7 +109,7 @@ public class VerificacaoEmailService {
     }
 
     private void criarEEnviar(Usuario usuario, String nome) {
-        String codigoAberto = "%06d".formatted(RANDOM.nextInt(1_000_000));
+        String codigoAberto = codigoAcesso.gerar();
         Instant agora = Instant.now();
         CodigoVerificacaoEmail codigo = new CodigoVerificacaoEmail(
                 usuario,
@@ -118,7 +119,9 @@ public class VerificacaoEmailService {
                 agora.plus(VALIDADE_CODIGO)
         );
         codigoRepository.save(codigo);
-        brevoEmailService.enviarCodigoVerificacao(usuario.getEmail(), nome, codigoAberto);
+        if (!codigoAcesso.simulado()) {
+            brevoEmailService.enviarCodigoVerificacao(usuario.getEmail(), nome, codigoAberto);
+        }
     }
 
     private Usuario buscarUsuario(String email) {
