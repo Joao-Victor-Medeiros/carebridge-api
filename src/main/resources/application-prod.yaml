@@ -30,7 +30,7 @@ app:
 management:
   health:
     mail:
-      enabled: ${BREVO_ENABLED:true}
+      enabled: ${MANAGEMENT_HEALTH_MAIL_ENABLED:false}
   endpoints:
     web:
       exposure:

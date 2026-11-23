@@ -1,5 +1,6 @@
 package com.bcndeigth.carebridgeapi.profissional_saude;
 
+import com.bcndeigth.carebridgeapi.auth.VerificacaoEmailService;
 import com.bcndeigth.carebridgeapi.profissional_saude.dto.CadastroProfissionalSaudeDto;
 import com.bcndeigth.carebridgeapi.users.ContaService;
 import com.bcndeigth.carebridgeapi.users.TipoPerfil;
@@ -41,11 +42,18 @@ class ProfissionalSaudeServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private VerificacaoEmailService verificacaoEmailService;
+
     private ProfissionalSaudeService service;
 
     @BeforeEach
     void setUp() {
-        service = new ProfissionalSaudeService(new ContaService(usuarioRepository, passwordEncoder), profissionalSaudeRepository);
+        service = new ProfissionalSaudeService(
+                new ContaService(usuarioRepository, passwordEncoder),
+                profissionalSaudeRepository,
+                verificacaoEmailService
+        );
     }
 
     @Test
@@ -65,6 +73,7 @@ class ProfissionalSaudeServiceTest {
         when(usuarioRepository.existsByEmailIgnoreCase("maria.santos@example.com")).thenReturn(false);
         when(passwordEncoder.encode("Senha123!")).thenReturn("senha-hash");
         when(usuarioRepository.save(any(Usuario.class))).thenAnswer(inv -> inv.getArgument(0));
+        when(profissionalSaudeRepository.save(any(ProfissionalSaude.class))).thenAnswer(inv -> inv.getArgument(0));
 
         CadastroResponse response = service.cadastrarProfissionalSaude(dto, List.<MultipartFile>of());
 
@@ -143,6 +152,7 @@ class ProfissionalSaudeServiceTest {
         when(usuarioRepository.existsByEmailIgnoreCase("maria@example.com")).thenReturn(false);
         when(passwordEncoder.encode("Senha123!")).thenReturn("senha-hash");
         when(usuarioRepository.save(any(Usuario.class))).thenAnswer(inv -> inv.getArgument(0));
+        when(profissionalSaudeRepository.save(any(ProfissionalSaude.class))).thenAnswer(inv -> inv.getArgument(0));
 
         service.cadastrarProfissionalSaude(dto, List.<MultipartFile>of());
 

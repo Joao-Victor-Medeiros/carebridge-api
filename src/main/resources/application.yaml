@@ -58,4 +58,4 @@ app:
 management:
   health:
     mail:
-      enabled: ${BREVO_ENABLED:false}
+      enabled: ${MANAGEMENT_HEALTH_MAIL_ENABLED:false}
