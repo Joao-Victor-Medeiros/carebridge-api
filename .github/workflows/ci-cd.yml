@@ -86,6 +86,7 @@ jobs:
             -e DATABASE_PASSWORD=admin \
             -e JWT_SECRET=segredo-apenas-para-o-ci \
             -e FLYWAY_BASELINE_ON_MIGRATE=true \
+            -e BREVO_ENABLED=false \
             carebridge-api:ci
 
       - name: Esperar o health check responder UP

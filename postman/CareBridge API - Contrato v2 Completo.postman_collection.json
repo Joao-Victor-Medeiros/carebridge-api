@@ -1,0 +1,2141 @@
+{
+  "info": {
+    "_postman_id": "f32e5c50-b3a8-4c47-a431-9ddab9ad2c2a",
+    "name": "CareBridge API - Contrato v2 Completo",
+    "description": "Collection completa dos controllers da CareBridge API. Execute as pastas em ordem. Verificação de e-mail e credenciais ADMIN dependem da configuração local. Rotas destrutivas ficam no final.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const now = new Date();",
+          "const isoDate = d => d.toISOString().slice(0, 10);",
+          "const end = new Date(now); end.setUTCDate(end.getUTCDate() + 60);",
+          "pm.collectionVariables.set('inscricoesDe', isoDate(now));",
+          "pm.collectionVariables.set('inscricoesAte', isoDate(end));",
+          "pm.collectionVariables.set('consentimentoDadosSaudeEm', now.toISOString());"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "pacienteEmail",
+      "value": "paciente.postman@example.com",
+      "type": "string"
+    },
+    {
+      "key": "pacienteSenha",
+      "value": "SenhaSegura123!",
+      "type": "string"
+    },
+    {
+      "key": "profissionalEmail",
+      "value": "profissional.postman@example.com",
+      "type": "string"
+    },
+    {
+      "key": "profissionalSenha",
+      "value": "SenhaSegura123!",
+      "type": "string"
+    },
+    {
+      "key": "adminEmail",
+      "value": "admin@carebridge.com",
+      "type": "string"
+    },
+    {
+      "key": "adminSenha",
+      "value": "SenhaForte@123",
+      "type": "string"
+    },
+    {
+      "key": "verificationCode",
+      "value": "000000",
+      "type": "string"
+    },
+    {
+      "key": "passwordResetCode",
+      "value": "000000",
+      "type": "string"
+    },
+    {
+      "key": "novaSenha",
+      "value": "NovaSenhaSegura123!",
+      "type": "string"
+    },
+    {
+      "key": "pacienteToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "profissionalToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "profissionalId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "profissionalRecusaId",
+      "value": "00000000-0000-0000-0000-000000000000",
+      "type": "string"
+    },
+    {
+      "key": "oportunidadeId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "oportunidadeCancelamentoId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "rascunhoId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "inscricaoId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "inscricaoCancelamentoId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "inscricoesDe",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "inscricoesAte",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "consentimentoDadosSaudeEm",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "00 - Saúde e documentação técnica",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200', () => pm.expect([200]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "OpenAPI JSON",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v3/api-docs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v3",
+                "api-docs"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200', () => pm.expect([200]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "01 - Cadastro e autenticação",
+      "item": [
+        {
+          "name": "Cadastrar paciente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "dados",
+                  "value": "{\"tipoPerfil\": \"PACIENTE\", \"usuarioDto\": {\"email\": \"{{pacienteEmail}}\", \"senha\": \"{{pacienteSenha}}\", \"tipoPerfil\": \"PACIENTE\"}, \"nome\": \"Paciente Postman\", \"dataNascimento\": \"1990-05-21\", \"telefone\": \"+55 11 99999-9999\", \"endereco\": \"Rua das Flores, 123, São Paulo - SP\", \"acceptedTerms\": true}",
+                  "type": "text",
+                  "contentType": "application/json"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 201, 409', () => pm.expect([201, 409]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cadastrar profissional",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "dados",
+                  "value": "{\"tipoPerfil\": \"PROFISSIONAL_SAUDE\", \"usuarioDto\": {\"email\": \"{{profissionalEmail}}\", \"senha\": \"{{profissionalSenha}}\", \"tipoPerfil\": \"PROFISSIONAL_SAUDE\"}, \"nome\": \"Profissional Postman\", \"conselho\": \"CRM\", \"uf\": \"SP\", \"numeroRegistro\": \"123456\", \"especialidade\": \"Cardiologia\", \"ondeAtende\": \"Clínica Postman - São Paulo\", \"biografiaOuDescricao\": \"Profissional criado para validação do contrato v2.\", \"acceptedTerms\": true}",
+                  "type": "text",
+                  "contentType": "application/json"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 201, 409, 503', () => pm.expect([201, 409, 503]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Verificar e-mail profissional",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/verify",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "verify"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{profissionalEmail}}\",\n  \"code\": \"{{verificationCode}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200, 400', () => pm.expect([200, 400]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reenviar código profissional",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/resend-code",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "resend-code"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{profissionalEmail}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200, 400, 429, 503', () => pm.expect([200, 400, 429, 503]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Solicitar redefinição de senha",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/password-reset",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "password-reset"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{pacienteEmail}}\",\n  \"code\": null,\n  \"newPassword\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200, 429, 503', () => pm.expect([200, 429, 503]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Confirmar redefinição de senha",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/password-reset",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "password-reset"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{pacienteEmail}}\",\n  \"code\": \"{{passwordResetCode}}\",\n  \"newPassword\": \"{{novaSenha}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200, 400', () => pm.expect([200, 400]).to.include(pm.response.code));",
+                  "if (pm.response.code === 200) pm.collectionVariables.set('pacienteSenha', pm.collectionVariables.get('novaSenha')); "
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login paciente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{pacienteEmail}}\",\n  \"password\": \"{{pacienteSenha}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200', () => pm.expect([200]).to.include(pm.response.code));",
+                  "const body = pm.response.json();",
+                  "if (body.token) pm.collectionVariables.set('pacienteToken', body.token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login profissional",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{profissionalEmail}}\",\n  \"password\": \"{{profissionalSenha}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200', () => pm.expect([200]).to.include(pm.response.code));",
+                  "const body = pm.response.json();",
+                  "if (body.token) pm.collectionVariables.set('profissionalToken', body.token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login administrador",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Requer ADMIN_EMAIL e ADMIN_PASSWORD configurados na API e nesta collection.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminSenha}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200, 401', () => pm.expect([200, 401]).to.include(pm.response.code));",
+                  "const body = pm.response.json();",
+                  "if (body.token) pm.collectionVariables.set('adminToken', body.token);"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 - Catálogo e perfis",
+      "item": [
+        {
+          "name": "Obter catálogos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/catalogos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "catalogos"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200', () => pm.expect([200]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Perfil do paciente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "me"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{pacienteToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200', () => pm.expect([200]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Perfil do profissional",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "me"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{profissionalToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200', () => pm.expect([200]).to.include(pm.response.code));",
+                  "const body = pm.response.json();",
+                  "if (body.id) pm.collectionVariables.set('profissionalId', body.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Perfil do administrador",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "me"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200, 401', () => pm.expect([200, 401]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 - Administração de profissionais",
+      "item": [
+        {
+          "name": "Listar profissionais pendentes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/profissionais/pendentes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "profissionais",
+                "pendentes"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200, 401, 403', () => pm.expect([200, 401, 403]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Aprovar profissional principal",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/profissionais/{{profissionalId}}/aprovar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "profissionais",
+                "{{profissionalId}}",
+                "aprovar"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200, 401, 403, 409', () => pm.expect([200, 401, 403, 409]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Recusar outro profissional",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/profissionais/{{profissionalRecusaId}}/recusar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "profissionais",
+                "{{profissionalRecusaId}}",
+                "recusar"
+              ]
+            },
+            "description": "Preencha profissionalRecusaId com outro profissional EM_VERIFICACAO.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200, 400, 401, 403, 404, 409', () => pm.expect([200, 400, 401, 403, 404, 409]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04 - Oportunidades",
+      "item": [
+        {
+          "name": "Criar oportunidade ativa",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/oportunidades",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "oportunidades"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{profissionalToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Consulta cardiológica social - Postman\",\n  \"descricao\": \"Consulta cardiológica social criada pela collection para validar integralmente o fluxo do contrato v2.\",\n  \"tipoServico\": \"CONSULTA\",\n  \"especialidade\": \"cardiologia\",\n  \"modalidade\": \"PRESENCIAL\",\n  \"modalidadeAcesso\": \"GRATUITO\",\n  \"preco\": null,\n  \"publicoAlvo\": [\n    \"ADULTOS\",\n    \"IDOSOS\"\n  ],\n  \"publicoAlvoObservacao\": \"Pessoas adultas e idosas.\",\n  \"vagasTotais\": 5,\n  \"cep\": \"01001-000\",\n  \"endereco\": \"Praça da Sé, 1\",\n  \"cidade\": \"São Paulo\",\n  \"uf\": \"SP\",\n  \"inscricoesDe\": \"{{inscricoesDe}}\",\n  \"inscricoesAte\": \"{{inscricoesAte}}\",\n  \"criteriosElegibilidade\": null,\n  \"semRestricoes\": true,\n  \"formaContato\": \"PLATAFORMA\",\n  \"prazoRespostaDias\": 15,\n  \"status\": \"ATIVA\",\n  \"triagem\": {\n    \"modo\": \"PADRAO\",\n    \"perguntas\": [],\n    \"documentosExigidos\": [\n      {\n        \"id\": \"rg\",\n        \"rotulo\": \"RG\"\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 201', () => pm.expect([201]).to.include(pm.response.code));",
+                  "const body = pm.response.json();",
+                  "if (body.id) pm.collectionVariables.set('oportunidadeId', body.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Criar oportunidade para cancelamento",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/oportunidades",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "oportunidades"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{profissionalToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Consulta para cancelamento - Postman\",\n  \"descricao\": \"Consulta cardiológica social criada pela collection para validar integralmente o fluxo do contrato v2.\",\n  \"tipoServico\": \"CONSULTA\",\n  \"especialidade\": \"clinica-geral\",\n  \"modalidade\": \"PRESENCIAL\",\n  \"modalidadeAcesso\": \"GRATUITO\",\n  \"preco\": null,\n  \"publicoAlvo\": [\n    \"ADULTOS\",\n    \"IDOSOS\"\n  ],\n  \"publicoAlvoObservacao\": \"Pessoas adultas e idosas.\",\n  \"vagasTotais\": 5,\n  \"cep\": \"01001-000\",\n  \"endereco\": \"Praça da Sé, 1\",\n  \"cidade\": \"São Paulo\",\n  \"uf\": \"SP\",\n  \"inscricoesDe\": \"{{inscricoesDe}}\",\n  \"inscricoesAte\": \"{{inscricoesAte}}\",\n  \"criteriosElegibilidade\": null,\n  \"semRestricoes\": true,\n  \"formaContato\": \"PLATAFORMA\",\n  \"prazoRespostaDias\": 15,\n  \"status\": \"ATIVA\",\n  \"triagem\": {\n    \"modo\": \"PADRAO\",\n    \"perguntas\": [],\n    \"documentosExigidos\": [\n      {\n        \"id\": \"rg\",\n        \"rotulo\": \"RG\"\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 201', () => pm.expect([201]).to.include(pm.response.code));",
+                  "const body = pm.response.json();",
+                  "if (body.id) pm.collectionVariables.set('oportunidadeCancelamentoId', body.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Criar rascunho",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/oportunidades",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "oportunidades"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{profissionalToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Rascunho removível - Postman\",\n  \"descricao\": null,\n  \"tipoServico\": null,\n  \"especialidade\": null,\n  \"modalidade\": null,\n  \"modalidadeAcesso\": null,\n  \"preco\": null,\n  \"publicoAlvo\": [],\n  \"publicoAlvoObservacao\": null,\n  \"vagasTotais\": null,\n  \"cep\": null,\n  \"endereco\": null,\n  \"cidade\": null,\n  \"uf\": null,\n  \"inscricoesDe\": null,\n  \"inscricoesAte\": null,\n  \"criteriosElegibilidade\": null,\n  \"semRestricoes\": false,\n  \"formaContato\": null,\n  \"prazoRespostaDias\": 15,\n  \"status\": \"RASCUNHO\",\n  \"triagem\": {\n    \"modo\": \"PADRAO\",\n    \"perguntas\": [],\n    \"documentosExigidos\": []\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 201', () => pm.expect([201]).to.include(pm.response.code));",
+                  "const body = pm.response.json();",
+                  "if (body.id) pm.collectionVariables.set('rascunhoId', body.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar oportunidades públicas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/oportunidades?q=Postman&tipoServico=CONSULTA&modalidade=PRESENCIAL&modalidadeAcesso=GRATUITO&publicoAlvo=ADULTOS&page=0&size=6",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "oportunidades"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "Postman"
+                },
+                {
+                  "key": "tipoServico",
+                  "value": "CONSULTA"
+                },
+                {
+                  "key": "modalidade",
+                  "value": "PRESENCIAL"
+                },
+                {
+                  "key": "modalidadeAcesso",
+                  "value": "GRATUITO"
+                },
+                {
+                  "key": "publicoAlvo",
+                  "value": "ADULTOS"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "6"
+                }
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200', () => pm.expect([200]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Detalhar oportunidade pública",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/oportunidades/{{oportunidadeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "oportunidades",
+                "{{oportunidadeId}}"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200', () => pm.expect([200]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar minhas oportunidades",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/profissional-saude/oportunidades",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "profissional-saude",
+                "oportunidades"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{profissionalToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200', () => pm.expect([200]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Atualizar oportunidade",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/oportunidades/{{oportunidadeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "oportunidades",
+                "{{oportunidadeId}}"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{profissionalToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Consulta cardiológica social atualizada - Postman\",\n  \"descricao\": \"Consulta cardiológica social criada pela collection para validar integralmente o fluxo do contrato v2.\",\n  \"tipoServico\": \"CONSULTA\",\n  \"especialidade\": \"cardiologia\",\n  \"modalidade\": \"PRESENCIAL\",\n  \"modalidadeAcesso\": \"GRATUITO\",\n  \"preco\": null,\n  \"publicoAlvo\": [\n    \"ADULTOS\",\n    \"IDOSOS\"\n  ],\n  \"publicoAlvoObservacao\": \"Pessoas adultas e idosas.\",\n  \"vagasTotais\": 5,\n  \"cep\": \"01001-000\",\n  \"endereco\": \"Praça da Sé, 1\",\n  \"cidade\": \"São Paulo\",\n  \"uf\": \"SP\",\n  \"inscricoesDe\": \"{{inscricoesDe}}\",\n  \"inscricoesAte\": \"{{inscricoesAte}}\",\n  \"criteriosElegibilidade\": null,\n  \"semRestricoes\": true,\n  \"formaContato\": \"PLATAFORMA\",\n  \"prazoRespostaDias\": 15,\n  \"status\": \"ATIVA\",\n  \"triagem\": {\n    \"modo\": \"PADRAO\",\n    \"perguntas\": [],\n    \"documentosExigidos\": [\n      {\n        \"id\": \"rg\",\n        \"rotulo\": \"RG\"\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200', () => pm.expect([200]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "05 - Inscrições do paciente",
+      "item": [
+        {
+          "name": "Criar inscrição principal",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/paciente/inscricoes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "paciente",
+                "inscricoes"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{pacienteToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oportunidadeId\": \"{{oportunidadeId}}\",\n  \"respostasTriagem\": [\n    {\n      \"perguntaId\": \"motivo\",\n      \"pergunta\": \"Qual o motivo principal?\",\n      \"resposta\": \"Avaliação preventiva cardiológica anual.\"\n    },\n    {\n      \"perguntaId\": \"tempo\",\n      \"pergunta\": \"Há quanto tempo?\",\n      \"resposta\": \"Mais de 6 meses\"\n    },\n    {\n      \"perguntaId\": \"diagnostico\",\n      \"pergunta\": \"Já tem diagnóstico?\",\n      \"resposta\": \"Não\"\n    },\n    {\n      \"perguntaId\": \"medicacao\",\n      \"pergunta\": \"Usa medicação contínua?\",\n      \"resposta\": \"Não\"\n    },\n    {\n      \"perguntaId\": \"urgencia\",\n      \"pergunta\": \"Urgência percebida\",\n      \"resposta\": \"Baixa\"\n    }\n  ],\n  \"documentos\": [\n    {\n      \"documentoId\": \"rg\",\n      \"nomeArquivo\": \"RG-postman.pdf\",\n      \"tamanhoBytes\": 120000\n    }\n  ],\n  \"consentimentoDadosSaudeEm\": \"{{consentimentoDadosSaudeEm}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 201', () => pm.expect([201]).to.include(pm.response.code));",
+                  "const body = pm.response.json();",
+                  "if (body.id) pm.collectionVariables.set('inscricaoId', body.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar minhas inscrições",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/paciente/inscricoes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "paciente",
+                "inscricoes"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{pacienteToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200', () => pm.expect([200]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Detalhar inscrição",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/paciente/inscricoes/{{inscricaoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "paciente",
+                "inscricoes",
+                "{{inscricaoId}}"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{pacienteToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200', () => pm.expect([200]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Criar inscrição a cancelar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/paciente/inscricoes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "paciente",
+                "inscricoes"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{pacienteToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oportunidadeId\": \"{{oportunidadeCancelamentoId}}\",\n  \"respostasTriagem\": [\n    {\n      \"perguntaId\": \"motivo\",\n      \"pergunta\": \"Qual o motivo principal?\",\n      \"resposta\": \"Avaliação preventiva cardiológica anual.\"\n    },\n    {\n      \"perguntaId\": \"tempo\",\n      \"pergunta\": \"Há quanto tempo?\",\n      \"resposta\": \"Mais de 6 meses\"\n    },\n    {\n      \"perguntaId\": \"diagnostico\",\n      \"pergunta\": \"Já tem diagnóstico?\",\n      \"resposta\": \"Não\"\n    },\n    {\n      \"perguntaId\": \"medicacao\",\n      \"pergunta\": \"Usa medicação contínua?\",\n      \"resposta\": \"Não\"\n    },\n    {\n      \"perguntaId\": \"urgencia\",\n      \"pergunta\": \"Urgência percebida\",\n      \"resposta\": \"Baixa\"\n    }\n  ],\n  \"documentos\": [\n    {\n      \"documentoId\": \"rg\",\n      \"nomeArquivo\": \"RG-postman.pdf\",\n      \"tamanhoBytes\": 120000\n    }\n  ],\n  \"consentimentoDadosSaudeEm\": \"{{consentimentoDadosSaudeEm}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 201', () => pm.expect([201]).to.include(pm.response.code));",
+                  "const body = pm.response.json();",
+                  "if (body.id) pm.collectionVariables.set('inscricaoCancelamentoId', body.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cancelar inscrição",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/paciente/inscricoes/{{inscricaoCancelamentoId}}/cancelar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "paciente",
+                "inscricoes",
+                "{{inscricaoCancelamentoId}}",
+                "cancelar"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{pacienteToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 204', () => pm.expect([204]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "06 - Análise pelo profissional",
+      "item": [
+        {
+          "name": "Listar inscrições recebidas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/profissional-saude/inscricoes?status=EM_ANALISE",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "profissional-saude",
+                "inscricoes"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "EM_ANALISE"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{profissionalToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200', () => pm.expect([200]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Detalhar inscrição recebida",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/profissional-saude/inscricoes/{{inscricaoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "profissional-saude",
+                "inscricoes",
+                "{{inscricaoId}}"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{profissionalToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200', () => pm.expect([200]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Pedir informação",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/profissional-saude/inscricoes/{{inscricaoId}}/pedido-informacao",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "profissional-saude",
+                "inscricoes",
+                "{{inscricaoId}}",
+                "pedido-informacao"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{profissionalToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"texto\": \"Envie uma observação adicional sobre o histórico clínico.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200', () => pm.expect([200]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Paciente responde ao pedido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/paciente/inscricoes/{{inscricaoId}}/resposta",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "paciente",
+                "inscricoes",
+                "{{inscricaoId}}",
+                "resposta"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{pacienteToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"texto\": \"Não há outras condições clínicas relevantes.\",\n  \"anexo\": {\n    \"nomeArquivo\": \"observacao.pdf\",\n    \"tamanhoBytes\": 2048\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200', () => pm.expect([200]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Aprovar inscrição",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/profissional-saude/inscricoes/{{inscricaoId}}/decisao",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "profissional-saude",
+                "inscricoes",
+                "{{inscricaoId}}",
+                "decisao"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{profissionalToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"APROVADA\",\n  \"motivo\": null,\n  \"combinado\": {\n    \"quando\": \"A combinar\",\n    \"onde\": \"Clínica Postman\",\n    \"levar\": \"Documento de identificação\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200', () => pm.expect([200]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "07 - Mensagens e documentos da inscrição",
+      "item": [
+        {
+          "name": "Profissional envia mensagem",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/profissional-saude/inscricoes/{{inscricaoId}}/mensagens",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "profissional-saude",
+                "inscricoes",
+                "{{inscricaoId}}",
+                "mensagens"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{profissionalToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"texto\": \"Sua inscrição foi aprovada. Vamos combinar o horário.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 201', () => pm.expect([201]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Paciente lista mensagens",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/paciente/inscricoes/{{inscricaoId}}/mensagens",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "paciente",
+                "inscricoes",
+                "{{inscricaoId}}",
+                "mensagens"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{pacienteToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200', () => pm.expect([200]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Paciente envia mensagem",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/paciente/inscricoes/{{inscricaoId}}/mensagens",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "paciente",
+                "inscricoes",
+                "{{inscricaoId}}",
+                "mensagens"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{pacienteToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"texto\": \"Obrigado. Tenho disponibilidade pela manhã.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 201', () => pm.expect([201]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Apagar documentos da inscrição",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/paciente/inscricoes/{{inscricaoId}}/documentos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "paciente",
+                "inscricoes",
+                "{{inscricaoId}}",
+                "documentos"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{pacienteToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 204', () => pm.expect([204]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "08 - Encerramento e limpeza de oportunidades",
+      "item": [
+        {
+          "name": "Encerrar oportunidade ativa",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/oportunidades/{{oportunidadeId}}/encerrar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "oportunidades",
+                "{{oportunidadeId}}",
+                "encerrar"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{profissionalToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 204', () => pm.expect([204]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Excluir rascunho",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/oportunidades/{{rascunhoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "oportunidades",
+                "{{rascunhoId}}"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{profissionalToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 204', () => pm.expect([204]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "09 - Conta e LGPD",
+      "item": [
+        {
+          "name": "Exportar meus dados",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/me/data-export",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "me",
+                "data-export"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{pacienteToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 200', () => pm.expect([200]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Remover todos os documentos do paciente",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/me/documents",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "me",
+                "documents"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{pacienteToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 204', () => pm.expect([204]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Anonimizar minha conta",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "me"
+              ]
+            },
+            "description": "Executar por último: anonimiza a conta e invalida o fluxo subsequente.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{pacienteToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"password\": \"{{pacienteSenha}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado: 204, 401', () => pm.expect([204, 401]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

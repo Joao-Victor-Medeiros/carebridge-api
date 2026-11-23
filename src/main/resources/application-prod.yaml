@@ -1,6 +1,7 @@
 server:
   address: 0.0.0.0
   port: ${PORT:8080}
+  forward-headers-strategy: native
 
 spring:
   servlet:
@@ -22,7 +23,14 @@ api:
     token:
       secret: ${JWT_SECRET}
 
+app:
+  brevo:
+    enabled: ${BREVO_ENABLED:true}
+
 management:
+  health:
+    mail:
+      enabled: ${MANAGEMENT_HEALTH_MAIL_ENABLED:false}
   endpoints:
     web:
       exposure:

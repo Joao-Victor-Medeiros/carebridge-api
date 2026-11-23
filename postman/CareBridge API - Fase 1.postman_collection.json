@@ -1,1334 +1,1499 @@
 {
-  "info": {
-    "_postman_id": "f2ac4788-5b29-4cff-b80c-8c125e62d1f1",
-    "name": "CareBridge API - Fase 1",
-    "description": "Collection para validar cadastro, login JWT, perfil autenticado, limite de tentativas, autorização, erros padronizados e CORS. Execute as pastas na ordem apresentada. Os cadastros e o bloqueio de login alteram estado.",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "variable": [
-    {
-      "key": "baseUrl",
-      "value": "http://localhost:8080",
-      "type": "string"
-    },
-    {
-      "key": "pacienteEmail",
-      "value": "paciente.teste@example.com",
-      "type": "string"
-    },
-    {
-      "key": "pacienteSenha",
-      "value": "SenhaSegura123!",
-      "type": "string"
-    },
-    {
-      "key": "profissionalEmail",
-      "value": "profissional.teste@example.com",
-      "type": "string"
-    },
-    {
-      "key": "profissionalSenha",
-      "value": "SenhaSegura123!",
-      "type": "string"
-    },
-    {
-      "key": "pacienteToken",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "profissionalToken",
-      "value": "",
-      "type": "string"
-    }
-  ],
-  "item": [
-    {
-      "name": "01 - Cadastro",
-      "item": [
-        {
-          "name": "01 - Cadastrar paciente",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"usuarioDto\": {\n    \"email\": \"{{pacienteEmail}}\",\n    \"senha\": \"{{pacienteSenha}}\",\n    \"tipoPerfil\": \"PACIENTE\",\n    \"acceptedTerms\": true\n  },\n  \"nome\": \"Paciente Teste\",\n  \"dataNascimento\": \"1990-05-21\",\n  \"telefone\": \"+55 (11) 99999-9999\",\n  \"endereco\": \"Rua das Flores, 123, São Paulo - SP\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/paciente/cadastro",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "paciente",
-                "cadastro"
-              ]
-            },
-            "auth": {
-              "type": "noauth"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
-                  "pm.test(\"Perfil PACIENTE\", function () { const body = pm.response.json(); pm.expect(body.email).to.eql(\"paciente.teste@example.com\"); pm.expect(body.profile).to.eql(\"PACIENTE\"); pm.expect(body.codeLength).to.eql(6); });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "02 - Blindagem do perfil de paciente",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"usuarioDto\": {\n    \"email\": \"blindagem.paciente@example.com\",\n    \"senha\": \"SenhaSegura123!\",\n    \"tipoPerfil\": \"PROFISSIONAL_SAUDE\",\n    \"acceptedTerms\": true\n  },\n  \"nome\": \"Teste Blindagem\",\n  \"dataNascimento\": \"1995-10-15\",\n  \"telefone\": \"61999990000\",\n  \"endereco\": null\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/paciente/cadastro",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "paciente",
-                "cadastro"
-              ]
-            },
-            "auth": {
-              "type": "noauth"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
-                  "pm.test(\"Backend força PACIENTE\", function () { pm.expect(pm.response.json().profile).to.eql(\"PACIENTE\"); });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "03 - Paciente sem aceite dos termos",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"usuarioDto\": {\n    \"email\": \"sem.termos@example.com\",\n    \"senha\": \"SenhaSegura123!\",\n    \"tipoPerfil\": \"PACIENTE\",\n    \"acceptedTerms\": false\n  },\n  \"nome\": \"Paciente Sem Termos\",\n  \"dataNascimento\": \"1990-05-21\",\n  \"telefone\": null,\n  \"endereco\": null\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/paciente/cadastro",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "paciente",
-                "cadastro"
-              ]
-            },
-            "auth": {
-              "type": "noauth"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });",
-                  "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(400); pm.expect(body.message).to.eql(\"É necessário aceitar os termos de uso e privacidade.\"); pm.expect(body.error).to.eql(\"Bad Request\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "04 - Paciente com e-mail duplicado",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"usuarioDto\": {\n    \"email\": \"PACIENTE.TESTE@EXAMPLE.COM\",\n    \"senha\": \"OutraSenha123!\",\n    \"tipoPerfil\": \"PACIENTE\",\n    \"acceptedTerms\": true\n  },\n  \"nome\": \"Paciente Duplicado\",\n  \"dataNascimento\": \"1992-06-10\",\n  \"telefone\": \"11988887777\",\n  \"endereco\": null\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/paciente/cadastro",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "paciente",
-                "cadastro"
-              ]
-            },
-            "auth": {
-              "type": "noauth"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status 409\", function () { pm.response.to.have.status(409); });",
-                  "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(409); pm.expect(body.message).to.eql(\"Já existe um usuário cadastrado com este e-mail.\"); pm.expect(body.error).to.eql(\"Conflict\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "05 - Cadastrar profissional",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "dados",
-                  "value": "{\n  \"usuarioDto\": {\n    \"email\": \"{{profissionalEmail}}\",\n    \"senha\": \"{{profissionalSenha}}\",\n    \"tipoPerfil\": \"PACIENTE\",\n    \"acceptedTerms\": true\n  },\n  \"nome\": \"Dra. Ana Souza\",\n  \"conselho\": \"crm\",\n  \"uf\": \"sp\",\n  \"numeroRegistro\": \"123456\",\n  \"especialidade\": \"Clínica geral\",\n  \"ondeAtende\": \"Clínica Saúde\",\n  \"biografiaOuDescricao\": \"Médica clínica geral com experiência em atenção primária.\"\n}",
-                  "type": "text",
-                  "contentType": "application/json"
-                }
-              ]
-            },
-            "url": {
-              "raw": "{{baseUrl}}/profissional-saude/cadastro",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "profissional-saude",
-                "cadastro"
-              ]
-            },
-            "auth": {
-              "type": "noauth"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
-                  "pm.test(\"Perfil PROFISSIONAL_SAUDE\", function () { const body = pm.response.json(); pm.expect(body.email).to.eql(\"profissional.teste@example.com\"); pm.expect(body.profile).to.eql(\"PROFISSIONAL_SAUDE\"); pm.expect(body.codeLength).to.eql(6); });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "06 - Profissional com e-mail duplicado",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "dados",
-                  "value": "{\n  \"usuarioDto\": {\n    \"email\": \"PACIENTE.TESTE@EXAMPLE.COM\",\n    \"senha\": \"SenhaSegura123!\",\n    \"tipoPerfil\": \"PROFISSIONAL_SAUDE\",\n    \"acceptedTerms\": true\n  },\n  \"nome\": \"Dr. Profissional Duplicado\",\n  \"conselho\": \"CRM\",\n  \"uf\": \"DF\",\n  \"numeroRegistro\": \"987654\",\n  \"especialidade\": \"Cardiologia\",\n  \"ondeAtende\": \"Hospital Central\",\n  \"biografiaOuDescricao\": \"Profissional usado no teste de e-mail duplicado.\"\n}",
-                  "type": "text",
-                  "contentType": "application/json"
-                }
-              ]
-            },
-            "url": {
-              "raw": "{{baseUrl}}/profissional-saude/cadastro",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "profissional-saude",
-                "cadastro"
-              ]
-            },
-            "auth": {
-              "type": "noauth"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status 409\", function () { pm.response.to.have.status(409); });",
-                  "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(409); pm.expect(body.message).to.eql(\"Já existe um usuário cadastrado com este e-mail.\"); pm.expect(body.error).to.eql(\"Conflict\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "07 - Profissional com documento inválido",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "dados",
-                  "value": "{\n  \"usuarioDto\": {\n    \"email\": \"documento.invalido@example.com\",\n    \"senha\": \"SenhaSegura123!\",\n    \"tipoPerfil\": \"PROFISSIONAL_SAUDE\",\n    \"acceptedTerms\": true\n  },\n  \"nome\": \"Dr. Documento Inválido\",\n  \"conselho\": \"CRM\",\n  \"uf\": \"SP\",\n  \"numeroRegistro\": \"654321\",\n  \"especialidade\": \"Cardiologia\",\n  \"ondeAtende\": \"Hospital Central\",\n  \"biografiaOuDescricao\": \"Teste de formato de documento.\"\n}",
-                  "type": "text",
-                  "contentType": "application/json"
-                },
-                {
-                  "key": "documentos",
-                  "type": "file",
-                  "src": "fixtures/documento-invalido.txt",
-                  "contentType": "text/plain"
-                }
-              ]
-            },
-            "url": {
-              "raw": "{{baseUrl}}/profissional-saude/cadastro",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "profissional-saude",
-                "cadastro"
-              ]
-            },
-            "auth": {
-              "type": "noauth"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });",
-                  "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(400); pm.expect(body.message).to.eql(\"Envie documentos nos formatos PDF, JPG ou PNG.\"); pm.expect(body.error).to.eql(\"Bad Request\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "02 - Autenticação",
-      "item": [
-        {
-          "name": "01 - Login de paciente",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"email\": \"{{pacienteEmail}}\",\n  \"password\": \"{{pacienteSenha}}\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/user/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "login"
-              ]
-            },
-            "auth": {
-              "type": "noauth"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "if (pm.response.code === 200) { pm.collectionVariables.set(\"pacienteToken\", pm.response.json().token); }",
-                  "pm.test(\"Login de paciente\", function () { const body = pm.response.json(); pm.response.to.have.status(200); pm.expect(body.token).to.be.a(\"string\").and.not.empty; pm.expect(body.expiresIn).to.eql(7200); pm.expect(body.user.tipoPerfil).to.eql(\"PACIENTE\"); pm.expect(body.user.verification).to.eql(null); });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "02 - Login de profissional",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"email\": \"{{profissionalEmail}}\",\n  \"password\": \"{{profissionalSenha}}\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/user/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "login"
-              ]
-            },
-            "auth": {
-              "type": "noauth"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "if (pm.response.code === 200) { pm.collectionVariables.set(\"profissionalToken\", pm.response.json().token); }",
-                  "pm.test(\"Login de profissional\", function () { const body = pm.response.json(); pm.response.to.have.status(200); pm.expect(body.token).to.be.a(\"string\").and.not.empty; pm.expect(body.expiresIn).to.eql(7200); pm.expect(body.user.tipoPerfil).to.eql(\"PROFISSIONAL_SAUDE\"); pm.expect(body.user.verification).to.eql(null); });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "03 - Login com credenciais inválidas",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"email\": \"{{pacienteEmail}}\",\n  \"password\": \"SenhaIncorreta\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/user/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "login"
-              ]
-            },
-            "auth": {
-              "type": "noauth"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status 401\", function () { pm.response.to.have.status(401); });",
-                  "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(401); pm.expect(body.message).to.eql(\"Sessão expirada ou credenciais inválidas.\"); pm.expect(body.error).to.eql(\"Unauthorized\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "03 - Perfil autenticado",
-      "item": [
-        {
-          "name": "01 - Perfil do paciente",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/user/me",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "me"
-              ]
-            },
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{pacienteToken}}",
-                  "type": "string"
-                }
-              ]
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Perfil do paciente\", function () { const body = pm.response.json(); pm.response.to.have.status(200); pm.expect(body.id).to.be.a(\"string\"); pm.expect(body.email).to.eql(\"paciente.teste@example.com\"); pm.expect(body.tipoPerfil).to.eql(\"PACIENTE\"); pm.expect(body.telefone).to.eql(\"5511999999999\"); pm.expect(body.verification).to.eql(null); });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "02 - Perfil do profissional",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/user/me",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "me"
-              ]
-            },
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{profissionalToken}}",
-                  "type": "string"
-                }
-              ]
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Perfil do profissional\", function () { const body = pm.response.json(); pm.response.to.have.status(200); pm.expect(body.id).to.be.a(\"string\"); pm.expect(body.email).to.eql(\"profissional.teste@example.com\"); pm.expect(body.tipoPerfil).to.eql(\"PROFISSIONAL_SAUDE\"); pm.expect(body.dataNascimento).to.eql(null); pm.expect(body.telefone).to.eql(null); pm.expect(body.verification).to.eql(null); });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "03 - Perfil sem token",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/user/me",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "me"
-              ]
-            },
-            "auth": {
-              "type": "noauth"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status 401\", function () { pm.response.to.have.status(401); });",
-                  "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(401); pm.expect(body.message).to.eql(\"Sessão expirada ou credenciais inválidas.\"); pm.expect(body.error).to.eql(\"Unauthorized\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "04 - Perfil com token inválido",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/user/me",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "me"
-              ]
-            },
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "token-invalido",
-                  "type": "string"
-                }
-              ]
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status 401\", function () { pm.response.to.have.status(401); });",
-                  "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(401); pm.expect(body.message).to.eql(\"Sessão expirada ou credenciais inválidas.\"); pm.expect(body.error).to.eql(\"Unauthorized\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "04 - Limite de login",
-      "description": "Execute as seis requisições em ordem, a partir do mesmo IP. O bloqueio dura 15 minutos e é mantido em memória.",
-      "item": [
-        {
-          "name": "01 - Primeira falha",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"email\": \"limite.login@example.com\",\n  \"password\": \"SenhaIncorreta\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/user/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "login"
-              ]
-            },
-            "auth": {
-              "type": "noauth"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status 401\", function () { pm.response.to.have.status(401); });",
-                  "pm.test(\"Credenciais inválidas\", function () { pm.expect(pm.response.json().message).to.eql(\"Sessão expirada ou credenciais inválidas.\"); });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "02 - Segunda falha",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"email\": \"limite.login@example.com\",\n  \"password\": \"SenhaIncorreta\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/user/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "login"
-              ]
-            },
-            "auth": {
-              "type": "noauth"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status 401\", function () { pm.response.to.have.status(401); });",
-                  "pm.test(\"Credenciais inválidas\", function () { pm.expect(pm.response.json().message).to.eql(\"Sessão expirada ou credenciais inválidas.\"); });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "03 - Terceira falha",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"email\": \"limite.login@example.com\",\n  \"password\": \"SenhaIncorreta\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/user/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "login"
-              ]
-            },
-            "auth": {
-              "type": "noauth"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status 401\", function () { pm.response.to.have.status(401); });",
-                  "pm.test(\"Credenciais inválidas\", function () { pm.expect(pm.response.json().message).to.eql(\"Sessão expirada ou credenciais inválidas.\"); });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "04 - Quarta falha",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"email\": \"limite.login@example.com\",\n  \"password\": \"SenhaIncorreta\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/user/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "login"
-              ]
-            },
-            "auth": {
-              "type": "noauth"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status 401\", function () { pm.response.to.have.status(401); });",
-                  "pm.test(\"Credenciais inválidas\", function () { pm.expect(pm.response.json().message).to.eql(\"Sessão expirada ou credenciais inválidas.\"); });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "05 - Quinta falha",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"email\": \"limite.login@example.com\",\n  \"password\": \"SenhaIncorreta\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/user/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "login"
-              ]
-            },
-            "auth": {
-              "type": "noauth"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status 401\", function () { pm.response.to.have.status(401); });",
-                  "pm.test(\"Credenciais inválidas\", function () { pm.expect(pm.response.json().message).to.eql(\"Sessão expirada ou credenciais inválidas.\"); });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "06 - Login bloqueado",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"email\": \"limite.login@example.com\",\n  \"password\": \"SenhaIncorreta\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/user/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "login"
-              ]
-            },
-            "auth": {
-              "type": "noauth"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status 429\", function () { pm.response.to.have.status(429); });",
-                  "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(429); pm.expect(body.message).to.eql(\"Muitas tentativas de login. Tente novamente mais tarde.\"); pm.expect(body.error).to.eql(\"Too Many Requests\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "05 - Segurança",
-      "item": [
-        {
-          "name": "01 - Rota autenticada sem token",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"titulo\": \"Oportunidade usada no teste de autorização\",\n  \"descricao\": \"Esta requisição deve ser bloqueada antes da criação.\",\n  \"tipoServico\": \"consulta\",\n  \"publicoAlvo\": \"adultos\",\n  \"modalidade\": \"online\",\n  \"condicoesAcesso\": \"Agendamento prévio.\",\n  \"statusAtiva\": true\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/oportunidades",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "oportunidades"
-              ]
-            },
-            "auth": {
-              "type": "noauth"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status 401\", function () { pm.response.to.have.status(401); });",
-                  "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(401); pm.expect(body.message).to.eql(\"Sessão expirada ou credenciais inválidas.\"); pm.expect(body.error).to.eql(\"Unauthorized\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "02 - Rota profissional com token de paciente",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"titulo\": \"Oportunidade usada no teste de autorização\",\n  \"descricao\": \"Esta requisição deve ser bloqueada antes da criação.\",\n  \"tipoServico\": \"consulta\",\n  \"publicoAlvo\": \"adultos\",\n  \"modalidade\": \"online\",\n  \"condicoesAcesso\": \"Agendamento prévio.\",\n  \"statusAtiva\": true\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/oportunidades",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "oportunidades"
-              ]
-            },
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{pacienteToken}}",
-                  "type": "string"
-                }
-              ]
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status 403\", function () { pm.response.to.have.status(403); });",
-                  "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(403); pm.expect(body.message).to.eql(\"Você não tem permissão para acessar este recurso.\"); pm.expect(body.error).to.eql(\"Forbidden\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "03 - JSON malformado",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"email\": \"paciente.teste@example.com\",\n  \"password\": \"SenhaSegura123!\"",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/user/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "login"
-              ]
-            },
-            "auth": {
-              "type": "noauth"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });",
-                  "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(400); pm.expect(body.message).to.eql(\"O corpo da requisição está ausente ou possui formato inválido.\"); pm.expect(body.error).to.eql(\"Bad Request\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "06 - CORS",
-      "item": [
-        {
-          "name": "01 - Preflight GitHub Pages",
-          "request": {
-            "method": "OPTIONS",
-            "auth": {
-              "type": "noauth"
-            },
-            "header": [
-              {
-                "key": "Origin",
-                "value": "https://luisfontinelles.github.io"
-              },
-              {
-                "key": "Access-Control-Request-Method",
-                "value": "POST"
-              },
-              {
-                "key": "Access-Control-Request-Headers",
-                "value": "content-type"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/user/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "login"
-              ]
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Preflight aceito\", function () { pm.expect([200, 204]).to.include(pm.response.code); });",
-                  "pm.test(\"Origem liberada\", function () { pm.expect(pm.response.headers.get(\"Access-Control-Allow-Origin\")).to.eql(\"https://luisfontinelles.github.io\"); pm.expect(pm.response.headers.get(\"Access-Control-Allow-Methods\")).to.include(\"POST\"); });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "02 - Preflight localhost",
-          "request": {
-            "method": "OPTIONS",
-            "auth": {
-              "type": "noauth"
-            },
-            "header": [
-              {
-                "key": "Origin",
-                "value": "http://localhost:5173"
-              },
-              {
-                "key": "Access-Control-Request-Method",
-                "value": "POST"
-              },
-              {
-                "key": "Access-Control-Request-Headers",
-                "value": "content-type,authorization"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/user/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "login"
-              ]
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Preflight aceito\", function () { pm.expect([200, 204]).to.include(pm.response.code); });",
-                  "pm.test(\"Localhost liberado\", function () { pm.expect(pm.response.headers.get(\"Access-Control-Allow-Origin\")).to.eql(\"http://localhost:5173\"); pm.expect(pm.response.headers.get(\"Access-Control-Allow-Methods\")).to.include(\"POST\"); });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "03 - Preflight de origem não permitida",
-          "request": {
-            "method": "OPTIONS",
-            "auth": {
-              "type": "noauth"
-            },
-            "header": [
-              {
-                "key": "Origin",
-                "value": "https://origem-nao-permitida.example"
-              },
-              {
-                "key": "Access-Control-Request-Method",
-                "value": "POST"
-              },
-              {
-                "key": "Access-Control-Request-Headers",
-                "value": "content-type"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/user/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "login"
-              ]
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Origem não é liberada\", function () { pm.expect(pm.response.headers.get(\"Access-Control-Allow-Origin\")).to.eql(undefined); });"
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    "info":  {
+                 "_postman_id":  "f2ac4788-5b29-4cff-b80c-8c125e62d1f1",
+                 "name":  "CareBridge API - Autenticação e Fase 1",
+                 "description":  "Collection para validar cadastro polimórfico, login JWT, verificação de e-mail, recuperação de senha, perfil autenticado, limite de tentativas, autorização, erros padronizados e CORS. Execute as pastas na ordem apresentada. Os cadastros, códigos temporários e o bloqueio de login alteram estado.",
+                 "schema":  "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+             },
+    "variable":  [
+                     {
+                         "key":  "baseUrl",
+                         "value":  "http://localhost:8080",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "pacienteEmail",
+                         "value":  "paciente.teste@example.com",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "pacienteSenha",
+                         "value":  "SenhaSegura123!",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "profissionalEmail",
+                         "value":  "profissional.teste@example.com",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "profissionalSenha",
+                         "value":  "SenhaSegura123!",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "pacienteToken",
+                         "value":  "",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "profissionalToken",
+                         "value":  "",
+                         "type":  "string"
+                     },
+                     {
+                         "key":  "verificationCode",
+                         "type":  "string",
+                         "value":  "000000"
+                     },
+                     {
+                         "key":  "passwordResetCode",
+                         "type":  "string",
+                         "value":  "000000"
+                     },
+                     {
+                         "key":  "novaSenha",
+                         "type":  "string",
+                         "value":  "NovaSenhaSegura123!"
+                     }
+                 ],
+    "item":  [
+                 {
+                     "name":  "01 - Cadastro",
+                     "item":  [
+                                  {
+                                      "name":  "01 - Cadastrar paciente",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "formdata",
+                                                                   "formdata":  [
+                                                                                    {
+                                                                                        "key":  "dados",
+                                                                                        "value":  "{\r\n    \"tipoPerfil\":  \"PACIENTE\",\r\n    \"usuarioDto\":  {\r\n                       \"email\":  \"{{pacienteEmail}}\",\r\n                       \"senha\":  \"{{pacienteSenha}}\",\r\n                       \"tipoPerfil\":  \"PACIENTE\",\r\n                       \"acceptedTerms\":  true\r\n                   },\r\n    \"nome\":  \"Paciente Teste\",\r\n    \"dataNascimento\":  \"1990-05-21\",\r\n    \"telefone\":  \"+55 (11) 99999-9999\",\r\n    \"endereco\":  \"Rua das Flores, 123, São Paulo - SP\"\r\n}",
+                                                                                        "type":  "text",
+                                                                                        "contentType":  "application/json"
+                                                                                    }
+                                                                                ]
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/register",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "register"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                                                                                    "pm.test(\"Perfil PACIENTE\", function () { const body = pm.response.json(); pm.expect(body.email).to.eql(\"paciente.teste@example.com\"); pm.expect(body.profile).to.eql(\"PACIENTE\"); pm.expect(body.codeLength).to.eql(6); });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "02 - Blindagem do perfil de paciente",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "formdata",
+                                                                   "formdata":  [
+                                                                                    {
+                                                                                        "key":  "dados",
+                                                                                        "value":  "{\r\n    \"tipoPerfil\":  \"PACIENTE\",\r\n    \"usuarioDto\":  {\r\n                       \"email\":  \"blindagem.paciente@example.com\",\r\n                       \"senha\":  \"SenhaSegura123!\",\r\n                       \"tipoPerfil\":  \"PROFISSIONAL_SAUDE\",\r\n                       \"acceptedTerms\":  true\r\n                   },\r\n    \"nome\":  \"Teste Blindagem\",\r\n    \"dataNascimento\":  \"1995-10-15\",\r\n    \"telefone\":  \"61999990000\",\r\n    \"endereco\":  null\r\n}",
+                                                                                        "type":  "text",
+                                                                                        "contentType":  "application/json"
+                                                                                    }
+                                                                                ]
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/register",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "register"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                                                                                    "pm.test(\"Backend força PACIENTE\", function () { pm.expect(pm.response.json().profile).to.eql(\"PACIENTE\"); });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "03 - Paciente sem aceite dos termos",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "formdata",
+                                                                   "formdata":  [
+                                                                                    {
+                                                                                        "key":  "dados",
+                                                                                        "value":  "{\r\n    \"tipoPerfil\":  \"PACIENTE\",\r\n    \"usuarioDto\":  {\r\n                       \"email\":  \"sem.termos@example.com\",\r\n                       \"senha\":  \"SenhaSegura123!\",\r\n                       \"tipoPerfil\":  \"PACIENTE\",\r\n                       \"acceptedTerms\":  false\r\n                   },\r\n    \"nome\":  \"Paciente Sem Termos\",\r\n    \"dataNascimento\":  \"1990-05-21\",\r\n    \"telefone\":  null,\r\n    \"endereco\":  null\r\n}",
+                                                                                        "type":  "text",
+                                                                                        "contentType":  "application/json"
+                                                                                    }
+                                                                                ]
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/register",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "register"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });",
+                                                                                    "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(400); pm.expect(body.message).to.eql(\"É necessário aceitar os termos de uso e privacidade.\"); pm.expect(body.error).to.eql(\"Bad Request\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "04 - Paciente com e-mail duplicado",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "formdata",
+                                                                   "formdata":  [
+                                                                                    {
+                                                                                        "key":  "dados",
+                                                                                        "value":  "{\r\n    \"tipoPerfil\":  \"PACIENTE\",\r\n    \"usuarioDto\":  {\r\n                       \"email\":  \"PACIENTE.TESTE@EXAMPLE.COM\",\r\n                       \"senha\":  \"OutraSenha123!\",\r\n                       \"tipoPerfil\":  \"PACIENTE\",\r\n                       \"acceptedTerms\":  true\r\n                   },\r\n    \"nome\":  \"Paciente Duplicado\",\r\n    \"dataNascimento\":  \"1992-06-10\",\r\n    \"telefone\":  \"11988887777\",\r\n    \"endereco\":  null\r\n}",
+                                                                                        "type":  "text",
+                                                                                        "contentType":  "application/json"
+                                                                                    }
+                                                                                ]
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/register",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "register"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Status 409\", function () { pm.response.to.have.status(409); });",
+                                                                                    "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(409); pm.expect(body.message).to.eql(\"Já existe um usuário cadastrado com este e-mail.\"); pm.expect(body.error).to.eql(\"Conflict\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "05 - Cadastrar profissional",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "formdata",
+                                                                   "formdata":  [
+                                                                                    {
+                                                                                        "key":  "dados",
+                                                                                        "value":  "{\r\n    \"tipoPerfil\":  \"PROFISSIONAL_SAUDE\",\r\n    \"usuarioDto\":  {\r\n                       \"email\":  \"{{profissionalEmail}}\",\r\n                       \"senha\":  \"{{profissionalSenha}}\",\r\n                       \"tipoPerfil\":  \"PACIENTE\",\r\n                       \"acceptedTerms\":  true\r\n                   },\r\n    \"nome\":  \"Dra. Ana Souza\",\r\n    \"conselho\":  \"crm\",\r\n    \"uf\":  \"sp\",\r\n    \"numeroRegistro\":  \"123456\",\r\n    \"especialidade\":  \"Clínica geral\",\r\n    \"ondeAtende\":  \"Clínica Saúde\",\r\n    \"biografiaOuDescricao\":  \"Médica clínica geral com experiência em atenção primária.\"\r\n}",
+                                                                                        "type":  "text",
+                                                                                        "contentType":  "application/json"
+                                                                                    }
+                                                                                ]
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/register",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "register"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                                                                                    "pm.test(\"Perfil PROFISSIONAL_SAUDE\", function () { const body = pm.response.json(); pm.expect(body.email).to.eql(\"profissional.teste@example.com\"); pm.expect(body.profile).to.eql(\"PROFISSIONAL_SAUDE\"); pm.expect(body.codeLength).to.eql(6); });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "06 - Profissional com e-mail duplicado",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "formdata",
+                                                                   "formdata":  [
+                                                                                    {
+                                                                                        "key":  "dados",
+                                                                                        "value":  "{\r\n    \"tipoPerfil\":  \"PROFISSIONAL_SAUDE\",\r\n    \"usuarioDto\":  {\r\n                       \"email\":  \"PACIENTE.TESTE@EXAMPLE.COM\",\r\n                       \"senha\":  \"SenhaSegura123!\",\r\n                       \"tipoPerfil\":  \"PROFISSIONAL_SAUDE\",\r\n                       \"acceptedTerms\":  true\r\n                   },\r\n    \"nome\":  \"Dr. Profissional Duplicado\",\r\n    \"conselho\":  \"CRM\",\r\n    \"uf\":  \"DF\",\r\n    \"numeroRegistro\":  \"987654\",\r\n    \"especialidade\":  \"Cardiologia\",\r\n    \"ondeAtende\":  \"Hospital Central\",\r\n    \"biografiaOuDescricao\":  \"Profissional usado no teste de e-mail duplicado.\"\r\n}",
+                                                                                        "type":  "text",
+                                                                                        "contentType":  "application/json"
+                                                                                    }
+                                                                                ]
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/register",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "register"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Status 409\", function () { pm.response.to.have.status(409); });",
+                                                                                    "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(409); pm.expect(body.message).to.eql(\"Já existe um usuário cadastrado com este e-mail.\"); pm.expect(body.error).to.eql(\"Conflict\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "07 - Profissional com documento inválido",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "formdata",
+                                                                   "formdata":  [
+                                                                                    {
+                                                                                        "key":  "dados",
+                                                                                        "value":  "{\r\n    \"tipoPerfil\":  \"PROFISSIONAL_SAUDE\",\r\n    \"usuarioDto\":  {\r\n                       \"email\":  \"documento.invalido@example.com\",\r\n                       \"senha\":  \"SenhaSegura123!\",\r\n                       \"tipoPerfil\":  \"PROFISSIONAL_SAUDE\",\r\n                       \"acceptedTerms\":  true\r\n                   },\r\n    \"nome\":  \"Dr. Documento Inválido\",\r\n    \"conselho\":  \"CRM\",\r\n    \"uf\":  \"SP\",\r\n    \"numeroRegistro\":  \"654321\",\r\n    \"especialidade\":  \"Cardiologia\",\r\n    \"ondeAtende\":  \"Hospital Central\",\r\n    \"biografiaOuDescricao\":  \"Teste de formato de documento.\"\r\n}",
+                                                                                        "type":  "text",
+                                                                                        "contentType":  "application/json"
+                                                                                    },
+                                                                                    {
+                                                                                        "key":  "documentos",
+                                                                                        "type":  "file",
+                                                                                        "src":  "fixtures/documento-invalido.txt",
+                                                                                        "contentType":  "text/plain"
+                                                                                    }
+                                                                                ]
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/register",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "register"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });",
+                                                                                    "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(400); pm.expect(body.message).to.eql(\"Envie documentos nos formatos PDF, JPG ou PNG.\"); pm.expect(body.error).to.eql(\"Bad Request\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "02 - Autenticação",
+                     "item":  [
+                                  {
+                                      "name":  "01 - Login de paciente",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"{{pacienteEmail}}\",\n  \"password\": \"{{pacienteSenha}}\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/login",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "login"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "if (pm.response.code === 200) { pm.collectionVariables.set(\"pacienteToken\", pm.response.json().token); }",
+                                                                                    "pm.test(\"Login de paciente\", function () { const body = pm.response.json(); pm.response.to.have.status(200); pm.expect(body.token).to.be.a(\"string\").and.not.empty; pm.expect(body.expiresIn).to.eql(7200); pm.expect(body.user.tipoPerfil).to.eql(\"PACIENTE\"); pm.expect(body.user.verification).to.eql(null); });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "02 - Login de profissional",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"{{profissionalEmail}}\",\n  \"password\": \"{{profissionalSenha}}\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/login",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "login"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "if (pm.response.code === 200) { pm.collectionVariables.set(\"profissionalToken\", pm.response.json().token); }",
+                                                                                    "pm.test(\"Login de profissional\", function () { const body = pm.response.json(); pm.response.to.have.status(200); pm.expect(body.token).to.be.a(\"string\").and.not.empty; pm.expect(body.expiresIn).to.eql(7200); pm.expect(body.user.tipoPerfil).to.eql(\"PROFISSIONAL_SAUDE\"); pm.expect(body.user.verification).to.eql(null); });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "03 - Login com credenciais inválidas",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"{{pacienteEmail}}\",\n  \"password\": \"SenhaIncorreta\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/login",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "login"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Status 401\", function () { pm.response.to.have.status(401); });",
+                                                                                    "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(401); pm.expect(body.message).to.eql(\"Sessão expirada ou credenciais inválidas.\"); pm.expect(body.error).to.eql(\"Unauthorized\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "03 - Perfil autenticado",
+                     "item":  [
+                                  {
+                                      "name":  "01 - Perfil do paciente",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/user/me",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "user",
+                                                                               "me"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{pacienteToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Perfil do paciente\", function () { const body = pm.response.json(); pm.response.to.have.status(200); pm.expect(body.id).to.be.a(\"string\"); pm.expect(body.email).to.eql(\"paciente.teste@example.com\"); pm.expect(body.tipoPerfil).to.eql(\"PACIENTE\"); pm.expect(body.telefone).to.eql(\"5511999999999\"); pm.expect(body.verification).to.eql(null); });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "02 - Perfil do profissional",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/user/me",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "user",
+                                                                               "me"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{profissionalToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Perfil do profissional\", function () { const body = pm.response.json(); pm.response.to.have.status(200); pm.expect(body.id).to.be.a(\"string\"); pm.expect(body.email).to.eql(\"profissional.teste@example.com\"); pm.expect(body.tipoPerfil).to.eql(\"PROFISSIONAL_SAUDE\"); pm.expect(body.dataNascimento).to.eql(null); pm.expect(body.telefone).to.eql(null); pm.expect(body.verification).to.eql(null); });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "03 - Perfil sem token",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/user/me",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "user",
+                                                                               "me"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Status 401\", function () { pm.response.to.have.status(401); });",
+                                                                                    "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(401); pm.expect(body.message).to.eql(\"Sessão expirada ou credenciais inválidas.\"); pm.expect(body.error).to.eql(\"Unauthorized\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "04 - Perfil com token inválido",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/user/me",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "user",
+                                                                               "me"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "token-invalido",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Status 401\", function () { pm.response.to.have.status(401); });",
+                                                                                    "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(401); pm.expect(body.message).to.eql(\"Sessão expirada ou credenciais inválidas.\"); pm.expect(body.error).to.eql(\"Unauthorized\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "04 - Limite de login",
+                     "description":  "Execute as seis requisições em ordem, a partir do mesmo IP. O bloqueio dura 15 minutos e é mantido em memória.",
+                     "item":  [
+                                  {
+                                      "name":  "01 - Primeira falha",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"limite.login@example.com\",\n  \"password\": \"SenhaIncorreta\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/login",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "login"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Status 401\", function () { pm.response.to.have.status(401); });",
+                                                                                    "pm.test(\"Credenciais inválidas\", function () { pm.expect(pm.response.json().message).to.eql(\"Sessão expirada ou credenciais inválidas.\"); });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "02 - Segunda falha",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"limite.login@example.com\",\n  \"password\": \"SenhaIncorreta\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/login",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "login"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Status 401\", function () { pm.response.to.have.status(401); });",
+                                                                                    "pm.test(\"Credenciais inválidas\", function () { pm.expect(pm.response.json().message).to.eql(\"Sessão expirada ou credenciais inválidas.\"); });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "03 - Terceira falha",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"limite.login@example.com\",\n  \"password\": \"SenhaIncorreta\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/login",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "login"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Status 401\", function () { pm.response.to.have.status(401); });",
+                                                                                    "pm.test(\"Credenciais inválidas\", function () { pm.expect(pm.response.json().message).to.eql(\"Sessão expirada ou credenciais inválidas.\"); });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "04 - Quarta falha",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"limite.login@example.com\",\n  \"password\": \"SenhaIncorreta\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/login",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "login"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Status 401\", function () { pm.response.to.have.status(401); });",
+                                                                                    "pm.test(\"Credenciais inválidas\", function () { pm.expect(pm.response.json().message).to.eql(\"Sessão expirada ou credenciais inválidas.\"); });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "05 - Quinta falha",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"limite.login@example.com\",\n  \"password\": \"SenhaIncorreta\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/login",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "login"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Status 401\", function () { pm.response.to.have.status(401); });",
+                                                                                    "pm.test(\"Credenciais inválidas\", function () { pm.expect(pm.response.json().message).to.eql(\"Sessão expirada ou credenciais inválidas.\"); });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "06 - Login bloqueado",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"limite.login@example.com\",\n  \"password\": \"SenhaIncorreta\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/login",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "login"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Status 429\", function () { pm.response.to.have.status(429); });",
+                                                                                    "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(429); pm.expect(body.message).to.eql(\"Muitas tentativas de login. Tente novamente mais tarde.\"); pm.expect(body.error).to.eql(\"Too Many Requests\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "05 - Segurança",
+                     "item":  [
+                                  {
+                                      "name":  "01 - Rota autenticada sem token",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"titulo\": \"Oportunidade usada no teste de autorização\",\n  \"descricao\": \"Esta requisição deve ser bloqueada antes da criação.\",\n  \"tipoServico\": \"consulta\",\n  \"publicoAlvo\": \"adultos\",\n  \"modalidade\": \"online\",\n  \"condicoesAcesso\": \"Agendamento prévio.\",\n  \"statusAtiva\": true\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/oportunidades",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "oportunidades"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Status 401\", function () { pm.response.to.have.status(401); });",
+                                                                                    "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(401); pm.expect(body.message).to.eql(\"Sessão expirada ou credenciais inválidas.\"); pm.expect(body.error).to.eql(\"Unauthorized\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "02 - Rota profissional com token de paciente",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"titulo\": \"Oportunidade usada no teste de autorização\",\n  \"descricao\": \"Esta requisição deve ser bloqueada antes da criação.\",\n  \"tipoServico\": \"consulta\",\n  \"publicoAlvo\": \"adultos\",\n  \"modalidade\": \"online\",\n  \"condicoesAcesso\": \"Agendamento prévio.\",\n  \"statusAtiva\": true\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/oportunidades",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "oportunidades"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "bearer",
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "value":  "{{pacienteToken}}",
+                                                                                      "type":  "string"
+                                                                                  }
+                                                                              ]
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Status 403\", function () { pm.response.to.have.status(403); });",
+                                                                                    "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(403); pm.expect(body.message).to.eql(\"Você não tem permissão para acessar este recurso.\"); pm.expect(body.error).to.eql(\"Forbidden\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "03 - JSON malformado",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"paciente.teste@example.com\",\n  \"password\": \"SenhaSegura123!\"",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/login",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "login"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });",
+                                                                                    "pm.test(\"Erro padronizado\", function () { const body = pm.response.json(); pm.expect(body.statusCode).to.eql(400); pm.expect(body.message).to.eql(\"O corpo da requisição está ausente ou possui formato inválido.\"); pm.expect(body.error).to.eql(\"Bad Request\"); pm.expect(body.requestId).to.be.a(\"string\").and.not.empty; });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "06 - CORS",
+                     "item":  [
+                                  {
+                                      "name":  "01 - Preflight GitHub Pages",
+                                      "request":  {
+                                                      "method":  "OPTIONS",
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Origin",
+                                                                         "value":  "https://luisfontinelles.github.io"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Access-Control-Request-Method",
+                                                                         "value":  "POST"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Access-Control-Request-Headers",
+                                                                         "value":  "content-type"
+                                                                     }
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/login",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "login"
+                                                                           ]
+                                                              }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Preflight aceito\", function () { pm.expect([200, 204]).to.include(pm.response.code); });",
+                                                                                    "pm.test(\"Origem liberada\", function () { pm.expect(pm.response.headers.get(\"Access-Control-Allow-Origin\")).to.eql(\"https://luisfontinelles.github.io\"); pm.expect(pm.response.headers.get(\"Access-Control-Allow-Methods\")).to.include(\"POST\"); });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "02 - Preflight localhost",
+                                      "request":  {
+                                                      "method":  "OPTIONS",
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Origin",
+                                                                         "value":  "http://localhost:5173"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Access-Control-Request-Method",
+                                                                         "value":  "POST"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Access-Control-Request-Headers",
+                                                                         "value":  "content-type,authorization"
+                                                                     }
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/login",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "login"
+                                                                           ]
+                                                              }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Preflight aceito\", function () { pm.expect([200, 204]).to.include(pm.response.code); });",
+                                                                                    "pm.test(\"Localhost liberado\", function () { pm.expect(pm.response.headers.get(\"Access-Control-Allow-Origin\")).to.eql(\"http://localhost:5173\"); pm.expect(pm.response.headers.get(\"Access-Control-Allow-Methods\")).to.include(\"POST\"); });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "03 - Preflight de origem não permitida",
+                                      "request":  {
+                                                      "method":  "OPTIONS",
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Origin",
+                                                                         "value":  "https://origem-nao-permitida.example"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Access-Control-Request-Method",
+                                                                         "value":  "POST"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Access-Control-Request-Headers",
+                                                                         "value":  "content-type"
+                                                                     }
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/login",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "login"
+                                                                           ]
+                                                              }
+                                                  },
+                                      "event":  [
+                                                    {
+                                                        "listen":  "test",
+                                                        "script":  {
+                                                                       "type":  "text/javascript",
+                                                                       "exec":  [
+                                                                                    "pm.test(\"Origem não é liberada\", function () { pm.expect(pm.response.headers.get(\"Access-Control-Allow-Origin\")).to.eql(undefined); });"
+                                                                                ]
+                                                                   }
+                                                    }
+                                                ]
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "07 - Verificação e recuperação de senha",
+                     "description":  "Atualize verificationCode e passwordResetCode com os códigos recebidos por e-mail antes de executar as confirmações.",
+                     "item":  [
+                                  {
+                                      "name":  "01 - Verificar e-mail profissional",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"{{profissionalEmail}}\",\n  \"code\": \"{{verificationCode}}\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/verify",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "verify"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "02 - Reenviar código de verificação",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"{{profissionalEmail}}\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/resend-code",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "resend-code"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "03 - Solicitar redefinição de senha",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"{{pacienteEmail}}\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/password-reset",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "password-reset"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "04 - Confirmar redefinição de senha",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "body":  {
+                                                                   "mode":  "raw",
+                                                                   "raw":  "{\n  \"email\": \"{{pacienteEmail}}\",\n  \"code\": \"{{passwordResetCode}}\",\n  \"newPassword\": \"{{novaSenha}}\"\n}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               }
+                                                               },
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/auth/password-reset",
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "path":  [
+                                                                               "auth",
+                                                                               "password-reset"
+                                                                           ]
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  }
+                                  }
+                              ]
+                 }
+             ]
 }

@@ -4,12 +4,13 @@ import com.bcndeigth.carebridgeapi.shared.ApiErrorWriter;
 import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,7 +25,6 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
 public class SecurityConfigurations {
 
     private final SecurityFilter securityFilter;
@@ -41,19 +41,22 @@ public class SecurityConfigurations {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .exceptionHandling(errors -> errors
                 .authenticationEntryPoint((request, response, exception) -> ApiErrorWriter.write(
-                        response, 401, "Unauthorized", "Sessão expirada ou credenciais inválidas."))
+                        request, response, HttpStatus.UNAUTHORIZED, "Sessão expirada ou credenciais inválidas."))
                 .accessDeniedHandler((request, response, exception) -> ApiErrorWriter.write(
-                        response, 403, "Forbidden", "Você não tem permissão para acessar este recurso.")))
+                        request, response, HttpStatus.FORBIDDEN, "Você não tem permissão para acessar este recurso.")))
             .authorizeHttpRequests(auth -> auth
                 .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
-                .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                .requestMatchers("/user/login", "/paciente/cadastro", "/profissional-saude/cadastro").permitAll()
-                .requestMatchers(org.springframework.http.HttpMethod.GET, "/oportunidades", "/oportunidades/*").permitAll()
+                .requestMatchers("/auth/login", "/auth/register", "/auth/verify",
+                        "/auth/resend-code", "/auth/password-reset").permitAll()
+                .requestMatchers(HttpMethod.GET, "/catalogos", "/oportunidades", "/oportunidades/*").permitAll()
+                .requestMatchers("/user/profissionais/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/me/documents").hasRole("PACIENTE")
                 .requestMatchers("/paciente/**").hasRole("PACIENTE")
                 .requestMatchers("/profissional-saude/**").hasRole("PROFISSIONAL_SAUDE")
-                .requestMatchers("/oportunidades/**").authenticated()
+                .requestMatchers("/oportunidades", "/oportunidades/**").hasRole("PROFISSIONAL_SAUDE")
                 .anyRequest().authenticated()
             )
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);

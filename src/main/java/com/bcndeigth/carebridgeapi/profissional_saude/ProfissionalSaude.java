@@ -1,18 +1,27 @@
 package com.bcndeigth.carebridgeapi.profissional_saude;
 
+import com.bcndeigth.carebridgeapi.oportunidade.Oportunidade;
 import com.bcndeigth.carebridgeapi.users.Usuario;
-import jakarta.persistence.*;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import tools.jackson.databind.json.JsonMapper;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import com.bcndeigth.carebridgeapi.oportunidade.Oportunidade;
-import com.bcndeigth.carebridgeapi.oportunidade.FormularioTriagem;
 
 @Entity
 @Table(name = "profissional_saude")
@@ -31,16 +40,19 @@ public class ProfissionalSaude {
     @Column(nullable = false)
     private String nome;
 
+    @Column(name = "conselho", length = 50)
     private String conselho;
 
+    @Column(name = "uf", length = 2)
     private String uf;
 
-    @Column(name = "numero_registro")
+    @Column(name = "numero_registro", length = 50)
     private String numeroRegistro;
 
+    @Column(name = "especialidade", length = 150)
     private String especialidade;
 
-    @Column(name = "onde_atende")
+    @Column(name = "onde_atende", length = 255)
     private String ondeAtende;
 
     @ElementCollection
@@ -50,28 +62,27 @@ public class ProfissionalSaude {
     )
     private List<Documento> documentosRegistro = new ArrayList<>();
 
-    @Column(name = "documento_registro", length = 4096)
-    private String documentoRegistro;
-
-    @PrePersist
-    @PreUpdate
-    private void atualizarReferenciaDocumentos() {
-        documentoRegistro = JsonMapper.builder().build().writeValueAsString(
-                documentosRegistro.stream().map(Documento::getNomeArquivo).toList());
-    }
-
     @Column(name = "biografia_ou_descricao", columnDefinition = "text")
     private String biografiaOuDescricao;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "situacao_registro", nullable = false, length = 20)
+    private SituacaoRegistro situacaoRegistro = SituacaoRegistro.EM_VERIFICACAO;
 
     @OneToMany(mappedBy = "ofertante", fetch = FetchType.LAZY)
     private List<Oportunidade> oportunidades = new ArrayList<>();
 
-    @OneToMany(mappedBy = "ofertante", fetch = FetchType.LAZY)
-    private List<FormularioTriagem> formulariosTriagem = new ArrayList<>();
-
-    public ProfissionalSaude(String nome, String conselho, String uf, String numeroRegistro,
-                             String especialidade, String ondeAtende, List<Documento> documentosRegistro,
-                             String biografiaOuDescricao, Usuario usuario) {
+    public ProfissionalSaude(
+            String nome,
+            String conselho,
+            String uf,
+            String numeroRegistro,
+            String especialidade,
+            String ondeAtende,
+            List<Documento> documentosRegistro,
+            String biografiaOuDescricao,
+            Usuario usuario
+    ) {
         this.nome = nome;
         this.conselho = conselho;
         this.uf = uf;

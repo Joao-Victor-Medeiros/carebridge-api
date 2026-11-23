@@ -11,13 +11,7 @@ public record SignUpUserDto(
         @Schema(description = "Senha da conta.", example = "SenhaSegura123!", format = "password")
         String senha,
 
-        @Schema(description = "Perfil da conta.", example = "PROFISSIONAL_SAUDE")
-        TipoPerfil tipoPerfil,
-
-        @Schema(description = "Confirmação de aceite dos termos de uso e privacidade.", example = "true")
-        boolean acceptedTerms
+        @Schema(description = "Ignorado: o perfil é definido pela rota de cadastro.", example = "PACIENTE")
+        TipoPerfil tipoPerfil
 ) {
-    public SignUpUserDto(String email, String senha, TipoPerfil tipoPerfil) {
-        this(email, senha, tipoPerfil, true);
-    }
 }
