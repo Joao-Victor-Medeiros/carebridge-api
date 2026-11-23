@@ -29,6 +29,7 @@ public class ContaService {
         }
         exigir(conta.email(), "O e-mail é obrigatório.");
         exigir(conta.senha(), "A senha é obrigatória.");
+        PoliticaSenha.validar(conta.senha());
         if (!Boolean.TRUE.equals(aceitouTermos)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "É necessário aceitar os termos de uso e privacidade.");
         }

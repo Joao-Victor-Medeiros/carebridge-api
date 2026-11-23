@@ -2,6 +2,7 @@ package com.bcndeigth.carebridgeapi.auth;
 
 import com.bcndeigth.carebridgeapi.paciente.PacienteRepository;
 import com.bcndeigth.carebridgeapi.profissional_saude.ProfissionalSaudeRepository;
+import com.bcndeigth.carebridgeapi.users.PoliticaSenha;
 import com.bcndeigth.carebridgeapi.users.TipoPerfil;
 import com.bcndeigth.carebridgeapi.users.Usuario;
 import com.bcndeigth.carebridgeapi.users.UsuarioRepository;
@@ -96,7 +97,7 @@ public class RecuperacaoSenhaService {
     }
 
     private void confirmar(Usuario usuario, String codigoInformado, String novaSenha) {
-        validarSenha(novaSenha);
+        PoliticaSenha.validar(novaSenha);
         CodigoVerificacaoEmail codigo = codigoRepository
                 .findFirstByUsuarioIdAndFinalidadeOrderByCriadoEmDesc(
                         usuario.getId(), FinalidadeCodigo.REDEFINICAO_SENHA)
@@ -131,17 +132,6 @@ public class RecuperacaoSenhaService {
         }
         return profissionalRepository.findByUsuarioId(usuario.getId())
                 .map(profissional -> profissional.getNome()).orElse("Usuário CareBridge");
-    }
-
-    private void validarSenha(String senha) {
-        if (senha == null || senha.length() < 8
-                || !senha.matches(".*[A-Z].*")
-                || !senha.matches(".*[a-z].*")
-                || !senha.matches(".*\\d.*")
-                || !senha.matches(".*[^A-Za-z0-9].*")) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "A senha deve ter ao menos 8 caracteres, com maiúscula, minúscula, número e caractere especial.");
-        }
     }
 
     private ResponseStatusException codigoInvalido() {
