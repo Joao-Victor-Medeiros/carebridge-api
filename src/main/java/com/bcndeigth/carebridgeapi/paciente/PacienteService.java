@@ -1,50 +1,62 @@
 package com.bcndeigth.carebridgeapi.paciente;
 
 import com.bcndeigth.carebridgeapi.paciente.dto.CadastroPacienteDto;
+import com.bcndeigth.carebridgeapi.users.ContaService;
+import com.bcndeigth.carebridgeapi.users.TipoPerfil;
 import com.bcndeigth.carebridgeapi.users.Usuario;
-import com.bcndeigth.carebridgeapi.users.UsuarioRepository;
+import com.bcndeigth.carebridgeapi.users.dto.CadastroResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+
+import static com.bcndeigth.carebridgeapi.users.ContaService.exigir;
+
 @Service
 public class PacienteService {
 
-    private final UsuarioRepository usuarioRepository;
-    private final PacienteRepository pacienteRepository;
-    private final PasswordEncoder passwordEncoder;
+    private static final int IDADE_MINIMA = 18;
 
-    public PacienteService(UsuarioRepository usuarioRepository, PacienteRepository pacienteRepository, PasswordEncoder passwordEncoder) {
-        this.usuarioRepository = usuarioRepository;
+    private final ContaService contaService;
+    private final PacienteRepository pacienteRepository;
+
+    public PacienteService(ContaService contaService, PacienteRepository pacienteRepository) {
+        this.contaService = contaService;
         this.pacienteRepository = pacienteRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
-    public void cadastrarPaciente(CadastroPacienteDto cadastroPacienteDto) {
-        var usuarioDto = cadastroPacienteDto.usuarioDto();
-        if (usuarioRepository.existsByEmail(usuarioDto.email())) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    "Já existe um usuário cadastrado com este e-mail."
-            );
+    public CadastroResponse cadastrarPaciente(CadastroPacienteDto dto) {
+        if (dto == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Os dados do cadastro são obrigatórios.");
+        }
+        exigir(dto.nome(), "O nome é obrigatório.");
+        if (dto.dataNascimento() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A data de nascimento é obrigatória.");
+        }
+        if (dto.dataNascimento().isAfter(LocalDate.now().minusYears(IDADE_MINIMA))) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "É preciso ter 18 anos ou mais para criar uma conta.");
         }
 
-        var hashedPassword = passwordEncoder.encode(usuarioDto.senha());
-        var usuarioSalvo = usuarioRepository.save(new Usuario(
-                usuarioDto.email(),
-                hashedPassword,
-                usuarioDto.tipoPerfil()
-        ));
-
+        Usuario usuario = contaService.criar(dto.usuarioDto(), dto.acceptedTerms(), TipoPerfil.PACIENTE);
+        usuario.marcarEmailComoVerificado();
         pacienteRepository.save(new Paciente(
-                cadastroPacienteDto.nome(),
-                cadastroPacienteDto.dataNascimento(),
-                cadastroPacienteDto.telefone(),
-                cadastroPacienteDto.endereco(),
-                usuarioSalvo
+                dto.nome().trim(),
+                dto.dataNascimento(),
+                somenteDigitos(dto.telefone()),
+                dto.endereco(),
+                usuario
         ));
+        return CadastroResponse.semVerificacao(usuario.getEmail(), TipoPerfil.PACIENTE);
+    }
+
+    private String somenteDigitos(String telefone) {
+        if (telefone == null) {
+            return null;
+        }
+        String digitos = telefone.replaceAll("\\D+", "");
+        return digitos.isEmpty() ? null : digitos;
     }
 }

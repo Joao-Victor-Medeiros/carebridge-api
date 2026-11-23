@@ -13,7 +13,6 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 @Entity
@@ -40,7 +40,17 @@ public class Usuario implements UserDetails {
     private String senhaHash;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_perfil", nullable = false)
     private TipoPerfil tipoPerfil;
+
+    @Column(name = "accepted_terms", nullable = false)
+    private boolean acceptedTerms;
+
+    @Column(name = "termos_aceitos_em", nullable = false, updatable = false)
+    private Instant termosAceitosEm;
+
+    @Column(name = "email_verificado", nullable = false)
+    private boolean emailVerificado;
 
     @Column(name = "criado_em", nullable = false, updatable = false)
     private Instant criadoEm;
@@ -48,22 +58,38 @@ public class Usuario implements UserDetails {
     @Column(name = "atualizado_em", nullable = false)
     private Instant atualizadoEm;
 
-    public Usuario(String email, String hashedPassword, TipoPerfil tipoPerfil) {
-        this.email = email;
-        this.senhaHash = hashedPassword;
+    public Usuario(String email, String senhaHash, TipoPerfil tipoPerfil, Instant termosAceitosEm) {
+        setEmail(email);
+        this.senhaHash = senhaHash;
         this.tipoPerfil = tipoPerfil;
+        this.acceptedTerms = true;
+        this.termosAceitosEm = termosAceitosEm;
     }
 
-    public String getEmail() {
-        return email;
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim().toLowerCase(Locale.ROOT);
     }
 
-    public TipoPerfil getTipoPerfil() {
-        return tipoPerfil;
+    public void marcarEmailComoVerificado() {
+        this.emailVerificado = true;
+    }
+
+    public void alterarSenha(String novaSenhaHash) {
+        this.senhaHash = novaSenhaHash;
+    }
+
+    public void anonimizar(String emailAnonimo, String senhaAleatoriaHash) {
+        setEmail(emailAnonimo);
+        this.senhaHash = senhaAleatoriaHash;
+        this.emailVerificado = false;
     }
 
     @PrePersist
     protected void aoCriar() {
+        setEmail(this.email);
+        if (this.termosAceitosEm == null) {
+            this.termosAceitosEm = Instant.now();
+        }
         Instant agora = Instant.now();
         criadoEm = agora;
         atualizadoEm = agora;
@@ -71,20 +97,17 @@ public class Usuario implements UserDetails {
 
     @PreUpdate
     protected void aoAtualizar() {
+        setEmail(this.email);
         atualizadoEm = Instant.now();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (tipoPerfil == null) {
-            return List.of();
-        }
-
-        return List.of(new SimpleGrantedAuthority("ROLE_" + tipoPerfil.name()));
+        return tipoPerfil == null ? List.of() : List.of(new SimpleGrantedAuthority("ROLE_" + tipoPerfil.name()));
     }
 
     @Override
-    public @Nullable String getPassword() {
+    public String getPassword() {
         return senhaHash;
     }
 

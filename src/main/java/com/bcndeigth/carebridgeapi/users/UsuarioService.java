@@ -1,45 +1,50 @@
 package com.bcndeigth.carebridgeapi.users;
 
-import com.bcndeigth.carebridgeapi.users.dto.ErrorResponse;
-import com.bcndeigth.carebridgeapi.users.dto.SignUpUserDto;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.bcndeigth.carebridgeapi.paciente.PacienteRepository;
+import com.bcndeigth.carebridgeapi.profissional_saude.ProfissionalSaude;
+import com.bcndeigth.carebridgeapi.profissional_saude.ProfissionalSaudeRepository;
+import com.bcndeigth.carebridgeapi.profissional_saude.SituacaoRegistro;
+import com.bcndeigth.carebridgeapi.users.dto.MeResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class UsuarioService {
-    @Autowired
-    private UsuarioRepository userRepository;
+    private final PacienteRepository pacienteRepository;
+    private final ProfissionalSaudeRepository profissionalSaudeRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UsuarioService(PacienteRepository pacienteRepository,
+                          ProfissionalSaudeRepository profissionalSaudeRepository) {
+        this.pacienteRepository = pacienteRepository;
+        this.profissionalSaudeRepository = profissionalSaudeRepository;
+    }
 
-    public ResponseEntity<ErrorResponse> cadastrarUsuario(SignUpUserDto dto) {
-        if (dto.tipoPerfil() == TipoPerfil.ADMIN) {
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(new ErrorResponse(403, "Não é permitido cadastrar administrador por esta rota."));
+    @Transactional(readOnly = true)
+    public MeResponse obterPerfil(Usuario usuario) {
+        if (usuario == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Sessão expirada ou credenciais inválidas.");
         }
+        return switch (usuario.getTipoPerfil()) {
+            case PACIENTE -> pacienteRepository.findById(usuario.getId())
+                    .map(paciente -> MeResponse.de(usuario, paciente))
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                            "Perfil de paciente não encontrado."));
+            case PROFISSIONAL_SAUDE -> MeResponse.de(profissional(usuario));
+            case ADMIN -> MeResponse.de(usuario);
+        };
+    }
 
-        if (userRepository.findByEmail(dto.email()) != null) {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT) // Código HTTP: 409
-                    .body(new ErrorResponse(
-                            409,
-                            "Já existe um usuário cadastrado com este e-mail."
-                    ));
-        }
+    @Transactional(readOnly = true)
+    public boolean validadoInstitucionalmente(Usuario usuario) {
+        return usuario.getTipoPerfil() == TipoPerfil.PROFISSIONAL_SAUDE
+                && profissional(usuario).getSituacaoRegistro() == SituacaoRegistro.VERIFICADO;
+    }
 
-        var hashedPassword = passwordEncoder.encode(dto.senha());
-        userRepository.save(new Usuario(dto.email(), hashedPassword, dto.tipoPerfil()));
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED) // Código HTTP: 201
-                .body(new ErrorResponse(
-                        201,
-                        "Usuário cadastrado com sucesso."
-                ));
+    private ProfissionalSaude profissional(Usuario usuario) {
+        return profissionalSaudeRepository.findById(usuario.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Perfil de profissional de saúde não encontrado."));
     }
 }

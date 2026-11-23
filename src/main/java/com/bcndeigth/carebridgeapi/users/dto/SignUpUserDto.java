@@ -11,7 +11,7 @@ public record SignUpUserDto(
         @Schema(description = "Senha da conta.", example = "SenhaSegura123!", format = "password")
         String senha,
 
-        @Schema(description = "Perfil da conta.", example = "PROFISSIONAL_SAUDE")
+        @Schema(description = "Ignorado: o perfil é definido pela rota de cadastro.", example = "PACIENTE")
         TipoPerfil tipoPerfil
 ) {
 }

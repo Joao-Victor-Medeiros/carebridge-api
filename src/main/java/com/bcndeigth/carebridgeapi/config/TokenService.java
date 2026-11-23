@@ -17,20 +17,21 @@ import java.util.Date;
 public class TokenService {
 
     private static final String ISSUER = "carebridge-api";
+    public static final long EXPIRATION_SECONDS = 7200;
 
     @Value("${api.security.token.secret}")
     private String secret;
 
-    public String generateToken(Usuario usuario, boolean validadoInstitucionalmente) {
+    public String generateToken(Usuario usuario) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
             return JWT.create()
                     .withIssuer(ISSUER)
                     .withSubject(usuario.getEmail())
-                    .withClaim("role", usuario.getTipoPerfil().name())
-                    .withClaim("validadoInstitucionalmente", validadoInstitucionalmente)
-                    .withExpiresAt(Date.from(Instant.now().plus(2, ChronoUnit.HOURS)))
+                    .withClaim("id", usuario.getId().toString())
+                    .withClaim("tipoPerfil", usuario.getTipoPerfil().name())
+                    .withExpiresAt(Date.from(Instant.now().plus(EXPIRATION_SECONDS, ChronoUnit.SECONDS)))
                     .sign(algorithm);
         } catch (JWTCreationException exception) {
             throw new IllegalStateException("Não foi possível gerar o token de autenticação.", exception);
@@ -47,7 +48,7 @@ public class TokenService {
 
             return decodedJWT.getSubject();
         } catch (JWTVerificationException exception) {
-            return "";
+            return null;
         }
     }
 }

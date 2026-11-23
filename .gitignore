@@ -34,3 +34,6 @@ build/
 
 ### environment ###
 .env
+
+### local access reports with credentials ###
+docs/acessos-admin-producao.txt

@@ -181,6 +181,11 @@ DATABASE_URL
 DATABASE_USERNAME
 DATABASE_PASSWORD
 JWT_SECRET
+BREVO_ENABLED
+BREVO_SMTP_USERNAME
+BREVO_SMTP_KEY
+BREVO_SENDER_EMAIL
+BREVO_SENDER_NAME
 ```
 
 O profile de produção usa `ddl-auto: validate`. O Flyway executa as migrations
@@ -254,7 +259,20 @@ DATABASE_USERNAME=SEU_USUARIO_NEON
 DATABASE_PASSWORD=SUA_SENHA_NEON
 JWT_SECRET=UMA_CHAVE_FORTE
 FLYWAY_BASELINE_ON_MIGRATE=true
+BREVO_ENABLED=true
+BREVO_SMTP_HOST=smtp-relay.brevo.com
+BREVO_SMTP_PORT=587
+BREVO_SMTP_USERNAME=SEU_USUARIO_SMTP_BREVO
+BREVO_SMTP_KEY=SUA_CHAVE_SMTP_BREVO
+BREVO_SENDER_EMAIL=REMETENTE_VALIDADO_NA_BREVO
+BREVO_SENDER_NAME=CareBridge
 ```
+
+As credenciais de e-mail são obtidas no painel da Brevo em **SMTP & API → SMTP**.
+Use uma **SMTP key** em `BREVO_SMTP_KEY`; uma API key da Brevo não funciona no
+relay SMTP. O endereço de `BREVO_SENDER_EMAIL` deve estar cadastrado e validado
+como remetente. Não coloque a SMTP key no repositório, no `.env.exemple` ou em
+comandos versionados.
 
 No primeiro deploy com Flyway, mantenha `FLYWAY_BASELINE_ON_MIGRATE=true`.
 Isso permite adotar o histórico de migrations no banco já existente:
@@ -314,7 +332,9 @@ Pull request nunca faz deploy: o deploy acontece quando o PR é mergeado na `mas
    **Imagem Docker e subida da API**. Assim nenhum PR entra quebrado.
 
 As variáveis de banco e `JWT_SECRET` de produção continuam só no Render; o
-workflow não precisa delas. O banco usado no CI é descartável e não tem relação com o Neon.
+workflow não precisa delas. As credenciais SMTP da Brevo também ficam somente no
+Render. O job de smoke test executa com `BREVO_ENABLED=false`, portanto não envia
+e-mails nem acessa a Brevo. O banco usado no CI é descartável e não tem relação com o Neon.
 
 ### Limitações
 
@@ -354,7 +374,7 @@ http://localhost:8082/swagger-ui/index.html
 Login:
 
 ```http
-POST /user/login
+POST /auth/login
 ```
 
 Body:
@@ -372,86 +392,60 @@ Use o token retornado nas rotas protegidas:
 Authorization: Bearer SEU_TOKEN
 ```
 
-Cadastro genérico:
+Cadastro de paciente ou profissional de saúde:
 
 ```http
-POST /user/register
+POST /auth/register
 ```
 
-Body:
+Essa rota usa `multipart/form-data`. Envie os dados cadastrais na parte `dados`
+com `Content-Type: application/json`. O campo `tipoPerfil` no início do JSON
+define qual formato será processado.
+
+Cadastro de paciente na parte `dados`:
 
 ```json
 {
-  "email": "paulo.ricardo@example.com",
-  "senha": "Senha123!",
-  "tipoPerfil": "PACIENTE"
-}
-```
-
-O cadastro público de `ADMIN` é bloqueado.
-
-### Paciente
-
-```http
-POST /paciente/cadastro
-```
-
-Body:
-
-```json
-{
+  "tipoPerfil": "PACIENTE",
   "usuarioDto": {
     "email": "paulo.ricardo@example.com",
     "senha": "Senha123!",
-    "tipoPerfil": "PACIENTE"
+    "tipoPerfil": "PACIENTE",
+    "acceptedTerms": true
   },
   "nome": "Paulo Ricardo",
   "dataNascimento": "1990-05-21",
   "telefone": "+55 11 99999-9999",
-  "endereco": "Rua das Flores, 123"
+  "endereco": "Rua das Flores, 123",
+  "acceptedTerms": true
 }
 ```
 
-### Profissional de saúde
-
-```http
-POST /profissional-saude/cadastro
-```
-
-Essa rota usa `multipart/form-data`. Envie a parte `dados` como JSON:
+Cadastro de profissional de saúde na parte `dados`:
 
 ```json
 {
+  "tipoPerfil": "PROFISSIONAL_SAUDE",
   "usuarioDto": {
     "email": "ana.souza@example.com",
     "senha": "Senha123!",
-    "tipoPerfil": "PROFISSIONAL_SAUDE"
+    "tipoPerfil": "PROFISSIONAL_SAUDE",
+    "acceptedTerms": true
   },
   "nome": "Dra. Ana Souza",
-  "documentosRegistro": [
-    "CRM-SP 123456"
-  ],
-  "biografiaOuDescricao": "Médica clínica geral."
+  "conselho": "CRM",
+  "uf": "SP",
+  "numeroRegistro": "123456",
+  "especialidade": "Clínica Geral",
+  "ondeAtende": "São Paulo - SP",
+  "biografiaOuDescricao": "Médica clínica geral.",
+  "acceptedTerms": true
 }
 ```
 
-Novos profissionais começam com `validado_institucionalmente = false`.
-
-### Administração
-
-Listar profissionais pendentes:
-
-```http
-GET /user/profissionais/pendentes
-```
-
-Aprovar profissional:
-
-```http
-PATCH /user/profissionais/{profissionalId}/aprovar
-```
-
-Essas rotas exigem token de um usuário com perfil `ADMIN`.
+Para profissionais, envie opcionalmente até dois arquivos PDF, JPG ou PNG em
+partes `documentos`. Pacientes não podem enviar documentos. O cadastro público
+de `ADMIN` não é aceito pelo discriminador polimórfico.
 
 ### Oportunidades
 
@@ -461,7 +455,7 @@ Criar:
 POST /oportunidades
 ```
 
-Exige profissional de saúde validado institucionalmente.
+Exige um usuário autenticado com perfil de profissional de saúde.
 
 Body:
 
@@ -503,6 +497,17 @@ DELETE /oportunidades/{id}
 
 O ofertante é obtido automaticamente do usuário autenticado. Não envie `ofertanteId` no body.
 
+## Dados de demonstração
+
+O seed em `src/main/resources/seed/demo.json` cria as contas `paciente@teste.com` e `profissional@teste.com` (verificado), os demais profissionais e pacientes das fixtures dos apps, 20 oportunidades e 11 solicitações. Ele só roda com o profile `demo` e a variável `DEMO_PASSWORD`, que vira a senha de todas essas contas:
+
+```bash
+SPRING_PROFILES_ACTIVE=prod,demo
+DEMO_PASSWORD=<senha da apresentação>
+```
+
+Não roda de novo se `paciente@teste.com` já existe. Depois da apresentação, tire o profile `demo` e troque a senha ou remova as contas.
+
 ## Migrations de banco
 
 As migrations versionadas ficam em:
@@ -517,6 +522,10 @@ O projeto possui inicialmente:
 V1__create_initial_schema.sql
 V2__move_nome_to_profissional_saude.sql
 V3__remove_nome_from_usuarios.sql
+V4__add_professional_registration_data.sql
+V5__unify_user_id_with_profiles.sql
+V6__remove_professional_document_evaluation.sql
+V7__add_onboarding_and_professional_profile_fields.sql
 ```
 
 A `V2` copia o nome legado de `usuarios.nome` para
@@ -528,12 +537,37 @@ A `V3` remove os triggers e funções de compatibilidade e, em seguida, exclui a
 coluna legada `usuarios.nome`. Depois da `V3`, o nome do profissional existe
 somente em `profissional_saude.nome`.
 
+A `V4` preserva a migration de dados de registro profissional que já havia sido
+aplicada em produção. O comentário de compatibilidade no final do arquivo faz
+parte do checksum histórico e não deve ser alterado.
+
+A `V5` prepara bancos legados e unifica os IDs dos perfis em uma única transação,
+preservando as referências existentes mesmo quando as constraints foram criadas
+pelo Hibernate com nomes automáticos. Ao final, ela remove as colunas
+`usuario_id` e passa a usar o ID do usuário como ID do paciente ou profissional.
+Não crie migrations com versão intermediária menor que uma versão já publicada;
+uma correção posterior deve sempre receber uma versão maior que a última aplicada.
+
+A `V6` remove o estado de validação institucional enquanto a avaliação de
+documentos estiver desativada.
+
+A `V7` adiciona os campos de onboarding do usuário e garante os campos do perfil
+profissional de forma idempotente.
+
 Para cada mudança futura de schema:
 
-1. crie um novo arquivo, por exemplo `V4__descricao_da_mudanca.sql`;
+1. crie um novo arquivo com versão maior que a última existente, por exemplo
+   `V8__descricao_da_mudanca.sql`;
 2. nunca edite uma migration que já tenha sido aplicada em qualquer ambiente;
 3. prefira mudanças compatíveis com a versão anterior da aplicação;
 4. valide a migration em uma cópia ou branch do banco antes do deploy.
+
+### Bancos locais com o histórico experimental
+
+Se um banco local já executou `V3.1`, a antiga `V4` de unificação, `V5` e `V6`,
+ele não representa o histórico de produção. Recrie apenas esse banco local e
+deixe o Flyway executar a sequência oficial de `V1` a `V7`. Não execute `repair`
+nesse caso e nunca apague ou recrie o banco de produção.
 
 O schema inclui entidades como:
 

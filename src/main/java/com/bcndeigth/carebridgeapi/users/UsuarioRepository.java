@@ -1,12 +1,14 @@
 package com.bcndeigth.carebridgeapi.users;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
-    UserDetails findByEmail(String email);
+    Optional<Usuario> findByEmailIgnoreCase(String email);
 
-    boolean existsByEmail(String email);
+    boolean existsByEmailIgnoreCase(String email);
+
+    boolean existsByTipoPerfil(TipoPerfil tipoPerfil);
 }
