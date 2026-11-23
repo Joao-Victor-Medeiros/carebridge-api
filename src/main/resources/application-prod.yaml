@@ -24,6 +24,9 @@ api:
       secret: ${JWT_SECRET}
 
 app:
+  # Em produção, o código deve ser aleatório e enviado por e-mail.
+  # Para testes excepcionais, ainda é possível definir CODIGO_FIXO no Render.
+  codigo-fixo: ${CODIGO_FIXO:}
   brevo:
     enabled: ${BREVO_ENABLED:true}
 
